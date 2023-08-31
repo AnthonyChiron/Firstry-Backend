@@ -1,52 +1,75 @@
-/** @type {import("mongoose").Model} */
-const Rider = require("../models/riders");
+const { Rider, validate } = require("../models/rider");
 
-// Create rider in db
-module.exports.createRider = async function (data) {
-  const rider = new Rider({
-    firstName: data.firstName,
-    lastName: data.lastName,
-    gender: data.gender,
-    birthDate: data.birthDate,
-    sports: data.sports,
-    category: data.category,
-    socials: data.socials,
-  });
+module.exports.createRider = async (req, res) => {
+  try {
+    const { error } = validate(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
 
-  return await rider.save();
+    const rider = new Rider({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      gender: req.body.gender,
+      birthDate: req.body.birthDate,
+      sports: req.body.sports,
+      category: req.body.category,
+      socials: req.body.socials,
+    });
+
+    const savedRider = await rider.save();
+    res.send(savedRider);
+  } catch (error) {
+    res.status(400).send(error);
+  }
 };
 
-// Delete rider in db
-module.exports.deleteRiderById = async function (id) {
-  return await Rider.findByIdAndDelete(id);
+module.exports.deleteRiderById = async (req, res) => {
+  try {
+    const result = await Rider.findByIdAndDelete(req.params.id);
+    if (!result) {
+      res.status(404).send("Rider not found");
+    } else {
+      res.send(result);
+    }
+  } catch (error) {
+    res.status(400).send(error);
+  }
 };
 
-// Update rider in db
-module.exports.updateRider = async function (id, data) {
-  const rider = new Rider({
-    firstName: data.firstName,
-    lastName: data.lastName,
-    gender: data.gender,
-    birthDate: data.birthDate,
-    sports: data.sports,
-    category: data.category,
-    socials: data.socials,
-  });
+module.exports.updateRider = async (req, res) => {
+  try {
+    const { error } = validate(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
 
-  return await Rider.findByIdAndUpdate(id, rider);
+    const result = await Rider.findByIdAndUpdate(req.params.id, req.body);
+    if (!result) {
+      res.status(404).send("Rider not found");
+    } else {
+      res.send(result);
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).send(error);
+  }
 };
 
-// Find rider by ID
-module.exports.getRiderById = async function (id) {
-  return await Rider.findById(id);
+module.exports.getRiderById = async (req, res) => {
+  try {
+    const result = await Rider.findById(req.params.id);
+    if (!result) {
+      res.status(404).send("Rider not found");
+    } else {
+      res.send(result);
+    }
+  } catch (error) {
+    res.status(400).send(error);
+  }
 };
 
-// Find rider by Name
-module.exports.getRiderByName = async function (id) {
-  return await Rider.find({});
-};
-
-// Get all
-module.exports.getAllRiders = async function () {
-  return await Rider.find();
+module.exports.getAllRiders = async (req, res) => {
+  try {
+    const riders = await Rider.find();
+    res.send(riders);
+  } catch (error) {
+    res.status(400).send(error);
+  }
 };
