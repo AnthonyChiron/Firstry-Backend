@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 const {
   createRider,
-  findRiderById,
+  getRiderById,
   deleteRiderById,
   getAllRiders,
+  updateRider,
 } = require("../controllers/riders");
 const Joi = require("joi");
 
@@ -19,8 +20,9 @@ router.get("/", (req, res) => {
     });
 });
 
+// GET BY ID
 router.get("/:id", (req, res) => {
-  findRiderById(req.params.id).then((rider) => {
+  getRiderById(req.params.id).then((rider) => {
     if (!rider)
       res.status(404).send("The rider with the given id was not found.");
     res.send(rider);
@@ -44,6 +46,7 @@ router.post("/", (req, res) => {
     });
 });
 
+// DELETE
 router.delete("/:id", (req, res) => {
   deleteRiderById(req.params.id).then((rider) => {
     if (!rider)
@@ -52,7 +55,15 @@ router.delete("/:id", (req, res) => {
   });
 });
 
+// PUT
 router.put("/:id", (req, res) => {
+  getRiderById(req.params.id)
+    .then((rider) => {
+      if (!rider)
+        res.status(404).send("The rider with the given id was not found.");
+      return updateRider(id, rider);
+    })
+    .then(() => {});
   const rider = riders.find((c) => c.id === parseInt(req.params.id));
   if (!rider)
     res.status(404).send("The rider with the given id was not found.");
