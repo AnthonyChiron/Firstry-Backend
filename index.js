@@ -10,7 +10,10 @@ app.use(express.json());
 
 // ROUTES
 const riders = require("./routes/riders");
+const contests = require("./routes/contests");
+
 app.use("/api/riders", riders);
+app.use("/api/contests", contests);
 
 // PORT
 const port = process.env.PORT || 3000;
