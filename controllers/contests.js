@@ -1,3 +1,4 @@
+/** @type {import("mongoose:Model")} */
 const { Contest, validate } = require("../models/contest");
 
 module.exports.createContest = async (req, res) => {
@@ -8,12 +9,12 @@ module.exports.createContest = async (req, res) => {
     const contest = new Contest({
       name: req.body.name,
       description: req.body.description,
-      city: req.body.city,
-      address: req.body.city,
       startDate: req.body.date,
       endDate: req.body.date,
       sports: req.body.sports,
       categories: req.body.category,
+      location: req.body.location,
+      branding: req.body.branding,
       socials: req.body.socials,
     });
 
@@ -46,7 +47,7 @@ module.exports.updateContest = async (req, res) => {
     if (!result) {
       res.status(404).send("Contest not found");
     } else {
-      res.send(result);
+      res.send(await Contest.findById(req.params.id));
     }
   } catch (error) {
     console.log(error);
