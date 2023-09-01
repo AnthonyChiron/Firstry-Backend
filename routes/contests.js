@@ -1,20 +1,22 @@
 const express = require("express");
 const router = express.Router();
-const contestController = require("../controllers/contests");
+const ContestController = require("../controllers/contests");
+
+const contest = new ContestController();
 
 // GET ALL CONTESTS
-router.get("/", contestController.getAllContests);
+router.get("/", contest.getAll);
 
 // GET CONTEST BY ID
-router.get("/:id", contestController.getContestById);
+router.get("/:id", contest.getById);
 
 // POST CONTEST
-router.post("/", contestController.createContest);
+router.post("/", contest.post);
 
 // DELETE CONTEST
-router.delete("/:id", contestController.deleteContestById);
+router.delete("/:id", contest.deleteById);
 
 // PUT CONTEST
-router.put("/:id", contestController.updateContest);
+router.put("/:id", contest.update);
 
 module.exports = router;
