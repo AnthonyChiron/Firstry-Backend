@@ -1,4 +1,4 @@
-/** @type {import("mongoose")} */
+/** @type {import("mongoose:Model")} */
 const mongoose = require("mongoose");
 const Joi = require("joi");
 

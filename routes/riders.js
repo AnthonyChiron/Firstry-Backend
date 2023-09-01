@@ -1,20 +1,22 @@
 const express = require("express");
 const router = express.Router();
-const riderController = require("../controllers/riders");
+const RiderController = require("../controllers/riders");
+
+const rider = new RiderController();
 
 // GET ALL RIDERS
-router.get("/", riderController.getAllRiders);
+router.get("/", rider.getAll);
 
 // GET RIDER BY ID
-router.get("/:id", riderController.getRiderById);
+router.get("/:id", rider.getById);
 
 // POST RIDER
-router.post("/", riderController.createRider);
+router.post("/", rider.post);
 
 // DELETE RIDER
-router.delete("/:id", riderController.deleteRiderById);
+router.delete("/:id", rider.deleteById);
 
 // PUT RIDER
-router.put("/:id", riderController.updateRider);
+router.put("/:id", rider.update);
 
 module.exports = router;
