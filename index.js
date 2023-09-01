@@ -11,9 +11,11 @@ app.use(express.json());
 // ROUTES
 const riders = require("./routes/riders");
 const contests = require("./routes/contests");
+const results = require("./routes/results");
 
 app.use("/api/riders", riders);
 app.use("/api/contests", contests);
+app.use("/api/results", results);
 
 // PORT
 const port = process.env.PORT || 3000;
