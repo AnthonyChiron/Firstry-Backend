@@ -4,19 +4,19 @@ const ResultsController = require("../controllers/results");
 
 const results = new ResultsController();
 
-// GET ALL RIDERS
+// GET ALL RESULTS
 router.get("/", results.getAll);
 
-// GET RIDER BY ID
+// GET RESULTS BY ID
 router.get("/:id", results.getById);
 
-// POST RIDER
+// POST RESULTS
 router.post("/", results.post);
 
-// DELETE RIDER
+// DELETE RESULTS
 router.delete("/:id", results.deleteById);
 
-// PUT RIDER
+// PUT RESULTS
 router.put("/:id", results.update);
 
 module.exports = router;

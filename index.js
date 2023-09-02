@@ -1,22 +1,14 @@
+const { infoLogger } = require("./services/logger");
 const express = require("express");
 
-const mongooseConnexion = require("./config/db");
-const config = require("config");
-const helmet = require("helmet");
 const app = express();
 
-app.use(helmet());
-app.use(express.json());
-
-// ROUTES
-const riders = require("./routes/riders");
-const contests = require("./routes/contests");
-const results = require("./routes/results");
-
-app.use("/api/riders", riders);
-app.use("/api/contests", contests);
-app.use("/api/results", results);
+// SETUP
+require("./services/logger"); // logger
+require("./config/config")(); // config & env
+require("./routes/routes")(app); // routes & middlewares
+require("./config/db")(); // db
 
 // PORT
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Server is on port ${port}!`));
+app.listen(port, () => infoLogger.log("info", `Server is on port ${port}!`));
