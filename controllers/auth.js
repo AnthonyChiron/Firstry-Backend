@@ -1,5 +1,5 @@
 const CRUDController = require("./CRUD");
-const { User, validate } = require("../models/user");
+const { User, validateLogin } = require("../models/user");
 const config = require("config");
 const { isValid } = require("../services/hash");
 const jwt = require("jsonwebtoken");
@@ -8,7 +8,7 @@ const _ = require("lodash");
 module.exports = class AuthController {
   login = async (req, res) => {
     try {
-      const { error } = validate(req.body.model);
+      const { error } = validateLogin(req.body.model);
       if (error) return res.status(400).send(error.details[0].message);
 
       const user = await User.findOne({ email: req.body.model.email });

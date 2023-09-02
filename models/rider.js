@@ -1,6 +1,7 @@
 /** @type {import("mongoose:Model")} */
 const mongoose = require("mongoose");
 const Joi = require("joi");
+const sportsEnum = require("../constants/sportsEnum");
 
 module.exports.Rider = mongoose.model(
   "Rider",
@@ -29,12 +30,15 @@ module.exports.Rider = mongoose.model(
 );
 
 module.exports.validate = function (rider) {
+  console.log(Object.values(sportsEnum));
   const schema = Joi.object({
     firstName: Joi.string().min(2).required(),
     lastName: Joi.string().min(2).required(),
     gender: Joi.string().min(2).required(),
     birthDate: Joi.date(),
-    sports: Joi.array().items(Joi.string()).required(),
+    sports: Joi.array()
+      .items(Joi.string().valid(...Object.values(sportsEnum)))
+      .required(),
     category: Joi.string().min(2).required(),
     socials: Joi.object({
       instagram: Joi.string().min(3).pattern(new RegExp("^@")),

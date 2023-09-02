@@ -1,22 +1,26 @@
 const express = require("express");
 const router = express.Router();
+const { auth } = require("../middlewares/auth");
 const UsersController = require("../controllers/users");
 
 const users = new UsersController();
 
-// GET ALL RIDERS
+// GET ALL USERS
 router.get("/", users.getAll);
 
-// GET RIDER BY ID
+// GET CONNECTED USER
+router.get("/me", auth, users.me);
+
+// GET USERS BY ID
 router.get("/:id", users.getById);
 
-// POST RIDER
+// POST USERS
 router.post("/", users.register);
 
-// DELETE RIDER
+// DELETE USERS
 router.delete("/:id", users.deleteById);
 
-// PUT RIDER
+// PUT USERS
 router.put("/:id", users.update);
 
 module.exports = router;
