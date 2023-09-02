@@ -15,6 +15,11 @@ if (!config.get("jwtPrivateKey")) {
   process.exit(1);
 }
 
+if (!config.get("jwtPrivateKey")) {
+  console.error("ERROR: JwtPrivateKey is not defined.");
+  process.exit(1);
+}
+
 // ROUTES
 const riders = require("./routes/riders");
 const contests = require("./routes/contests");
