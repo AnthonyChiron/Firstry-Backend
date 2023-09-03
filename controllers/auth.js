@@ -18,6 +18,7 @@ module.exports = class AuthController {
         req.body.model.password,
         user.password
       );
+
       if (!validPassword)
         return res.status(400).send("Invalid email or password.");
 

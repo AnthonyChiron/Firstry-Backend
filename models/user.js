@@ -16,6 +16,14 @@ const UserSchema = mongoose.Schema({
     unique: true,
     required: true,
   },
+  newEmail: {
+    type: String,
+    minLength: 5,
+    maxLength: 255,
+    unique: true,
+    required: true,
+  },
+  isValid: Boolean,
   password: { type: String, required: true },
   role: { type: String, enum: rolesEnum, required: true },
 });
@@ -41,6 +49,7 @@ module.exports.validateRegister = function (user) {
       .noWhiteSpaces()
       .onlyLatinCharacters()
       .required(),
+    isValid: Joi.boolean(),
     role: Joi.string()
       .valid(...Object.values(rolesEnum))
       .required(),
