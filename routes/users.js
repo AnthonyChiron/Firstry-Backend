@@ -5,22 +5,23 @@ const UsersController = require("../controllers/users");
 
 const users = new UsersController();
 
-// GET ALL USERS
+// CRUD
 router.get("/", users.getAll);
+router.get("/:id", users.getById);
+router.post("/", users.register);
+router.delete("/:id", users.deleteById);
+router.put("/:id", users.update);
 
 // GET CONNECTED USER
 router.get("/me", auth, users.me);
 
-// GET USERS BY ID
-router.get("/:id", users.getById);
+// UPDATE EMAIL
+router.post("/updateemail", users.updateEmail);
 
-// POST USERS
-router.post("/", users.register);
+// VALIDATE EMAIL
+router.post("/validateemail", users.validateEmail);
 
-// DELETE USERS
-router.delete("/:id", users.deleteById);
-
-// PUT USERS
-router.put("/:id", users.update);
+// RESET PASSWORD
+router.post("/resetPassword", users.resetPassword);
 
 module.exports = router;
