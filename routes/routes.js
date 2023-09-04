@@ -1,5 +1,6 @@
 const riders = require("./riders");
 const contests = require("./contests");
+const categories = require("./categories");
 const results = require("./results");
 const users = require("./users");
 const auth = require("./auth");
@@ -17,6 +18,7 @@ module.exports = function (app) {
   // Routes
   app.use("/api/riders", riders);
   app.use("/api/contests", contests);
+  app.use("/api/categories", categories);
   app.use("/api/results", results);
   app.use("/api/users", users);
   app.use("/api/auth", auth);
