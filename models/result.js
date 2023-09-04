@@ -1,6 +1,8 @@
 /** @type {import("mongoose:Model")} */
 const mongoose = require("mongoose");
 const Joi = require("joi");
+const { Contest } = require("./contest");
+const { Rider } = require("./rider");
 
 module.exports.Result = mongoose.model(
   "Result",
@@ -9,11 +11,25 @@ module.exports.Result = mongoose.model(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Rider",
       required: true,
+      validate: {
+        isAsync: true,
+        validator: async function (v) {
+          return await Rider.findById(v);
+        },
+        message: "Rider not found",
+      },
     },
     contest: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Contest",
       required: true,
+      validate: {
+        isAsync: true,
+        validator: async function (v) {
+          return await Contest.findById(v);
+        },
+        message: "Contest not found",
+      },
     },
     score: Number,
     rank: {

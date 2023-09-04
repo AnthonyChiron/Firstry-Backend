@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
-const formatEnum = require("../constants/rulesEnum");
+const { formatEnum } = require("../constants/rulesEnum");
 
 module.exports.Rules = mongoose.model(
   "Rules",
@@ -27,7 +27,7 @@ module.exports.validate = function (rules) {
         Joi.object({
           point: Joi.number().required(),
           label: Joi.string().required(),
-          description: Joi.string(),
+          description: Joi.string().allow(""),
         })
       )
       .min(1)
