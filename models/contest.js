@@ -8,6 +8,7 @@ module.exports.Contest = mongoose.model(
     description: { type: String, required: true },
     startDate: Date,
     endDate: Date,
+    registrationEndDate: Date,
     sports: { type: Array, required: true },
     categories: { type: Array, required: true },
     location: {
@@ -36,6 +37,7 @@ module.exports.validate = function (contest) {
     description: Joi.string().min(2).required(),
     startDate: Joi.date().required(),
     endDate: Joi.date().required(),
+    registrationEndDate: Joi.date(),
     location: {
       country: Joi.string().min(2).required(),
       postalCode: Joi.string()

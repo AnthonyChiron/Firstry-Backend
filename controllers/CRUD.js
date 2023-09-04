@@ -1,6 +1,6 @@
 module.exports = class CRUDController {
   getById = async (req, res) => {
-    const result = await this.model.findById(id);
+    const result = await this.model.findById(req.params.id);
     if (!result) {
       return res.status(404).send(`${this.name} not found`);
     }
