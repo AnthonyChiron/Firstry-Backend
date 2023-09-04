@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
+const { Rules } = require("./rules");
 
 module.exports.Category = mongoose.model(
   "Category",
@@ -13,6 +14,13 @@ module.exports.Category = mongoose.model(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Rules",
       required: true,
+      validate: {
+        isAsync: true,
+        validator: async function (v) {
+          return await Rules.findById(v);
+        },
+        message: "Rules not found",
+      },
     },
     maxCompetitorCount: { type: Number, required: true },
     contest: {

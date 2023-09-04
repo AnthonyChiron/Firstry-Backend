@@ -2,6 +2,7 @@ const riders = require("./riders");
 const contests = require("./contests");
 const categories = require("./categories");
 const rules = require("./rules");
+const registrations = require("./registrations");
 const results = require("./results");
 const users = require("./users");
 const auth = require("./auth");
@@ -21,6 +22,7 @@ module.exports = function (app) {
   app.use("/api/contests", contests);
   app.use("/api/categories", categories);
   app.use("/api/rules", rules);
+  app.use("/api/registrations", registrations);
   app.use("/api/results", results);
   app.use("/api/users", users);
   app.use("/api/auth", auth);
