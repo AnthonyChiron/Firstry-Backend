@@ -2,21 +2,21 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const { Contest } = require("./contest");
-const { Rider } = require("./rider");
+const { Registration } = require("./registration");
 
-module.exports.Result = mongoose.model(
-  "Result",
+module.exports.Pool = mongoose.model(
+  "Pool",
   mongoose.Schema({
-    rider: {
+    registration: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Rider",
+      ref: "Registration",
       required: true,
       validate: {
         isAsync: true,
         validator: async function (v) {
-          return await Rider.findById(v);
+          return await Registration.findById(v);
         },
-        message: "Rider not found",
+        message: "Registration not found",
       },
     },
     contest: {

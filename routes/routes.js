@@ -3,7 +3,7 @@ const contests = require("./contests");
 const categories = require("./categories");
 const rules = require("./rules");
 const registrations = require("./registrations");
-const results = require("./results");
+const pools = require("./pools");
 const users = require("./users");
 const auth = require("./auth");
 const express = require("express");
@@ -23,7 +23,7 @@ module.exports = function (app) {
   app.use("/api/categories", categories);
   app.use("/api/rules", rules);
   app.use("/api/registrations", registrations);
-  app.use("/api/results", results);
+  app.use("/api/pools", pools);
   app.use("/api/users", users);
   app.use("/api/auth", auth);
 
