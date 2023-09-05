@@ -10,6 +10,7 @@ module.exports.Rules = mongoose.model(
     format: { type: String, required: true },
     pointDistribution: { type: Array, required: true },
     competitorPerPool: { type: Number },
+    competitorQualifiedCount: { type: Number },
     jamTimer: { type: Number },
     runTimer: { type: Number },
   })
@@ -33,6 +34,7 @@ module.exports.validate = function (rules) {
       .min(1)
       .required(),
     competitorPerPool: Joi.number(),
+    competitorQualifiedCount: Joi.number(),
     jamTimer: Joi.number(),
     runTimer: Joi.number(),
   });
