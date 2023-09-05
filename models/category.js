@@ -9,6 +9,7 @@ module.exports.Category = mongoose.model(
     description: { type: String, required: true },
     cashprize: { type: String, required: true },
     startDate: Date,
+    endDate: Date,
     sports: { type: Array, required: true },
     rules: {
       type: mongoose.Schema.Types.ObjectId,
@@ -37,6 +38,7 @@ module.exports.validate = function (category) {
     description: Joi.string().min(2).required(),
     cashprize: Joi.string(),
     startDate: Joi.date(),
+    endDate: Joi.date(),
     sports: Joi.array().items(Joi.string()).min(1).required(),
     rules: Joi.objectId().required(),
     maxCompetitorCount: Joi.number().required(),

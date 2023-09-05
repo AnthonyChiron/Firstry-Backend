@@ -31,6 +31,7 @@ module.exports = class CRUDController {
       req.params.id,
       req.body.model
     );
+
     if (!result) {
       res.status(404).send(`${this.name} not found`);
     } else {
