@@ -44,17 +44,22 @@ module.exports.Pool = mongoose.model(
     isQualified: {
       type: Boolean,
     },
+    pool: {
+      type: Number,
+      required: true,
+    },
   })
 );
 
 module.exports.validate = function (result) {
   const schema = Joi.object({
-    rider: Joi.objectId().required(),
+    registration: Joi.objectId().required(),
     contest: Joi.objectId().required(),
     score: Joi.number(),
     rank: Joi.number().required(),
     step: Joi.string().valid("Qualification", "Finale").required(),
     isQualified: Joi.boolean(),
+    pool: Joi.number().required(),
   });
 
   return schema.validate(result);
