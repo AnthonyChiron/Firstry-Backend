@@ -21,7 +21,6 @@ const UserSchema = mongoose.Schema({
     minLength: 5,
     maxLength: 255,
     unique: true,
-    required: true,
   },
   isValid: Boolean,
   password: { type: String, required: true },
@@ -31,7 +30,8 @@ const UserSchema = mongoose.Schema({
 UserSchema.methods.generateAuthToken = function () {
   return jwt.sign(
     { _id: this._id, role: this.role },
-    config.get("jwtPrivateKey")
+    config.get("jwtPrivateKey"),
+    { expiresIn: "2d" }
   );
 };
 

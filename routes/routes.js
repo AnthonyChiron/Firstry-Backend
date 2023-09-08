@@ -10,10 +10,12 @@ const express = require("express");
 const error = require("../middlewares/error");
 const logger = require("../middlewares/logger");
 const helmet = require("helmet");
+const cors = require("cors");
 
 module.exports = function (app) {
   // Middlewares
   app.use(helmet());
+  app.use(cors());
   app.use(express.json());
   app.use(logger);
 

@@ -1,5 +1,5 @@
 const CRUDController = require("./CRUD");
-const { User, validate } = require("../models/user");
+const { User, validateRegister } = require("../models/user");
 const { encrypt } = require("../services/hash");
 const { mailSubjectsEnum, mailContentEnum } = require("../constants/mailEnum");
 const mailService = require("../services/mail");
@@ -8,7 +8,7 @@ const _ = require("lodash");
 module.exports = class UsersController extends CRUDController {
   name = "user";
   model = User;
-  validate = validate;
+  validate = validateRegister;
 
   register = async (req, res) => {
     const { error } = this.validate(req.body.model);

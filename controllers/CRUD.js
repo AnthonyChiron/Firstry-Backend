@@ -13,10 +13,10 @@ module.exports = class CRUDController {
   };
 
   post = async (req, res) => {
+    console.log(req.body);
     const { error } = this.validate(req.body.model);
     if (error) return res.status(400).send(error.details[0].message);
 
-    console.log(req.body.model);
     const model = new this.model(req.body.model);
 
     const savedmodel = await model.save();
