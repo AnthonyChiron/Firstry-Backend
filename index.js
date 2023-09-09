@@ -11,4 +11,6 @@ require("./config/db")(); // db
 
 // PORT
 const port = process.env.PORT || 3000;
-app.listen(port, () => infoLogger.log("info", `Server is on port ${port}!`));
+app.listen(port, "0.0.0.0", () =>
+  infoLogger.log("info", `Server is on port ${port}!`)
+);
