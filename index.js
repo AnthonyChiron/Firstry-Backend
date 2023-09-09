@@ -10,5 +10,5 @@ require("./routes/routes")(app); // routes & middlewares
 require("./config/db")(); // db
 
 // PORT
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 80;
 app.listen(port, () => infoLogger.log("info", `Server is on port ${port}!`));
