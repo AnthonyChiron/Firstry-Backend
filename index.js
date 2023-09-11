@@ -1,4 +1,5 @@
 const { infoLogger } = require("./services/logger");
+const functions = require("firebase-functions");
 const express = require("express");
 
 const app = express();
@@ -9,8 +10,8 @@ require("./config/config")(); // config & env
 require("./routes/routes")(app); // routes & middlewares
 require("./config/db")(); // db
 
-// PORT
-const port = process.env.PORT || 3000;
-app.listen(port, "0.0.0.0", () =>
-  infoLogger.log("info", `Server is on port ${port}!`)
-);
+// // PORT
+// const port = process.env.PORT || 3000;
+// app.listen(port, () => infoLogger.log("info", `Server is on port ${port}!`));
+
+exports.api = functions.https.onRequest(app);
