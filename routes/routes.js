@@ -5,7 +5,6 @@ const rules = require("./rules");
 const registrations = require("./registrations");
 const pools = require("./pools");
 const users = require("./users");
-const auth = require("./auth");
 const express = require("express");
 const error = require("../middlewares/error");
 const logger = require("../middlewares/logger");
@@ -19,7 +18,6 @@ module.exports = function (app) {
   app.use(express.json());
   app.use(logger);
 
-  // Routes
   app.use("/riders", riders);
   app.use("/contests", contests);
   app.use("/categories", categories);
@@ -27,7 +25,14 @@ module.exports = function (app) {
   app.use("/registrations", registrations);
   app.use("/pools", pools);
   app.use("/users", users);
-  app.use("/auth", auth);
+
+  // app.use("/api/riders", riders);
+  // app.use("/api/contests", contests);
+  // app.use("/api/categories", categories);
+  // app.use("/api/rules", rules);
+  // app.use("/api/registrations", registrations);
+  // app.use("/api/pools", pools);
+  // app.use("/api/users", users);
 
   // Logger
   app.use(error);
