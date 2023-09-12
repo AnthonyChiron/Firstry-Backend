@@ -10,7 +10,7 @@ require("./config/config")(); // config & env
 require("./routes/routes")(app); // routes & middlewares
 require("./config/db")(); // db
 
-// // PORT
+// PORT
 // const port = process.env.PORT || 3000;
 // app.listen(port, () => infoLogger.log("info", `Server is on port ${port}!`));
 

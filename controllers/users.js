@@ -11,27 +11,16 @@ module.exports = class UsersController extends CRUDController {
   validate = validateRegister;
 
   register = async (req, res) => {
-    const { error } = this.validate(req.body.model);
+    const { error } = this.validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    const user = await User.findOne({ email: req.body.model.email });
+    const user = await User.findOne({ email: req.body.email });
     if (user) return res.status(400).send("User already registered.");
 
-    const model = new User(req.body.model);
-    model.password = await encrypt(model.password);
-
+    const model = new User(req.body);
     const newUser = await model.save();
 
-    res
-      .header("x-auth-token", newUser.generateAuthToken())
-      .send(_.pick(newUser, ["_id", "name", "email", "role"]));
-  };
-
-  me = async (req, res) => {
-    const currentUser = await this.model
-      .findById(req.user._id)
-      .select("-password");
-    res.send(currentUser);
+    res.send(newUser);
   };
 
   updateEmail = async (req, res) => {
@@ -51,29 +40,10 @@ module.exports = class UsersController extends CRUDController {
     );
   };
 
-  validateEmail = async (req, res) => {
-    // Vérifie que l'utilisateur existe
-    const user = await this.model.findById(req.body.model.id);
+  getUserByGoogleId = async (req, res) => {
+    const user = await this.model.findOne({ googleId: req.params.googleId });
     if (!user) return res.status(404).send("User not found.");
 
-    user.isValid = true;
-
-    res.send("Email has been validate.");
-  };
-
-  resetPassword = async (req, res) => {
-    // Vérifie que l'utilisateur existe
-    const user = await this.model.findOne({ email: req.body.model.email });
-    if (!user) return res.status(404).send("User doesn't exist.");
-
-    // Envoie un mail de réinitialisation de mdp
-    mailService.sendEmail(
-      user.email,
-      mailSubjectsEnum.RESET_PASSWORD,
-      mailContentEnum.RESET_PASSWORD,
-      ""
-    );
-
-    res.send("Reset password mail sent !");
+    res.send(user);
   };
 };
