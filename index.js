@@ -11,7 +11,7 @@ require("./routes/routes")(app); // routes & middlewares
 require("./config/db")(); // db
 
 // PORT
-// const port = process.env.PORT || 3000;
-// app.listen(port, () => infoLogger.log("info", `Server is on port ${port}!`));
+const port = process.env.PORT || 3000;
+app.listen(port, () => infoLogger.log("info", `Server is on port ${port}!`));
 
-exports.api = functions.https.onRequest(app);
+exports = functions.https.onRequest(app);
