@@ -9,10 +9,6 @@ const { joiPasswordExtendCore } = require("joi-password");
 const joiPassword = Joi.extend(joiPasswordExtendCore);
 
 const UserSchema = mongoose.Schema({
-  googleId: {
-    type: String,
-    required: true,
-  },
   email: {
     type: String,
     minLength: 5,
@@ -20,16 +16,26 @@ const UserSchema = mongoose.Schema({
     unique: true,
     required: true,
   },
+  password: {
+    type: String,
+    required: true,
+  },
   isValid: Boolean,
+  verifyEmailToken: String,
   role: { type: String, enum: rolesEnum, required: true },
 });
 
 module.exports.User = mongoose.model("User", UserSchema);
 
-module.exports.validateRegister = function (user) {
+module.exports.validateSignup = function (user) {
   const schema = Joi.object({
-    googleId: Joi.string().required(),
     email: Joi.string().email().required(),
+    password: joiPassword
+      .string()
+      .minOfNumeric(2)
+      .noWhiteSpaces()
+      .onlyLatinCharacters()
+      .required(),
     isValid: Joi.boolean(),
     role: Joi.string()
       .valid(...Object.values(rolesEnum))
@@ -43,9 +49,6 @@ module.exports.validateLogin = function (user) {
     email: Joi.string().email().required(),
     password: joiPassword
       .string()
-      .minOfSpecialCharacters(2)
-      .minOfLowercase(2)
-      .minOfUppercase(2)
       .minOfNumeric(2)
       .noWhiteSpaces()
       .onlyLatinCharacters()
