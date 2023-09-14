@@ -14,17 +14,17 @@ module.exports = class CRUDController {
 
   post = async (req, res) => {
     console.log(req.body);
-    const { error } = this.validate(req.body.model);
+    const { error } = this.validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    const model = new this.model(req.body.model);
+    const model = new this.model(req.body);
 
     const savedmodel = await model.save();
     res.send(savedmodel);
   };
 
   update = async (req, res) => {
-    const { error } = this.validate(req.body.model);
+    const { error } = this.validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
     const result = await this.model.findByIdAndUpdate(

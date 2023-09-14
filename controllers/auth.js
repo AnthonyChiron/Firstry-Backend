@@ -4,9 +4,16 @@ const crypto = require("crypto");
 const { sendEmail } = require("../services/mail");
 const { User, validateSignup, validateLogin } = require("../models/user");
 const _ = require("lodash");
+const rolesEnum = require("../constants/rolesEnum");
+const {
+  Organizer,
+  validate: validateOrganizer,
+} = require("../models/organizer");
+const { Rider, validate: validateRider } = require("../models/rider");
 
 module.exports = class AuthController {
   signup = async (req, res) => {
+    console.log(req.body);
     const { error } = validateSignup(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -23,6 +30,30 @@ module.exports = class AuthController {
       role: req.body.role,
     });
 
+    if (req.body.role == rolesEnum.CONTEST) {
+      const reqOrganizer = req.body.organizer;
+      console.log(reqOrganizer);
+      const { error } = validateOrganizer(reqOrganizer);
+      if (error) return res.status(400).send(error.details[0].message);
+
+      const organizer = new Organizer(reqOrganizer);
+
+      const savedOrganizer = await organizer.save();
+      console.log(savedOrganizer);
+      user.organizerId = savedOrganizer._id;
+    }
+
+    if (req.body.role == rolesEnum.RIDER) {
+      const reqRider = req.body.rider;
+      const { error } = validateRider(reqRider);
+      if (error) return res.status(400).send(error.details[0].message);
+
+      const rider = new Rider(reqRider);
+
+      const savedRider = await rider.save();
+      user.riderId = savedRider._id;
+    }
+
     try {
       const savedUser = await user.save();
 
@@ -34,11 +65,15 @@ module.exports = class AuthController {
       );
 
       res.send(
-        _.pick(
-          savedUser._id,
-          savedUser.email,
-          savedUser.role,
-          savedUser.isValid
+        JSON.stringify(
+          _.pick(savedUser, [
+            "_id",
+            "email",
+            "role",
+            "isValid",
+            "riderId",
+            "organizerId",
+          ])
         )
       );
     } catch (err) {

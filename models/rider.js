@@ -8,7 +8,7 @@ module.exports.Rider = mongoose.model(
   mongoose.Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    gender: { type: String, required: true },
+    gender: String,
     birthDate: Date,
     sports: {
       type: Array,
@@ -34,7 +34,7 @@ module.exports.validate = function (rider) {
   const schema = Joi.object({
     firstName: Joi.string().min(2).required(),
     lastName: Joi.string().min(2).required(),
-    gender: Joi.string().min(2).required(),
+    gender: Joi.string().min(2),
     birthDate: Joi.date(),
     sports: Joi.array()
       .items(Joi.string().valid(...Object.values(sportsEnum)))

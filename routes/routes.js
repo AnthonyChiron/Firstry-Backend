@@ -6,6 +6,7 @@ const auth = require("./auth");
 const registrations = require("./registrations");
 const pools = require("./pools");
 const users = require("./users");
+const organizers = require("./organizers");
 const express = require("express");
 const error = require("../middlewares/error");
 const logger = require("../middlewares/logger");
@@ -27,6 +28,16 @@ module.exports = function (app) {
   app.use("/api/registrations", registrations);
   app.use("/api/pools", pools);
   app.use("/api/users", users);
+  app.use("/api/organizers", organizers);
+
+  // app.use("/riders", riders);
+  // app.use("/auth", auth);
+  // app.use("/contests", contests);
+  // app.use("/categories", categories);
+  // app.use("/rules", rules);
+  // app.use("/registrations", registrations);
+  // app.use("/pools", pools);
+  // app.use("/users", users);
 
   // Logger
   app.use(error);
