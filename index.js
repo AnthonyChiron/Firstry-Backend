@@ -14,4 +14,4 @@ require("./config/db")(); // db
 const port = process.env.PORT || 3000;
 app.listen(port, () => infoLogger.log("info", `Server is on port ${port}!`));
 
-exports = functions.https.onRequest(app);
+exports.api = functions.https.onRequest(app);

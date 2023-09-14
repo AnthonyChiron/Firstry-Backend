@@ -23,6 +23,14 @@ const UserSchema = mongoose.Schema({
   isValid: Boolean,
   verifyEmailToken: String,
   role: { type: String, enum: rolesEnum, required: true },
+  riderId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Rider",
+  },
+  organizerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Organizer",
+  },
 });
 
 module.exports.User = mongoose.model("User", UserSchema);
@@ -40,6 +48,10 @@ module.exports.validateSignup = function (user) {
     role: Joi.string()
       .valid(...Object.values(rolesEnum))
       .required(),
+    rider: Joi.object(),
+    riderId: Joi.objectId(),
+    organizer: Joi.object(),
+    organizerId: Joi.objectId(),
   });
   return schema.validate(user);
 };
