@@ -13,23 +13,23 @@ const { Rider, validate: validateRider } = require("../models/rider");
 
 module.exports = class AuthController {
   signup = async (req, res) => {
-    console.log(req.body);
-    const { error } = validateSignup(req.body);
+    const { error } = validateSignup(req.body.user);
     if (error) return res.status(400).send(error.details[0].message);
 
-    const emailExist = await User.findOne({ email: req.body.email });
+    const emailExist = await User.findOne({ email: req.body.user.email });
     if (emailExist) return res.status(400).send("Email already exists");
 
     const verifyEmailToken = crypto.randomBytes(20).toString("hex");
 
     const user = new User({
-      email: req.body.email,
-      password: await hash.encrypt(req.body.password),
+      email: req.body.user.email,
+      password: await hash.encrypt(req.body.user.password),
       isValid: false,
       verifyEmailToken: verifyEmailToken,
-      role: req.body.role,
+      role: req.body.user.role,
     });
 
+    console.log(req.body.organizer);
     if (req.body.role == rolesEnum.CONTEST) {
       const reqOrganizer = req.body.organizer;
       console.log(reqOrganizer);
