@@ -29,17 +29,14 @@ module.exports = class AuthController {
       role: req.body.user.role,
     });
 
-    console.log(req.body.organizer);
     if (req.body.role == rolesEnum.CONTEST) {
       const reqOrganizer = req.body.organizer;
-      console.log(reqOrganizer);
       const { error } = validateOrganizer(reqOrganizer);
       if (error) return res.status(400).send(error.details[0].message);
 
       const organizer = new Organizer(reqOrganizer);
 
       const savedOrganizer = await organizer.save();
-      console.log(savedOrganizer);
       user.organizerId = savedOrganizer._id;
     }
 
@@ -56,26 +53,14 @@ module.exports = class AuthController {
 
     try {
       const savedUser = await user.save();
-
       sendEmail(
         savedUser.email,
         "Firstry - Validation de votre compte",
-        "Veuillez cliquer sur ce lien pour vérifier votre compte: http://localhost:4200/verify/" +
+        "Veuillez cliquer sur ce lien pour vérifier votre compte: http://localhost:4200/account/validateEmail/" +
           verifyEmailToken
       );
 
-      res.send(
-        JSON.stringify(
-          _.pick(savedUser, [
-            "_id",
-            "email",
-            "role",
-            "isValid",
-            "riderId",
-            "organizerId",
-          ])
-        )
-      );
+      res.send(JSON.stringify(this.createToken(savedUser)));
     } catch (err) {
       console.log(err);
       res.status(400).send(err);
@@ -93,17 +78,7 @@ module.exports = class AuthController {
     const validPass = await hash.isValid(req.body.password, user.password);
     if (!validPass) return res.status(400).send("Invalid password");
 
-    // Create and assign a token
-    const token = jwt.sign(
-      {
-        _id: user._id,
-        role: user.role,
-        email: user.email,
-        isValid: user.isValid,
-      },
-      "SECRET_TOKEN"
-    );
-    res.send(JSON.stringify(token));
+    res.send(JSON.stringify(this.createToken()));
   };
 
   sendNewValidationEmail = async (req, res) => {
@@ -142,6 +117,19 @@ module.exports = class AuthController {
     user.isValid = true;
 
     const savedUser = await user.save();
-    res.send(savedUser);
+    res.send(JSON.stringify(this.createToken(savedUser)));
   };
+
+  createToken(user) {
+    const token = jwt.sign(
+      {
+        _id: user._id,
+        role: user.role,
+        email: user.email,
+        isValid: user.isValid,
+      },
+      "SECRET_TOKEN"
+    );
+    return token;
+  }
 };

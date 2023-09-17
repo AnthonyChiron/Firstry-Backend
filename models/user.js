@@ -40,7 +40,11 @@ module.exports.validateSignup = function (user) {
     email: Joi.string().email().required(),
     password: joiPassword
       .string()
-      .minOfNumeric(2)
+      .noWhiteSpaces()
+      .onlyLatinCharacters()
+      .required(),
+    confirmPassword: joiPassword
+      .string()
       .noWhiteSpaces()
       .onlyLatinCharacters()
       .required(),
