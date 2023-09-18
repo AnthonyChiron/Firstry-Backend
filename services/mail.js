@@ -1,13 +1,13 @@
 const nodemailer = require("nodemailer");
-
-const from = "anthony.chiron@outlook.fr";
+const functions = require("firebase-functions");
+const from = "app@firstry.fr";
 
 // Créer un transporteur de messagerie SMTP
 const transporter = nodemailer.createTransport({
-  service: "Outlook", // Remplacez par le service de messagerie que vous utilisez
+  service: "gmail", // Remplacez par le service de messagerie que vous utilisez
   auth: {
     user: from, // Votre adresse e-mail
-    pass: "iXEk3C&2pdFJ*F", // Votre mot de passe
+    pass: functions.config().mail.pass, // Votre mot de passe
   },
 });
 

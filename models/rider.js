@@ -35,11 +35,13 @@ module.exports.validate = function (rider) {
     firstName: Joi.string().min(2).required(),
     lastName: Joi.string().min(2).required(),
     gender: Joi.string().min(2),
-    birthDate: Joi.date(),
+    birthDate: Joi.date().required(),
+    nationality: Joi.object().required(),
+    city: Joi.string().min(2).required(),
     sports: Joi.array()
       .items(Joi.string().valid(...Object.values(sportsEnum)))
       .required(),
-    category: Joi.string().min(2).required(),
+    category: Joi.string().min(2),
     socials: Joi.object({
       instagram: Joi.string().min(3).pattern(new RegExp("^@")),
       twitter: Joi.string().min(3).pattern(new RegExp("^@")),

@@ -46,4 +46,21 @@ module.exports = class UsersController extends CRUDController {
 
     res.send(user);
   };
+
+  test = async (req, res) => {
+    mailService.sendEmail(
+      "anthony.chiron@outlook.fr",
+      "Test de mail",
+      "Ceci est un test de mail",
+      ""
+    );
+    res.send("OK");
+  };
+
+  isEmailAvailable = async (req, res) => {
+    console.log(req.body);
+    const user = await User.findOne({ email: req.body.email });
+    if (user) return res.status(200).send(false);
+    return res.status(200).send(true);
+  };
 };
