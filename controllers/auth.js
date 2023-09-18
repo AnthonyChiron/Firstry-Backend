@@ -10,6 +10,7 @@ const {
   validate: validateOrganizer,
 } = require("../models/organizer");
 const { Rider, validate: validateRider } = require("../models/rider");
+const functions = require("firebase-functions");
 
 module.exports = class AuthController {
   signup = async (req, res) => {
@@ -29,7 +30,7 @@ module.exports = class AuthController {
       role: req.body.user.role,
     });
 
-    if (req.body.role == rolesEnum.CONTEST) {
+    if (req.body.user.role == rolesEnum.CONTEST) {
       const reqOrganizer = req.body.organizer;
       const { error } = validateOrganizer(reqOrganizer);
       if (error) return res.status(400).send(error.details[0].message);
@@ -40,7 +41,7 @@ module.exports = class AuthController {
       user.organizerId = savedOrganizer._id;
     }
 
-    if (req.body.role == rolesEnum.RIDER) {
+    if (req.body.user.role == rolesEnum.RIDER) {
       const reqRider = req.body.rider;
       const { error } = validateRider(reqRider);
       if (error) return res.status(400).send(error.details[0].message);
@@ -49,15 +50,25 @@ module.exports = class AuthController {
 
       const savedRider = await rider.save();
       user.riderId = savedRider._id;
+      console.log(user);
     }
 
     try {
       const savedUser = await user.save();
+      console.log(savedUser);
+
+      let url = "";
+      if (functions.config().env.type == "production")
+        url =
+          "https://firstry-7e136.web.app/account/validateEmail/" +
+          verifyEmailToken;
+      else
+        url = "http://localhost:4200/account/validateEmail/" + verifyEmailToken;
+
       sendEmail(
         savedUser.email,
         "Firstry - Validation de votre compte",
-        "Veuillez cliquer sur ce lien pour vérifier votre compte: http://localhost:4200/account/validateEmail/" +
-          verifyEmailToken
+        "Veuillez cliquer sur ce lien pour vérifier votre compte: " + url
       );
 
       res.send(JSON.stringify(this.createToken(savedUser)));
@@ -128,7 +139,7 @@ module.exports = class AuthController {
         email: user.email,
         isValid: user.isValid,
       },
-      "SECRET_TOKEN"
+      functions.config().env.secret_token
     );
     return token;
   }

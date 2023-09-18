@@ -11,7 +11,10 @@ require("./routes/routes")(app); // routes & middlewares
 require("./config/db")(); // db
 
 // PORT
-const port = process.env.PORT || 3000;
-app.listen(port, () => infoLogger.log("info", `Server is on port ${port}!`));
+if (functions.config().env.type == "dev") {
+  const port = process.env.PORT || 3000;
+  app.listen(port, () => infoLogger.log("info", `Server is on port ${port}!`));
+}
 
-exports.api = functions.https.onRequest(app);
+if (functions.config().env.type == "production")
+  exports.api = functions.https.onRequest(app);
