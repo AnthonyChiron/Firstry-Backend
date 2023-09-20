@@ -1,11 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const AuthController = require("../controllers/auth");
+const multer = require("multer");
 
+const upload = multer({ storage: multer.memoryStorage() });
 const auth = new AuthController();
 
 // CRUD
-router.post("/signup", auth.signup);
+router.post("/signup", upload.single("photo"), auth.signup);
 router.post("/login", auth.login);
 router.post("/sendNewValidationEmail/:id", auth.sendNewValidationEmail);
 router.post("/validateEmail/:id", auth.validateEmail);

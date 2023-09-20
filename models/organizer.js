@@ -7,6 +7,7 @@ module.exports.Organizer = mongoose.model(
   mongoose.Schema({
     name: { type: String, required: true },
     siretNumber: { type: String, required: true },
+    photoUrl: { type: String },
     socials: {
       instagram: String,
       twitter: String,
