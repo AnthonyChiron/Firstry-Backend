@@ -8,7 +8,9 @@ module.exports.Rider = mongoose.model(
   mongoose.Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
+    photoUrl: { type: String },
     gender: String,
+    nationality: Object,
     birthDate: Date,
     sports: {
       type: Array,
@@ -30,10 +32,10 @@ module.exports.Rider = mongoose.model(
 );
 
 module.exports.validate = function (rider) {
-  console.log(Object.values(sportsEnum));
   const schema = Joi.object({
     firstName: Joi.string().min(2).required(),
     lastName: Joi.string().min(2).required(),
+    photoUrl: Joi.string(),
     gender: Joi.string().min(2),
     birthDate: Joi.date().required(),
     nationality: Joi.object().required(),

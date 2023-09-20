@@ -11,44 +11,56 @@ const {
 } = require("../models/organizer");
 const { Rider, validate: validateRider } = require("../models/rider");
 const functions = require("firebase-functions");
+const { uploadFile } = require("../services/storage");
 
 module.exports = class AuthController {
   signup = async (req, res) => {
-    const { error } = validateSignup(req.body.user);
+    const body = JSON.parse(req.body.signUpForm);
+    console.log(body.user);
+    const { error } = validateSignup(body.user);
     if (error) return res.status(400).send(error.details[0].message);
 
-    const emailExist = await User.findOne({ email: req.body.user.email });
+    const emailExist = await User.findOne({ email: body.user.email });
     if (emailExist) return res.status(400).send("Email already exists");
 
     const verifyEmailToken = crypto.randomBytes(20).toString("hex");
-
     const user = new User({
-      email: req.body.user.email,
-      password: await hash.encrypt(req.body.user.password),
+      email: body.user.email,
+      password: await hash.encrypt(body.user.password),
       isValid: false,
       verifyEmailToken: verifyEmailToken,
-      role: req.body.user.role,
+      role: body.user.role,
     });
 
-    if (req.body.user.role == rolesEnum.CONTEST) {
-      const reqOrganizer = req.body.organizer;
+    let savedOrganizer = null;
+    if (body.user.role == rolesEnum.CONTEST) {
+      const reqOrganizer = body.organizer;
       const { error } = validateOrganizer(reqOrganizer);
       if (error) return res.status(400).send(error.details[0].message);
-
       const organizer = new Organizer(reqOrganizer);
-
-      const savedOrganizer = await organizer.save();
+      const photoUrlOrganizer = await uploadFile(
+        req.file,
+        "pdp/" + reqOrganizer.name + "_" + reqOrganizer.siretNumber
+      );
+      organizer.photoUrl = photoUrlOrganizer;
+      savedOrganizer = await organizer.save();
       user.organizerId = savedOrganizer._id;
     }
 
-    if (req.body.user.role == rolesEnum.RIDER) {
-      const reqRider = req.body.rider;
+    let savedRider = null;
+    if (body.user.role == rolesEnum.RIDER) {
+      const reqRider = body.rider;
       const { error } = validateRider(reqRider);
       if (error) return res.status(400).send(error.details[0].message);
 
       const rider = new Rider(reqRider);
+      const photoUrlRider = await uploadFile(
+        req.file,
+        "pdp/" + reqRider.firstName + "_" + reqRider.lastName
+      );
+      rider.photoUrl = photoUrlRider;
 
-      const savedRider = await rider.save();
+      savedRider = await rider.save();
       user.riderId = savedRider._id;
       console.log(user);
     }
@@ -56,7 +68,6 @@ module.exports = class AuthController {
     try {
       const savedUser = await user.save();
       console.log(savedUser);
-
       let url = "";
       if (functions.config().env.type == "production")
         url =
@@ -64,14 +75,14 @@ module.exports = class AuthController {
           verifyEmailToken;
       else
         url = "http://localhost:4200/account/validateEmail/" + verifyEmailToken;
-
       sendEmail(
         savedUser.email,
         "Firstry - Validation de votre compte",
         "Veuillez cliquer sur ce lien pour vérifier votre compte: " + url
       );
-
-      res.send(JSON.stringify(this.createToken(savedUser)));
+      res.send(
+        JSON.stringify(this.createToken(savedUser, savedRider, savedOrganizer))
+      );
     } catch (err) {
       console.log(err);
       res.status(400).send(err);
@@ -89,7 +100,10 @@ module.exports = class AuthController {
     const validPass = await hash.isValid(req.body.password, user.password);
     if (!validPass) return res.status(400).send("Invalid password");
 
-    res.send(JSON.stringify(this.createToken()));
+    const rider = await Rider.findById(user.riderId);
+    const organizer = await Organizer.findById(user.organizerId);
+
+    res.send(JSON.stringify(this.createToken(user, rider, organizer)));
   };
 
   sendNewValidationEmail = async (req, res) => {
@@ -128,16 +142,25 @@ module.exports = class AuthController {
     user.isValid = true;
 
     const savedUser = await user.save();
-    res.send(JSON.stringify(this.createToken(savedUser)));
+
+    const rider = await Rider.findById(user.riderId);
+    const organizer = await Organizer.findById(user.organizerId);
+
+    res.send(JSON.stringify(this.createToken(savedUser, rider, organizer)));
   };
 
-  createToken(user) {
+  createToken(user, rider, organizer) {
     const token = jwt.sign(
       {
         _id: user._id,
         role: user.role,
         email: user.email,
+        photoUrl: user.photoUrl,
         isValid: user.isValid,
+        riderId: user.riderId,
+        organizerId: user.organizerId,
+        rider: rider,
+        organizer: organizer,
       },
       functions.config().env.secret_token
     );

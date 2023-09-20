@@ -23,6 +23,7 @@ const UserSchema = mongoose.Schema({
   isValid: Boolean,
   verifyEmailToken: String,
   role: { type: String, enum: rolesEnum, required: true },
+  photoUrl: { type: String },
   riderId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Rider",
