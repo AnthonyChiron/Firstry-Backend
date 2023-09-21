@@ -3,4 +3,5 @@ module.exports = {
   TROTTINETTE: "trottinette",
   BMX: "bmx",
   SKATE: "skate",
+  QUAD: "quad",
 };

@@ -16,7 +16,8 @@ const { uploadFile } = require("../services/storage");
 module.exports = class AuthController {
   signup = async (req, res) => {
     const body = JSON.parse(req.body.signUpForm);
-    console.log(body.user);
+    console.log(body);
+
     const { error } = validateSignup(body.user);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -24,62 +25,24 @@ module.exports = class AuthController {
     if (emailExist) return res.status(400).send("Email already exists");
 
     const verifyEmailToken = crypto.randomBytes(20).toString("hex");
-    const user = new User({
-      email: body.user.email,
-      password: await hash.encrypt(body.user.password),
-      isValid: false,
-      verifyEmailToken: verifyEmailToken,
-      role: body.user.role,
-    });
+    const user = createUser(body.user, verifyEmailToken);
 
     let savedOrganizer = null;
     if (body.user.role == rolesEnum.CONTEST) {
-      const reqOrganizer = body.organizer;
-      const { error } = validateOrganizer(reqOrganizer);
-      if (error) return res.status(400).send(error.details[0].message);
-      const organizer = new Organizer(reqOrganizer);
-      const photoUrlOrganizer = await uploadFile(
-        req.file,
-        "pdp/" + reqOrganizer.name + "_" + reqOrganizer.siretNumber
-      );
-      organizer.photoUrl = photoUrlOrganizer;
-      savedOrganizer = await organizer.save();
+      savedOrganizer = await createOrganizer(body.organizer, req.file);
       user.organizerId = savedOrganizer._id;
     }
 
     let savedRider = null;
     if (body.user.role == rolesEnum.RIDER) {
-      const reqRider = body.rider;
-      const { error } = validateRider(reqRider);
-      if (error) return res.status(400).send(error.details[0].message);
-
-      const rider = new Rider(reqRider);
-      const photoUrlRider = await uploadFile(
-        req.file,
-        "pdp/" + reqRider.firstName + "_" + reqRider.lastName
-      );
-      rider.photoUrl = photoUrlRider;
-
-      savedRider = await rider.save();
+      savedRider = await createRider(body.rider, req.file);
       user.riderId = savedRider._id;
-      console.log(user);
     }
 
     try {
       const savedUser = await user.save();
       console.log(savedUser);
-      let url = "";
-      if (functions.config().env.type == "production")
-        url =
-          "https://firstry-7e136.web.app/account/validateEmail/" +
-          verifyEmailToken;
-      else
-        url = "http://localhost:4200/account/validateEmail/" + verifyEmailToken;
-      sendEmail(
-        savedUser.email,
-        "Firstry - Validation de votre compte",
-        "Veuillez cliquer sur ce lien pour vérifier votre compte: " + url
-      );
+      sendVerificationEmail(savedUser.email, verifyEmailToken);
       res.send(
         JSON.stringify(this.createToken(savedUser, savedRider, savedOrganizer))
       );
@@ -89,20 +52,84 @@ module.exports = class AuthController {
     }
   };
 
+  createUser = async (userData, verifyEmailToken) => {
+    return new User({
+      email: userData.email,
+      password: await hash.encrypt(userData.password),
+      isValid: false,
+      verifyEmailToken: verifyEmailToken,
+      role: userData.role,
+    });
+  };
+
+  createOrganizer = async (organizerData, file) => {
+    const { error } = validateOrganizer(organizerData);
+    if (error) throw new Error(error.details[0].message);
+
+    const organizer = new Organizer(organizerData);
+    const photoUrlOrganizer = await uploadFile(
+      file,
+      "pdp/" + organizerData.name + "_" + organizerData.siretNumber
+    );
+    organizer.photoUrl = photoUrlOrganizer;
+    return organizer.save();
+  };
+
+  createRider = async (riderData, file) => {
+    const { error } = validateRider(riderData);
+    console.log(error);
+    if (error) throw new Error(error.details[0].message);
+
+    const rider = new Rider(riderData);
+    const photoUrlRider = await uploadFile(
+      file,
+      "pdp/" + riderData.firstName + "_" + riderData.lastName
+    );
+    rider.photoUrl = photoUrlRider;
+    return rider.save();
+  };
+
+  sendVerificationEmail = (email, verifyEmailToken) => {
+    let url = "";
+    if (functions.config().env.type == "production")
+      url =
+        "https://firstry-7e136.web.app/account/validateEmail/" +
+        verifyEmailToken;
+    else
+      url = "http://localhost:4200/account/validateEmail/" + verifyEmailToken;
+    sendEmail(
+      email,
+      "Firstry - Validation de votre compte",
+      "Veuillez cliquer sur ce lien pour vérifier votre compte: " + url
+    );
+  };
+
   login = async (req, res) => {
+    console.log("a");
+    console.log(req.body);
     const { error } = validateLogin(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
     const user = await User.findOne({ email: req.body.email });
     if (!user) return res.status(400).send("Email is not found");
 
+    console.log("b");
     // Check if password is correct
     const validPass = await hash.isValid(req.body.password, user.password);
     if (!validPass) return res.status(400).send("Invalid password");
 
-    const rider = await Rider.findById(user.riderId);
-    const organizer = await Organizer.findById(user.organizerId);
+    let rider;
+    let organizer;
+    console.log(user);
+    if (user.role == rolesEnum.RIDER) {
+      rider = await Rider.findById(user.riderId);
+      organizer = null;
+    } else {
+      organizer = await Organizer.findById(user.organizerId);
+      rider = null;
+    }
 
+    console.log("c");
     res.send(JSON.stringify(this.createToken(user, rider, organizer)));
   };
 
