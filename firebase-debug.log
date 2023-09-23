@@ -1,0 +1,160 @@
+[debug] [2023-09-21T19:16:31.077Z] ----------------------------------------------------------------------
+[debug] [2023-09-21T19:16:31.078Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\antho\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only functions
+[debug] [2023-09-21T19:16:31.078Z] CLI Version:   12.5.3
+[debug] [2023-09-21T19:16:31.078Z] Platform:      win32
+[debug] [2023-09-21T19:16:31.079Z] Node Version:  v18.16.0
+[debug] [2023-09-21T19:16:31.079Z] Time:          Thu Sep 21 2023 21:16:31 GMT+0200 (heure d’été d’Europe centrale)
+[debug] [2023-09-21T19:16:31.079Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-09-21T19:16:31.128Z] Field ".functions" in "firebase.json" is possibly invalid: should be object
+[debug] [2023-09-21T19:16:31.128Z] Object ".functions[0]" in "firebase.json" has unknown property: {"additionalProperty":"funcion"}
+[debug] [2023-09-21T19:16:31.129Z] Field ".functions" in "firebase.json" is possibly invalid: should match some schema in anyOf
+[debug] [2023-09-21T19:16:31.134Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-09-21T19:16:31.135Z] > authorizing via signed-in user (contact@sean-prod.com)
+[debug] [2023-09-21T19:16:31.135Z] [iam] checking project firstry-7e136 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2023-09-21T19:16:31.136Z] > refreshing access token with scopes: []
+[debug] [2023-09-21T19:16:31.137Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2023-09-21T19:16:31.137Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-09-21T19:16:31.320Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2023-09-21T19:16:31.321Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-09-21T19:16:31.326Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/firstry-7e136:testIamPermissions [none]
+[debug] [2023-09-21T19:16:31.326Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/firstry-7e136:testIamPermissions x-goog-quota-user=projects/firstry-7e136
+[debug] [2023-09-21T19:16:31.326Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/firstry-7e136:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2023-09-21T19:16:32.001Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/firstry-7e136:testIamPermissions 200
+[debug] [2023-09-21T19:16:32.001Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/firstry-7e136:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2023-09-21T19:16:32.002Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/firstry-7e136/serviceAccounts/firstry-7e136@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2023-09-21T19:16:32.002Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/firstry-7e136/serviceAccounts/firstry-7e136@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-09-21T19:16:32.624Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/firstry-7e136/serviceAccounts/firstry-7e136@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2023-09-21T19:16:32.624Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/firstry-7e136/serviceAccounts/firstry-7e136@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[info] 
+[info] === Deploying to 'firstry-7e136'...
+[info] 
+[info] i  deploying functions 
+[info] +  functions: Finished running predeploy script. 
+[debug] [2023-09-21T19:16:32.627Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/firstry-7e136 [none]
+[debug] [2023-09-21T19:16:32.912Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/firstry-7e136 200
+[debug] [2023-09-21T19:16:32.912Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/firstry-7e136 {"projectId":"firstry-7e136","projectNumber":"305938669830","displayName":"Firstry","name":"projects/firstry-7e136","resources":{"hostingSite":"firstry-7e136","storageBucket":"firstry-7e136.appspot.com","locationId":"europe-west"},"state":"ACTIVE","etag":"1_963ec1b3-1800-4f1a-a145-519ec88592b6"}
+[info] i  functions: preparing codebase default for deployment 
+[info] i  functions: ensuring required API cloudfunctions.googleapis.com is enabled... 
+[info] i  functions: ensuring required API cloudbuild.googleapis.com is enabled... 
+[info] i  artifactregistry: ensuring required API artifactregistry.googleapis.com is enabled... 
+[debug] [2023-09-21T19:16:32.913Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/firstry-7e136/services/cloudfunctions.googleapis.com [none]
+[debug] [2023-09-21T19:16:32.913Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/firstry-7e136/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/firstry-7e136
+[debug] [2023-09-21T19:16:32.914Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/firstry-7e136/services/runtimeconfig.googleapis.com [none]
+[debug] [2023-09-21T19:16:32.914Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/firstry-7e136/services/runtimeconfig.googleapis.com x-goog-quota-user=projects/firstry-7e136
+[debug] [2023-09-21T19:16:32.915Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/firstry-7e136/services/cloudbuild.googleapis.com [none]
+[debug] [2023-09-21T19:16:32.915Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/firstry-7e136/services/cloudbuild.googleapis.com x-goog-quota-user=projects/firstry-7e136
+[debug] [2023-09-21T19:16:32.915Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/firstry-7e136/services/artifactregistry.googleapis.com [none]
+[debug] [2023-09-21T19:16:32.915Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/firstry-7e136/services/artifactregistry.googleapis.com x-goog-quota-user=projects/firstry-7e136
+[debug] [2023-09-21T19:16:33.805Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/firstry-7e136/services/runtimeconfig.googleapis.com 200
+[debug] [2023-09-21T19:16:33.806Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/firstry-7e136/services/runtimeconfig.googleapis.com [omitted]
+[debug] [2023-09-21T19:16:33.806Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/firstry-7e136/services/artifactregistry.googleapis.com 200
+[debug] [2023-09-21T19:16:33.806Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/firstry-7e136/services/artifactregistry.googleapis.com [omitted]
+[info] +  artifactregistry: required API artifactregistry.googleapis.com is enabled 
+[debug] [2023-09-21T19:16:33.807Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/firstry-7e136/services/cloudbuild.googleapis.com 200
+[debug] [2023-09-21T19:16:33.807Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/firstry-7e136/services/cloudbuild.googleapis.com [omitted]
+[info] +  functions: required API cloudbuild.googleapis.com is enabled 
+[debug] [2023-09-21T19:16:33.867Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/firstry-7e136/services/cloudfunctions.googleapis.com 200
+[debug] [2023-09-21T19:16:33.867Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/firstry-7e136/services/cloudfunctions.googleapis.com [omitted]
+[info] +  functions: required API cloudfunctions.googleapis.com is enabled 
+[debug] [2023-09-21T19:16:33.868Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/firstry-7e136/adminSdkConfig [none]
+[debug] [2023-09-21T19:16:34.117Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/firstry-7e136/adminSdkConfig 200
+[debug] [2023-09-21T19:16:34.117Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/firstry-7e136/adminSdkConfig {"projectId":"firstry-7e136","storageBucket":"firstry-7e136.appspot.com","locationId":"europe-west"}
+[debug] [2023-09-21T19:16:34.117Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs [none]
+[debug] [2023-09-21T19:16:34.420Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs 200
+[debug] [2023-09-21T19:16:34.420Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs {"configs":[{"name":"projects/firstry-7e136/configs/config"},{"name":"projects/firstry-7e136/configs/env"},{"name":"projects/firstry-7e136/configs/mail"}]}
+[debug] [2023-09-21T19:16:34.421Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/config/variables [none]
+[debug] [2023-09-21T19:16:34.422Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/env/variables [none]
+[debug] [2023-09-21T19:16:34.423Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/mail/variables [none]
+[debug] [2023-09-21T19:16:34.655Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/config/variables 200
+[debug] [2023-09-21T19:16:34.655Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/config/variables {"variables":[{"name":"projects/firstry-7e136/configs/config/variables/private_key_id","updateTime":"2023-09-20T10:13:45.305759097Z"},{"name":"projects/firstry-7e136/configs/config/variables/project_id","updateTime":"2023-09-20T10:13:44.780455004Z"},{"name":"projects/firstry-7e136/configs/config/variables/type","updateTime":"2023-09-20T10:13:45.721635677Z"},{"name":"projects/firstry-7e136/configs/config/variables/client_email","updateTime":"2023-09-20T10:16:12.085853174Z"},{"name":"projects/firstry-7e136/configs/config/variables/client_id","updateTime":"2023-09-20T10:16:30.028659549Z"},{"name":"projects/firstry-7e136/configs/config/variables/private_key","updateTime":"2023-09-20T10:15:19.575973363Z"}]}
+[debug] [2023-09-21T19:16:34.656Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/config/variables/private_key_id [none]
+[debug] [2023-09-21T19:16:34.658Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/config/variables/project_id [none]
+[debug] [2023-09-21T19:16:34.659Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/config/variables/type [none]
+[debug] [2023-09-21T19:16:34.660Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/config/variables/client_email [none]
+[debug] [2023-09-21T19:16:34.661Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/config/variables/client_id [none]
+[debug] [2023-09-21T19:16:34.662Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/config/variables/private_key [none]
+[debug] [2023-09-21T19:16:34.725Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/mail/variables 200
+[debug] [2023-09-21T19:16:34.726Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/mail/variables {"variables":[{"name":"projects/firstry-7e136/configs/mail/variables/pass","updateTime":"2023-09-18T08:02:22.699369677Z"}]}
+[debug] [2023-09-21T19:16:34.726Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/mail/variables/pass [none]
+[debug] [2023-09-21T19:16:34.776Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/env/variables 200
+[debug] [2023-09-21T19:16:34.776Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/env/variables {"variables":[{"name":"projects/firstry-7e136/configs/env/variables/type","updateTime":"2023-09-18T07:58:37.141278117Z"},{"name":"projects/firstry-7e136/configs/env/variables/secret_token","updateTime":"2023-09-18T07:51:51.275856391Z"}]}
+[debug] [2023-09-21T19:16:34.776Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/env/variables/type [none]
+[debug] [2023-09-21T19:16:34.777Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/env/variables/secret_token [none]
+[debug] [2023-09-21T19:16:34.845Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/config/variables/project_id 200
+[debug] [2023-09-21T19:16:34.845Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/config/variables/project_id {"name":"projects/firstry-7e136/configs/config/variables/project_id","updateTime":"2023-09-20T10:13:44.780455004Z","text":"firstry-7e136"}
+[debug] [2023-09-21T19:16:34.846Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/config/variables/private_key_id 200
+[debug] [2023-09-21T19:16:34.846Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/config/variables/private_key_id {"name":"projects/firstry-7e136/configs/config/variables/private_key_id","updateTime":"2023-09-20T10:13:45.305759097Z","text":"f70b23157129fd2e6ef35aa9b99d8a234d3b9c04"}
+[debug] [2023-09-21T19:16:34.860Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/config/variables/client_id 200
+[debug] [2023-09-21T19:16:34.860Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/config/variables/client_id {"name":"projects/firstry-7e136/configs/config/variables/client_id","updateTime":"2023-09-20T10:16:30.028659549Z","text":"109455500371173764711"}
+[debug] [2023-09-21T19:16:34.938Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/config/variables/client_email 200
+[debug] [2023-09-21T19:16:34.938Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/config/variables/client_email {"name":"projects/firstry-7e136/configs/config/variables/client_email","updateTime":"2023-09-20T10:16:12.085853174Z","text":"firebase-adminsdk-v4ylh@firstry-7e136.iam.gserviceaccount.com"}
+[debug] [2023-09-21T19:16:34.941Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/mail/variables/pass 200
+[debug] [2023-09-21T19:16:34.941Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/mail/variables/pass {"name":"projects/firstry-7e136/configs/mail/variables/pass","updateTime":"2023-09-18T08:02:22.699369677Z","text":"tqboonxbfzvwdgbe"}
+[debug] [2023-09-21T19:16:34.942Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/config/variables/private_key 200
+[debug] [2023-09-21T19:16:34.942Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/config/variables/private_key {"name":"projects/firstry-7e136/configs/config/variables/private_key","updateTime":"2023-09-20T10:15:19.575973363Z","text":"-----BEGIN PRIVATE KEY-----\\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCTstj1JCk+R7Oa\\nxDW2p8VhC3iXcwPcpuk3HVr9HXqamLyqTLXegVcVQ7sxzddqap9jRTLdGXU4dBxu\\nHUMu0qt20S3cRvjOFWFv96cvmkS5NrfZiwlqIOhIxnwdouNAwzlEjxhkwjyP5EnE\\nWyEamv0iiHAsBM5O9eByZ/F0s6W4v4dfRCC4Ndnyx168Q0tSyt1cSOO0mM5jEKj1\\n9WmZ9Kaaq2+TMAbIw4kXonHIhPSDQRjuugn+yHe0Xx+U5dx/BepQKYhiPKscYxmK\\noP5ySGudGrT51c+jljtUwviIRsl96aEGN2eCkZ97KBU/41Gnhkzag7T8PWfObm7C\\nSPx77YCTAgMBAAECggEAD46Da+fypiTZkIrBGOuOjnGtsnoCpUo5VJJKzqU9EC0t\\nQLISvTcaATCLS4F3AouXcoEhNzONarROzZ8BwAagLm7K6fbZvE8j3li96yAlw+0K\\nVqdehvykqrb+mgUu8tfSijDuQf1JcWMmDUCx+cJAY6juSQdP5EuL5/ugbYksgosU\\nz20hDEMZgILqSavY59K78+I3jMk2KgfbRFcBxWaY+9vMVKDO0uD3gZ+Oaoa8/tz2\\nAxALo/wUBlExEGNdombgfnReuzCkz4CQeVvnNZoLJhtkgsfkK9wpRL2S3N6L+3Kx\\nXIst1kB4MzmXrUj/bwyGcf3O7Cr1C1wMo+RIgx241QKBgQDQxKsS+amrWDx8zSVT\\nP5EMHpTWxhQv37QU0glmALVzylVD621lBOtpqKio1uP6dLNN89U0RiZcz2TYWwrA\\nNJKEmqFd5cV0U0IcZEdkuvWStOSBI864P7Lc+21rJhJoUlG1rgUDV6dqkU66DTjK\\nt1E7eBjxGxxP/F9RQH0VvuwOZwKBgQC1HS5CObFueXI1iRmoc2qIQD/yySswB81M\\nIVDULl6HPG0h2twmJL71NrOEd58tYvhL+jfQXHQX04uXtmZ0eNB2fZ36ZtScBPpx\\n3oGVQmf2/A64RuDmiDn8Hg0xd6/jbGhQWKPvZ3vdVuo6Wal33GxerxIwGqRgZ7LO\\nw0ZpvJuI9QKBgQCHu/bGhZCtGNdrBS6Ja8DwsklvQqYJYlcBWnZF3ZwcRqcdW8pq\\nbcJplgDilaTwSEP0IN6z+BAlM6qLiNX6lbPVh3v3QtcYhLFtKD3K3kugMQCIfjF/\\nVdsDFm3TxpMdRLhfeV9FBw6QmR0olkQgeQPVuIXu7QOBdcK7X0R0iQeNbQKBgDeY\\ny5h8yWDWWx7gBUZWl79XqcnHw0AtRPI3z+4yhcYR4JZh7u6unQf9UMI7TlvKY9o+\\n519I4kJmKBXcYjsi0ytsiFBTvLRgOtk1qqW9CtkgqwwahfN+of4o43fp+85eeu8f\\nJsPZCob5pVFgMMugmIvARl8J7qfBbXxXKYhP45b5AoGBAK+9S9mI6di9+KvgOKeS\\nm1YanXOwbZqtVQsF8v88luaCvOq7YR+tm/7eXEsuVY8sjfFarSMcDhqEtUxsXdr5\\nngFDpEfX6dtFmrGi3EGmXO9N9JGJMN+U8qB/xthcOIkYnIOco0vB+EB0ZrDDdaK+\\nPQ602giSqOAEaESaRnKFL2Nk\\n-----END PRIVATE KEY-----\\n"}
+[debug] [2023-09-21T19:16:34.973Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/env/variables/type 200
+[debug] [2023-09-21T19:16:34.973Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/env/variables/type {"name":"projects/firstry-7e136/configs/env/variables/type","updateTime":"2023-09-18T07:58:37.141278117Z","text":"production"}
+[debug] [2023-09-21T19:16:35.064Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/env/variables/secret_token 200
+[debug] [2023-09-21T19:16:35.064Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/env/variables/secret_token {"name":"projects/firstry-7e136/configs/env/variables/secret_token","updateTime":"2023-09-18T07:51:51.275856391Z","text":"4jD5zgb9R3JZ9k"}
+[debug] [2023-09-21T19:16:35.613Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/config/variables/type 200
+[debug] [2023-09-21T19:16:35.614Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/firstry-7e136/configs/config/variables/type {"name":"projects/firstry-7e136/configs/config/variables/type","updateTime":"2023-09-20T10:13:45.721635677Z","text":"service_account"}
+[debug] [2023-09-21T19:16:35.615Z] Validating nodejs source
+[debug] [2023-09-21T19:16:36.729Z] > [functions] package.json contents: {
+  "name": "firstry-backend",
+  "description": "API Firstry",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "config": "^3.3.9",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
+    "firebase-admin": "^11.8.0",
+    "firebase-functions": "^4.4.1",
+    "google-auth-library": "^9.0.0",
+    "helmet": "^7.0.0",
+    "joi": "^17.10.1",
+    "joi-objectid": "^4.0.2",
+    "joi-password": "^4.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
+    "mongoose": "^7.5.1",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.4",
+    "winston": "^3.10.0",
+    "winston-mongodb": "^5.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^3.1.0",
+    "jest": "^29.6.4"
+  }
+}
+[debug] [2023-09-21T19:16:36.729Z] Building nodejs source
+[info] i  functions: Loading and analyzing source code for codebase default to determine what to deploy 
+[debug] [2023-09-21T19:16:36.730Z] Could not find functions.yaml. Must use http discovery
+[debug] [2023-09-21T19:16:36.736Z] Found firebase-functions binary at 'C:\Users\antho\Documents\DEV\Firstry\Backend\node_modules\.bin\firebase-functions'
+[info] Serving at port 8260
+
+[debug] [2023-09-21T19:16:38.038Z] Got response from /__/functions.yaml {"endpoints":{"api":{"platform":"gcfv1","availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"httpsTrigger":{},"entryPoint":"api"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[info] shutdown requested via /__/quitquitquit
+
+[info] [2023-09-21T19:16:38.380Z] info: Connected to MongoDB
+
+[error] ^C
