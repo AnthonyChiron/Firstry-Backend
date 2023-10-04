@@ -14,6 +14,7 @@ const helmet = require("helmet");
 const cors = require("cors");
 const functions = require("firebase-functions");
 const bodyParser = require("body-parser");
+const currentUser = require("../middlewares/currentUser");
 
 module.exports = function (app) {
   // Middlewares
@@ -23,6 +24,7 @@ module.exports = function (app) {
   app.use(logger);
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(currentUser);
 
   if (functions.config().env.type == "dev") {
     app.use("/api/riders", riders);

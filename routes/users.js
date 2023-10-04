@@ -7,7 +7,7 @@ const users = new UsersController();
 
 // CRUD
 router.get("/", users.getAll);
-router.get("/:id", users.getById);
+router.get("/getById/:id", users.getById);
 router.post("/", users.register);
 router.delete("/:id", users.deleteById);
 router.put("/:id", users.update);
@@ -16,10 +16,5 @@ router.put("/:id", users.update);
 router.post("/updateemail", users.updateEmail);
 
 router.post("/isEmailAvailable", users.isEmailAvailable);
-
-// GET USER BY GOOGLE_ID
-router.get("/getUserByGoogleId/:googleId", users.getUserByGoogleId);
-
-router.get("/test/test", users.test);
 
 module.exports = router;

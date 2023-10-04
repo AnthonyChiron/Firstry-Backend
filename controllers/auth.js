@@ -25,24 +25,23 @@ module.exports = class AuthController {
     if (emailExist) return res.status(400).send("Email already exists");
 
     const verifyEmailToken = crypto.randomBytes(20).toString("hex");
-    const user = createUser(body.user, verifyEmailToken);
+    const user = await this.createUser(body.user, verifyEmailToken);
 
     let savedOrganizer = null;
     if (body.user.role == rolesEnum.CONTEST) {
-      savedOrganizer = await createOrganizer(body.organizer, req.file);
+      savedOrganizer = await this.createOrganizer(body.organizer, req.file);
       user.organizerId = savedOrganizer._id;
     }
 
     let savedRider = null;
     if (body.user.role == rolesEnum.RIDER) {
-      savedRider = await createRider(body.rider, req.file);
+      savedRider = await this.createRider(body.rider, req.file);
       user.riderId = savedRider._id;
     }
 
     try {
       const savedUser = await user.save();
-      console.log(savedUser);
-      sendVerificationEmail(savedUser.email, verifyEmailToken);
+      this.sendVerificationEmail(savedUser.email, verifyEmailToken);
       res.send(
         JSON.stringify(this.createToken(savedUser, savedRider, savedOrganizer))
       );
@@ -53,7 +52,7 @@ module.exports = class AuthController {
   };
 
   createUser = async (userData, verifyEmailToken) => {
-    return new User({
+    return await new User({
       email: userData.email,
       password: await hash.encrypt(userData.password),
       isValid: false,
@@ -83,7 +82,12 @@ module.exports = class AuthController {
     const rider = new Rider(riderData);
     const photoUrlRider = await uploadFile(
       file,
-      "pdp/" + riderData.firstName + "_" + riderData.lastName
+      "pdp/" +
+        riderData.firstName +
+        "_" +
+        riderData.lastName +
+        "_" +
+        crypto.randomBytes(5).toString("hex")
     );
     rider.photoUrl = photoUrlRider;
     return rider.save();
@@ -177,6 +181,7 @@ module.exports = class AuthController {
   };
 
   createToken(user, rider, organizer) {
+    console.log(rider);
     const token = jwt.sign(
       {
         _id: user._id,

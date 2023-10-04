@@ -8,7 +8,7 @@ const riders = new RidersController();
 router.get("/", riders.getAll);
 
 // GET RIDER BY ID
-router.get("/:id", riders.getById);
+router.get("/getById/:id", riders.getById);
 
 // POST RIDER
 router.post("/", riders.post);

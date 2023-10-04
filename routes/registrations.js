@@ -6,7 +6,7 @@ const registrations = new RegistrationsController();
 
 // CRUD
 router.get("/", registrations.getAll);
-router.get("/:id", registrations.getById);
+router.get("/getById/:id", registrations.getById);
 router.post("/", registrations.post);
 router.put("/:id", registrations.update);
 router.delete("/:id", registrations.deleteById);

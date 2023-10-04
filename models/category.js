@@ -24,11 +24,6 @@ module.exports.Category = mongoose.model(
       },
     },
     maxCompetitorCount: { type: Number, required: true },
-    contest: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Contest",
-      required: true,
-    },
   })
 );
 
@@ -42,7 +37,6 @@ module.exports.validate = function (category) {
     sports: Joi.array().items(Joi.string()).min(1).required(),
     rules: Joi.objectId().required(),
     maxCompetitorCount: Joi.number().required(),
-    contest: Joi.objectId().required(),
   });
 
   return schema.validate(category);
