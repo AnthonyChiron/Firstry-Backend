@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const ContestsController = require("../controllers/contests");
+const currentUser = require("../middlewares/currentUser");
 
 const contests = new ContestsController();
 
@@ -8,10 +9,13 @@ const contests = new ContestsController();
 router.get("/", contests.getAll);
 
 // GET CONTEST BY ID
-router.get("/:id", contests.getById);
+router.get("/getById/:id", contests.getById);
+
+// GET ORGANIZER CONTESTS
+router.get("/getOrganizerContests", contests.getOrganizerContests);
 
 // POST CONTEST
-router.post("/", contests.post);
+router.post("/", contests.createContest);
 
 // PUT CONTEST
 router.put("/:id", contests.update);

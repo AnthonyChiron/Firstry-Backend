@@ -40,23 +40,6 @@ module.exports = class UsersController extends CRUDController {
     );
   };
 
-  getUserByGoogleId = async (req, res) => {
-    const user = await this.model.findOne({ googleId: req.params.googleId });
-    if (!user) return res.status(404).send("User not found.");
-
-    res.send(user);
-  };
-
-  test = async (req, res) => {
-    mailService.sendEmail(
-      "anthony.chiron@outlook.fr",
-      "Test de mail",
-      "Ceci est un test de mail",
-      ""
-    );
-    res.send("OK");
-  };
-
   isEmailAvailable = async (req, res) => {
     console.log(req.body);
     const user = await User.findOne({ email: req.body.email });

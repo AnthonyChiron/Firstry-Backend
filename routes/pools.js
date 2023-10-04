@@ -8,7 +8,7 @@ const pools = new PoolsController();
 router.get("/", pools.getAll);
 
 // GET RESULTS BY ID
-router.get("/:id", pools.getById);
+router.get("/getById/:id", pools.getById);
 
 // POST RESULTS
 router.post("/", pools.post);

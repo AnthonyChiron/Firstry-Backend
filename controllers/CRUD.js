@@ -15,6 +15,7 @@ module.exports = class CRUDController {
   post = async (req, res) => {
     console.log(req.body);
     const { error } = this.validate(req.body);
+    console.log(error);
     if (error) return res.status(400).send(error.details[0].message);
 
     const model = new this.model(req.body);

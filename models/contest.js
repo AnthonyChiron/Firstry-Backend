@@ -10,7 +10,7 @@ module.exports.Contest = mongoose.model(
     endDate: Date,
     registrationEndDate: Date,
     sports: { type: Array },
-    categories: { type: Array },
+    categories: [{ type: mongoose.Schema.Types.ObjectId, ref: "Category" }],
     location: {
       country: { type: String },
       postalCode: { type: String },
@@ -28,6 +28,7 @@ module.exports.Contest = mongoose.model(
       youtube: String,
       website: String,
     },
+    organizerId: { type: mongoose.Schema.Types.ObjectId, ref: "Organizer" },
   })
 );
 
@@ -40,11 +41,9 @@ module.exports.validate = function (contest) {
     registrationEndDate: Joi.date(),
     location: {
       country: Joi.string().min(2),
-      postalCode: Joi.string()
-        .length(5)
-        .regex(/^[0-9]/),
-      city: Joi.string().min(2),
-      address: Joi.string().min(2),
+      postalCode: Joi.string().allow(null, ""),
+      city: Joi.string(),
+      address: Joi.string(),
     },
     branding: {
       logo: Joi.string().uri().min(2),
@@ -59,6 +58,7 @@ module.exports.validate = function (contest) {
       youtube: Joi.string().min(3).pattern(new RegExp("^@")),
       website: Joi.string().uri(),
     }),
+    organizerId: Joi.objectId(),
   });
 
   return schema.validate(contest);
