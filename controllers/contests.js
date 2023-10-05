@@ -43,4 +43,11 @@ module.exports = class ContestsController extends CRUDController {
     }).populate("categories");
     res.send(contests);
   };
+
+  getContestCategories = async (req, res) => {
+    const contest = await Contest.findById(req.params.id).populate(
+      "categories"
+    );
+    res.send(contest.categories);
+  };
 };

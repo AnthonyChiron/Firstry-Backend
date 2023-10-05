@@ -14,6 +14,9 @@ router.get("/getById/:id", contests.getById);
 // GET ORGANIZER CONTESTS
 router.get("/getOrganizerContests", contests.getOrganizerContests);
 
+// GET ORGANIZER CONTESTS
+router.get("/getContestsCategories", contests.getOrganizerContests);
+
 // POST CONTEST
 router.post("/", contests.createContest);
 
