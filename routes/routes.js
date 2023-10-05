@@ -47,6 +47,7 @@ module.exports = function (app) {
     app.use("/registrations", registrations);
     app.use("/pools", pools);
     app.use("/users", users);
+    app.use("/api/organizers", organizers);
   }
   // Logger
   app.use(error);
