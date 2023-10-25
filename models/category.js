@@ -7,14 +7,14 @@ module.exports.Category = mongoose.model(
   mongoose.Schema({
     name: { type: String, required: true },
     description: { type: String, required: true },
-    cashprize: { type: String, required: true },
+    cashprize: { type: String },
     startDate: Date,
     endDate: Date,
     sports: { type: Array, required: true },
     rules: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Rules",
-      required: true,
+      required: false,
       validate: {
         isAsync: true,
         validator: async function (v) {
@@ -24,6 +24,11 @@ module.exports.Category = mongoose.model(
       },
     },
     maxCompetitorCount: { type: Number, required: true },
+    contestId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Contest",
+      required: true,
+    },
   })
 );
 
@@ -35,8 +40,9 @@ module.exports.validate = function (category) {
     startDate: Joi.date(),
     endDate: Joi.date(),
     sports: Joi.array().items(Joi.string()).min(1).required(),
-    rules: Joi.objectId().required(),
+    rules: Joi.objectId(),
     maxCompetitorCount: Joi.number().required(),
+    contestId: Joi.objectId().required(),
   });
 
   return schema.validate(category);

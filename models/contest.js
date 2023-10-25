@@ -10,7 +10,6 @@ module.exports.Contest = mongoose.model(
     endDate: Date,
     registrationEndDate: Date,
     sports: { type: Array },
-    categories: [{ type: mongoose.Schema.Types.ObjectId, ref: "Category" }],
     location: {
       country: { type: String },
       postalCode: { type: String },
@@ -51,7 +50,6 @@ module.exports.validate = function (contest) {
       trailer: Joi.string().uri().min(2),
     },
     sports: Joi.array().items(Joi.string()).min(1),
-    categories: Joi.array().items(Joi.objectId()).min(1),
     socials: Joi.object({
       instagram: Joi.string().min(3).pattern(new RegExp("^@")),
       twitter: Joi.string().min(3).pattern(new RegExp("^@")),
