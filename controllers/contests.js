@@ -1,6 +1,8 @@
 const CRUDController = require("./CRUD");
 const { Contest, validate } = require("../models/contest");
+const { Category } = require("../models/category");
 const { Organizer } = require("../models/organizer");
+const mongoose = require("mongoose");
 const { checkPreferences } = require("joi");
 
 module.exports = class ContestsController extends CRUDController {
@@ -37,17 +39,46 @@ module.exports = class ContestsController extends CRUDController {
 
   // Get organizer's contests
   getOrganizerContests = async (req, res) => {
-    console.log(req.user);
-    const contests = await Contest.find({
-      organizerId: req.user.organizerId,
-    }).populate("categories");
-    res.send(contests);
+    console.log(req.user.organizerId);
+    Contest.aggregate([
+      {
+        $match: {
+          organizerId: new mongoose.Types.ObjectId(req.user.organizerId), // Assurez-vous que la valeur est un ObjectId
+        },
+      },
+      {
+        $lookup: {
+          from: "categories", // nom de la collection en minuscules
+          localField: "_id", // nom du champ dans la collection `Contest`
+          foreignField: "contestId", // nom du champ dans la collection `Category`
+          as: "categories", // comment vous voulez nommer le champ dans le document résultant
+        },
+      },
+    ])
+      .then((results) => {
+        res.send(results);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
-  getContestCategories = async (req, res) => {
-    const contest = await Contest.findById(req.params.id).populate(
-      "categories"
-    );
-    res.send(contest.categories);
+  getContests = async (req, res) => {
+    Contest.aggregate([
+      {
+        $lookup: {
+          from: "categories", // nom de la collection en minuscules
+          localField: "_id", // nom du champ dans la collection `Contest`
+          foreignField: "contestId", // nom du champ dans la collection `Category`
+          as: "categories", // comment vous voulez nommer le champ dans le document résultant
+        },
+      },
+    ])
+      .then((results) => {
+        res.send(results);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 };
