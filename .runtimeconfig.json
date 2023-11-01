@@ -1,0 +1,17 @@
+{
+  "config": {
+    "client_id": "109455500371173764711",
+    "private_key_id": "f70b23157129fd2e6ef35aa9b99d8a234d3b9c04",
+    "project_id": "firstry-7e136",
+    "private_key": "-----BEGIN PRIVATE KEY-----\\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCTstj1JCk+R7Oa\\nxDW2p8VhC3iXcwPcpuk3HVr9HXqamLyqTLXegVcVQ7sxzddqap9jRTLdGXU4dBxu\\nHUMu0qt20S3cRvjOFWFv96cvmkS5NrfZiwlqIOhIxnwdouNAwzlEjxhkwjyP5EnE\\nWyEamv0iiHAsBM5O9eByZ/F0s6W4v4dfRCC4Ndnyx168Q0tSyt1cSOO0mM5jEKj1\\n9WmZ9Kaaq2+TMAbIw4kXonHIhPSDQRjuugn+yHe0Xx+U5dx/BepQKYhiPKscYxmK\\noP5ySGudGrT51c+jljtUwviIRsl96aEGN2eCkZ97KBU/41Gnhkzag7T8PWfObm7C\\nSPx77YCTAgMBAAECggEAD46Da+fypiTZkIrBGOuOjnGtsnoCpUo5VJJKzqU9EC0t\\nQLISvTcaATCLS4F3AouXcoEhNzONarROzZ8BwAagLm7K6fbZvE8j3li96yAlw+0K\\nVqdehvykqrb+mgUu8tfSijDuQf1JcWMmDUCx+cJAY6juSQdP5EuL5/ugbYksgosU\\nz20hDEMZgILqSavY59K78+I3jMk2KgfbRFcBxWaY+9vMVKDO0uD3gZ+Oaoa8/tz2\\nAxALo/wUBlExEGNdombgfnReuzCkz4CQeVvnNZoLJhtkgsfkK9wpRL2S3N6L+3Kx\\nXIst1kB4MzmXrUj/bwyGcf3O7Cr1C1wMo+RIgx241QKBgQDQxKsS+amrWDx8zSVT\\nP5EMHpTWxhQv37QU0glmALVzylVD621lBOtpqKio1uP6dLNN89U0RiZcz2TYWwrA\\nNJKEmqFd5cV0U0IcZEdkuvWStOSBI864P7Lc+21rJhJoUlG1rgUDV6dqkU66DTjK\\nt1E7eBjxGxxP/F9RQH0VvuwOZwKBgQC1HS5CObFueXI1iRmoc2qIQD/yySswB81M\\nIVDULl6HPG0h2twmJL71NrOEd58tYvhL+jfQXHQX04uXtmZ0eNB2fZ36ZtScBPpx\\n3oGVQmf2/A64RuDmiDn8Hg0xd6/jbGhQWKPvZ3vdVuo6Wal33GxerxIwGqRgZ7LO\\nw0ZpvJuI9QKBgQCHu/bGhZCtGNdrBS6Ja8DwsklvQqYJYlcBWnZF3ZwcRqcdW8pq\\nbcJplgDilaTwSEP0IN6z+BAlM6qLiNX6lbPVh3v3QtcYhLFtKD3K3kugMQCIfjF/\\nVdsDFm3TxpMdRLhfeV9FBw6QmR0olkQgeQPVuIXu7QOBdcK7X0R0iQeNbQKBgDeY\\ny5h8yWDWWx7gBUZWl79XqcnHw0AtRPI3z+4yhcYR4JZh7u6unQf9UMI7TlvKY9o+\\n519I4kJmKBXcYjsi0ytsiFBTvLRgOtk1qqW9CtkgqwwahfN+of4o43fp+85eeu8f\\nJsPZCob5pVFgMMugmIvARl8J7qfBbXxXKYhP45b5AoGBAK+9S9mI6di9+KvgOKeS\\nm1YanXOwbZqtVQsF8v88luaCvOq7YR+tm/7eXEsuVY8sjfFarSMcDhqEtUxsXdr5\\nngFDpEfX6dtFmrGi3EGmXO9N9JGJMN+U8qB/xthcOIkYnIOco0vB+EB0ZrDDdaK+\\nPQ602giSqOAEaESaRnKFL2Nk\\n-----END PRIVATE KEY-----\\n",
+    "client_email": "firebase-adminsdk-v4ylh@firstry-7e136.iam.gserviceaccount.com",
+    "type": "service_account"
+  },
+  "mail": {
+    "pass": "tqboonxbfzvwdgbe"
+  },
+  "env": {
+    "secret_token": "4jD5zgb9R3JZ9k",
+    "type": "dev"
+  }
+}
