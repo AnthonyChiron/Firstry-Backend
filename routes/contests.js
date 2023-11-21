@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const ContestsController = require("../controllers/contests");
 const currentUser = require("../middlewares/currentUser");
+const multer = require("multer");
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 const contests = new ContestsController();
 
@@ -16,6 +19,13 @@ router.get("/getOrganizerContests", contests.getOrganizerContests);
 
 // POST CONTEST
 router.post("/", contests.createContest);
+
+// UPLOAD BRAND IMAGE
+router.post(
+  "/uploadBrandImage/:id",
+  upload.single("image"),
+  contests.uploadBrandImage
+);
 
 // PUT CONTEST
 router.put("/:id", contests.update);

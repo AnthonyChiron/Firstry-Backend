@@ -4,6 +4,7 @@ const { Category } = require("../models/category");
 const { Organizer } = require("../models/organizer");
 const mongoose = require("mongoose");
 const { checkPreferences } = require("joi");
+const { uploadFile } = require("../services/storage");
 
 module.exports = class ContestsController extends CRUDController {
   name = "contest";
@@ -105,5 +106,29 @@ module.exports = class ContestsController extends CRUDController {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  uploadBrandImage = async (req, res) => {
+    const contest = await this.model.findById(req.params.id);
+
+    if (!contest) return res.status(404).send("Contest not found");
+
+    const imageUrl = await uploadFile(
+      req.file,
+      "contests/" +
+        contest._id +
+        "/" +
+        contest.name +
+        "_" +
+        req.file.originalname
+    );
+
+    if (req.file.originalname.includes("logo"))
+      contest.branding.logo = imageUrl;
+    if (req.file.originalname.includes("banner"))
+      contest.branding.banner = imageUrl;
+
+    const savedContest = contest.save();
+    res.send(savedContest);
   };
 };

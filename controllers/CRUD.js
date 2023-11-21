@@ -25,10 +25,13 @@ module.exports = class CRUDController {
   };
 
   update = async (req, res) => {
+    console.log(req.body);
     const { error } = this.validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
     const result = await this.model.findByIdAndUpdate(req.params.id, req.body);
+
+    console.log(result);
 
     if (!result) {
       res.status(404).send(`${this.name} not found`);
