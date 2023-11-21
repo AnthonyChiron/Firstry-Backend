@@ -28,10 +28,7 @@ module.exports = class CRUDController {
     const { error } = this.validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    const result = await this.model.findByIdAndUpdate(
-      req.params.id,
-      req.body.model
-    );
+    const result = await this.model.findByIdAndUpdate(req.params.id, req.body);
 
     if (!result) {
       res.status(404).send(`${this.name} not found`);
