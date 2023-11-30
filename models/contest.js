@@ -19,6 +19,7 @@ module.exports.Contest = mongoose.model(
     branding: {
       logo: String,
       banner: String,
+      poster: String,
       trailer: String,
     },
     socials: {
@@ -47,14 +48,15 @@ module.exports.validate = function (contest) {
     branding: {
       logo: Joi.string().uri().min(2),
       banner: Joi.string().uri().min(2),
+      poster: Joi.string().uri().min(2),
       trailer: Joi.string().uri().min(2),
     },
     sports: Joi.array().items(Joi.string()).min(1),
     socials: Joi.object({
-      instagram: Joi.string().min(3).pattern(new RegExp("^@")),
-      twitter: Joi.string().min(3).pattern(new RegExp("^@")),
-      youtube: Joi.string().min(3).pattern(new RegExp("^@")),
-      website: Joi.string().uri(),
+      instagram: Joi.string().allow(null, ""),
+      twitter: Joi.string().allow(null, ""),
+      youtube: Joi.string().allow(null, ""),
+      website: Joi.string().allow(null, "").uri(),
     }),
     organizerId: Joi.objectId(),
   });

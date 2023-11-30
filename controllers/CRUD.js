@@ -27,6 +27,7 @@ module.exports = class CRUDController {
   update = async (req, res) => {
     console.log(req.body);
     const { error } = this.validate(req.body);
+    console.log(error);
     if (error) return res.status(400).send(error.details[0].message);
 
     const result = await this.model.findByIdAndUpdate(req.params.id, req.body);
@@ -41,7 +42,9 @@ module.exports = class CRUDController {
   };
 
   deleteById = async (req, res) => {
+    console.log(req.params.id);
     const result = await this.model.findByIdAndDelete(req.params.id);
+    console.log(result);
     if (!result) {
       res.status(404).send(`${this.name} not found`);
     } else {

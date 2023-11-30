@@ -123,10 +123,14 @@ module.exports = class ContestsController extends CRUDController {
         req.file.originalname
     );
 
+    console.log(req.file.originalname);
+
     if (req.file.originalname.includes("logo"))
       contest.branding.logo = imageUrl;
     if (req.file.originalname.includes("banner"))
       contest.branding.banner = imageUrl;
+    if (req.file.originalname.includes("poster"))
+      contest.branding.poster = imageUrl;
 
     const savedContest = contest.save();
     res.send(savedContest);
