@@ -5,6 +5,7 @@ const rules = require("./rules");
 const auth = require("./auth");
 const registrations = require("./registrations");
 const pools = require("./pools");
+const steps = require("./steps");
 const users = require("./users");
 const organizers = require("./organizers");
 const express = require("express");
@@ -34,6 +35,7 @@ module.exports = function (app) {
     app.use("/api/rules", rules);
     app.use("/api/registrations", registrations);
     app.use("/api/pools", pools);
+    app.use("/api/steps", steps);
     app.use("/api/users", users);
     app.use("/api/organizers", organizers);
   }
@@ -46,6 +48,7 @@ module.exports = function (app) {
     app.use("/rules", rules);
     app.use("/registrations", registrations);
     app.use("/pools", pools);
+    app.use("/steps", steps);
     app.use("/users", users);
     app.use("/api/organizers", organizers);
   }

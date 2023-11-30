@@ -12,7 +12,7 @@ const contests = new ContestsController();
 router.get("/", contests.getContests);
 
 // GET CONTEST BY ID
-router.get("/getById/:id", contests.getById);
+router.get("/getById/:id", contests.getContestById);
 
 // GET ORGANIZER CONTESTS
 router.get("/getOrganizerContests", contests.getOrganizerContests);

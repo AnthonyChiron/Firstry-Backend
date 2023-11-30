@@ -38,6 +38,31 @@ module.exports = class ContestsController extends CRUDController {
     }
   };
 
+  // Get contest by Id and add categories
+  getContestById = async (req, res) => {
+    Contest.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(req.params.id), // Assurez-vous que la valeur est un ObjectId
+        },
+      },
+      {
+        $lookup: {
+          from: "categories", // nom de la collection en minuscules
+          localField: "_id", // nom du champ dans la collection `Contest`
+          foreignField: "contestId", // nom du champ dans la collection `Category`
+          as: "categories", // comment vous voulez nommer le champ dans le document résultant
+        },
+      },
+    ])
+      .then((results) => {
+        res.send(results[0]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   // Get organizer's contests
   getOrganizerContests = async (req, res) => {
     console.log(req.user.organizerId);
@@ -98,10 +123,14 @@ module.exports = class ContestsController extends CRUDController {
         req.file.originalname
     );
 
+    console.log(req.file.originalname);
+
     if (req.file.originalname.includes("logo"))
       contest.branding.logo = imageUrl;
     if (req.file.originalname.includes("banner"))
       contest.branding.banner = imageUrl;
+    if (req.file.originalname.includes("poster"))
+      contest.branding.poster = imageUrl;
 
     const savedContest = contest.save();
     res.send(savedContest);

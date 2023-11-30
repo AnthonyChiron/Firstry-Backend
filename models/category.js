@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const { Rules } = require("./rules");
+const stepFormatEnum = require("../constants/stepFormatEnum");
 
 module.exports.Category = mongoose.model(
   "Category",
@@ -8,22 +9,10 @@ module.exports.Category = mongoose.model(
     name: { type: String, required: true },
     description: { type: String, required: true },
     cashprize: { type: String },
-    startDate: Date,
-    endDate: Date,
     sports: { type: Array, required: true },
-    rules: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Rules",
-      required: false,
-      validate: {
-        isAsync: true,
-        validator: async function (v) {
-          return await Rules.findById(v);
-        },
-        message: "Rules not found",
-      },
-    },
-    maxCompetitorCount: { type: Number, required: true },
+    maxRiders: { type: Number, required: true },
+    registerPrice: { type: Number, required: true },
+    isQualificationStep: { type: Boolean },
     contestId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Contest",
@@ -37,11 +26,10 @@ module.exports.validate = function (category) {
     name: Joi.string().min(2).required(),
     description: Joi.string().min(2).required(),
     cashprize: Joi.string(),
-    startDate: Joi.date(),
-    endDate: Joi.date(),
     sports: Joi.array().items(Joi.string()).min(1).required(),
-    rules: Joi.objectId(),
-    maxCompetitorCount: Joi.number().required(),
+    maxRiders: Joi.number().required(),
+    registerPrice: Joi.number().required(),
+    isQualificationStep: Joi.boolean(),
     contestId: Joi.objectId().required(),
   });
 

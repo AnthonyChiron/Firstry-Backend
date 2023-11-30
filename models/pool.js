@@ -1,8 +1,8 @@
 /** @type {import("mongoose:Model")} */
 const mongoose = require("mongoose");
 const Joi = require("joi");
-const { Contest } = require("./contest");
 const { Registration } = require("./registration");
+const { Step } = require("./step");
 
 module.exports.Pool = mongoose.model(
   "Pool",
@@ -19,16 +19,16 @@ module.exports.Pool = mongoose.model(
         message: "Registration not found",
       },
     },
-    contest: {
+    step: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Contest",
+      ref: "Step",
       required: true,
       validate: {
         isAsync: true,
         validator: async function (v) {
-          return await Contest.findById(v);
+          return await Step.findById(v);
         },
-        message: "Contest not found",
+        message: "Step not found",
       },
     },
     score: Number,
@@ -36,15 +36,10 @@ module.exports.Pool = mongoose.model(
       type: Number,
       required: true,
     },
-    step: {
-      type: String,
-      enum: ["Qualification", "Finale"],
-      required: true,
-    },
     isQualified: {
       type: Boolean,
     },
-    pool: {
+    poolNumber: {
       type: Number,
       required: true,
     },
@@ -54,12 +49,11 @@ module.exports.Pool = mongoose.model(
 module.exports.validate = function (result) {
   const schema = Joi.object({
     registration: Joi.objectId().required(),
-    contest: Joi.objectId().required(),
+    step: Joi.objectId().required(),
     score: Joi.number(),
     rank: Joi.number().required(),
-    step: Joi.string().valid("Qualification", "Finale").required(),
     isQualified: Joi.boolean(),
-    pool: Joi.number().required(),
+    poolNumber: Joi.number().required(),
   });
 
   return schema.validate(result);
