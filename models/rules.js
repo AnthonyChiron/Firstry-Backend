@@ -1,18 +1,15 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
-const { formatEnum } = require("../constants/rulesEnum");
+const { formatTypeEnum } = require("../constants/rulesEnum");
 
 module.exports.Rules = mongoose.model(
   "Rules",
   mongoose.Schema({
     name: { type: String, required: true },
     description: { type: String, required: false },
-    format: { type: String, required: true },
+    stepFormats: { type: Array, required: true },
     pointDistribution: { type: Array, required: true },
-    competitorPerPool: { type: Number },
-    competitorQualifiedCount: { type: Number },
-    jamTimer: { type: Number },
-    runTimer: { type: Number },
+    contestId: { type: mongoose.Schema.Types.ObjectId, required: true },
   })
 );
 
@@ -20,23 +17,26 @@ module.exports.validate = function (rules) {
   const schema = Joi.object({
     name: Joi.string().min(2).required(),
     description: Joi.string(),
-    format: Joi.string()
-      .valid(...Object.values(formatEnum))
-      .required(),
-    pointDistribution: Joi.array()
+    stepFormats: Joi.array()
       .items(
         Joi.object({
-          point: Joi.number().required(),
-          label: Joi.string().required(),
-          description: Joi.string().allow(""),
+          order: Joi.number().required(),
+          formatType: Joi.string().valid(...Object.values(formatTypeEnum)),
+          runTimer: Joi.number(),
+          jamTimer: Joi.number(),
+          bestTricksCount: Joi.number(),
         })
       )
       .min(1)
       .required(),
-    competitorPerPool: Joi.number(),
-    competitorQualifiedCount: Joi.number(),
-    jamTimer: Joi.number(),
-    runTimer: Joi.number(),
+    pointDistribution: Joi.array().items(
+      Joi.object({
+        point: Joi.number().required(),
+        label: Joi.string().required(),
+        description: Joi.string().allow(""),
+      })
+    ),
+    contestId: Joi.objectId().required(),
   });
 
   return schema.validate(rules);

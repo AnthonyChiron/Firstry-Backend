@@ -36,6 +36,8 @@ module.exports.Step = mongoose.model(
     },
     startDate: Date,
     endDate: Date,
+    ridersPerPool: { type: Number },
+    ridersQualifiedCount: { type: Number },
   })
 );
 
@@ -48,6 +50,8 @@ module.exports.validate = function (result) {
     rules: Joi.objectId().required(),
     startDate: Joi.date(),
     endDate: Joi.date(),
+    ridersPerPool: Joi.number(),
+    ridersQualifiedCount: Joi.number(),
   });
 
   return schema.validate(result);
