@@ -1,6 +1,5 @@
-module.exports.formatEnum = {
-  JAM: "jam",
-  RUN: "run",
-  JAM_AND_RUN: "jam & run",
-  RUN_AND_BESTTRICKS: "run & besttricks",
+module.exports.formatTypeEnum = {
+  JAM: "JAM",
+  RUN: "RUN",
+  BEST_TRICKS: "BEST_TRICKS",
 };
