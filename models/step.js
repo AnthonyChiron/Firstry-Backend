@@ -9,7 +9,7 @@ const stepTypeEnum = require("../constants/stepTypeEnum");
 module.exports.Step = mongoose.model(
   "Step",
   mongoose.Schema({
-    category: {
+    categoryId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Categories",
       required: true,
@@ -21,7 +21,7 @@ module.exports.Step = mongoose.model(
         message: "Category not found",
       },
     },
-    name: { type: String, required: true },
+    name: { type: String },
     rules: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Rules",
@@ -43,7 +43,7 @@ module.exports.Step = mongoose.model(
 
 module.exports.validate = function (result) {
   const schema = Joi.object({
-    category: Joi.objectId().required(),
+    categoryId: Joi.objectId().required(),
     name: Joi.string()
       .valid(...Object.values(stepTypeEnum))
       .required(),

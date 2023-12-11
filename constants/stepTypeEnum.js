@@ -1,5 +1,5 @@
 module.exports = {
-  QUALIFICATION: "Qualification",
+  QUALIFICATION: "QUALIFICATION",
   FINAL: "FINALE",
   NO_QUALIFICATION: "",
 };

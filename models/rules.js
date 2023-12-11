@@ -8,7 +8,7 @@ module.exports.Rules = mongoose.model(
     name: { type: String, required: true },
     description: { type: String, required: false },
     stepFormats: { type: Array, required: true },
-    pointDistribution: { type: Array, required: true },
+    pointCategories: { type: Array, required: true },
     contestId: { type: mongoose.Schema.Types.ObjectId, required: true },
   })
 );
@@ -29,11 +29,11 @@ module.exports.validate = function (rules) {
       )
       .min(1)
       .required(),
-    pointDistribution: Joi.array().items(
+    pointCategories: Joi.array().items(
       Joi.object({
-        point: Joi.number().required(),
-        label: Joi.string().required(),
+        name: Joi.string().required(),
         description: Joi.string().allow(""),
+        points: Joi.number().required(),
       })
     ),
     contestId: Joi.objectId().required(),
