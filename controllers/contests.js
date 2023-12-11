@@ -52,6 +52,16 @@ module.exports = class ContestsController extends CRUDController {
           localField: "_id", // nom du champ dans la collection `Contest`
           foreignField: "contestId", // nom du champ dans la collection `Category`
           as: "categories", // comment vous voulez nommer le champ dans le document résultant
+          pipeline: [
+            {
+              $lookup: {
+                from: "steps", // Assurez-vous que c'est le nom correct de votre collection de steps
+                localField: "_id", // Ici, nous utilisons l'ID de la catégorie
+                foreignField: "categoryId", // Assurez-vous que c'est le champ correct dans la collection `steps`
+                as: "steps",
+              },
+            },
+          ],
         },
       },
     ])

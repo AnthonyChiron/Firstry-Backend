@@ -7,8 +7,9 @@ const categories = new CategoriesController();
 // CRUD
 router.get("/", categories.getAll);
 router.get("/getById/:id", categories.getById);
-router.post("/", categories.post);
-router.put("/:id", categories.update);
-router.delete("/:id", categories.deleteById);
+router.get("/getAllByContestId/:id", categories.getById);
+router.post("/", categories.createCategory);
+router.put("/:id", categories.updateCategory);
+router.delete("/:id", categories.deleteCategory);
 
 module.exports = router;
