@@ -34,48 +34,36 @@ module.exports = class CategoriesController extends CRUDController {
   };
 
   createCategory = async (req, res) => {
-    console.log(req.body);
     // Validate the category from body
     const { errorCategory } = this.validate(req.body.category);
-    console.log(errorCategory);
     if (errorCategory) return res.status(400).send(error.details[0].message);
 
     // Create a new category in db
     const category = new Category(req.body.category);
     await category.save();
 
+    let categoryId = category._id.toString();
     let newCategory = {
-      ...req.body.category,
-      _id: category._id.toString(),
+      ...category._doc,
       steps: [],
     };
 
     let steps = [];
     req.body.steps.forEach((step) => {
-      steps.push({ ...step, categoryId: newCategory._id });
+      steps.push({ ...step, categoryId: categoryId });
     });
 
     // Validate the step from body
     steps.forEach((step) => {
       const { errorStep } = validateStep(step);
-      console.log(errorStep);
       if (errorStep) return res.status(400).send(error.details[0].message);
+
+      let newStep = new Step(step);
+      newStep.startDate = newStep.startDate.setHours(8, 0, 0, 0);
+      newStep.endDate = new Date(newStep.startDate).setHours(9, 0, 0, 0);
+      newStep.save();
+      newCategory.steps.push(newStep);
     });
-
-    // Create steps for the category
-    if (newCategory.isQualificationStep) {
-      const qualifStep = new Step(
-        steps.find((step) => step.name == "QUALIFICATION")
-      );
-      await qualifStep.save();
-      newCategory.steps.push(qualifStep);
-    }
-
-    const finalStep = new Step(
-      steps.find((step) => step.name === "FINALE" || step.name === "")
-    );
-    await finalStep.save();
-    newCategory.steps.push(finalStep);
 
     // Send the new category
     res.send(newCategory);
@@ -108,17 +96,18 @@ module.exports = class CategoriesController extends CRUDController {
     };
 
     // Update steps for the category
-    forEach(req.body.steps, async (step) => {
-      const newStep = await Step.findByIdAndUpdate(step._id, step, {
-        new: true,
-      });
-      console.log(step);
-      console.log(newStep);
-      newCategory.steps.push(newStep);
-      console.log(newCategory);
-    });
+    for (let i = 0; i < req.body.steps.length; i++) {
+      let step = req.body.steps[i];
+      let stepId = req.body.stepsId[i];
+      step.categoryId = req.params.id;
 
-    console.log(newCategory);
+      // Validate the step from body
+      const { error } = validateStep(step);
+      if (error) return res.status(400).send(error.details[0].message);
+
+      const newStep = await Step.findByIdAndUpdate(stepId, step);
+      newCategory.steps.push(newStep);
+    }
 
     // Send the updated category
     res.send(newCategory);
