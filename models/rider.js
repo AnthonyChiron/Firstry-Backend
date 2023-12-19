@@ -4,7 +4,7 @@ const Joi = require("joi");
 const sportsEnum = require("../constants/sportsEnum");
 
 module.exports.Rider = mongoose.model(
-  "Rider",
+  "Riders",
   mongoose.Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
@@ -12,6 +12,8 @@ module.exports.Rider = mongoose.model(
     gender: String,
     nationality: Object,
     birthDate: Date,
+    city: String,
+    bio: String,
     sports: {
       type: Array,
       validate: {
@@ -40,14 +42,15 @@ module.exports.validate = function (rider) {
     birthDate: Joi.date().required(),
     nationality: Joi.object().required(),
     city: Joi.string().min(2).required(),
+    bio: Joi.string().allow(null, ""),
     sports: Joi.array()
       .items(Joi.string().valid(...Object.values(sportsEnum)))
       .required(),
     category: Joi.string().min(2),
     socials: Joi.object({
-      instagram: Joi.string().min(3).pattern(new RegExp("^@")),
-      twitter: Joi.string().min(3).pattern(new RegExp("^@")),
-      youtube: Joi.string().min(3).pattern(new RegExp("^@")),
+      instagram: Joi.string().allow(null, ""),
+      twitter: Joi.string().allow(null, ""),
+      youtube: Joi.string().allow(null, ""),
     }),
   });
 

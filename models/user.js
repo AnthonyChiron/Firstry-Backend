@@ -16,12 +16,23 @@ const UserSchema = mongoose.Schema({
     unique: true,
     required: true,
   },
+  newEmail: {
+    type: String,
+    minLength: 5,
+    maxLength: 255,
+    unique: true,
+  },
   password: {
     type: String,
     required: true,
   },
+  newPassword: {
+    type: String,
+  },
   isValid: Boolean,
   verifyEmailToken: String,
+  verifyNewEmailToken: String,
+  verifyNewPasswordToken: String,
   role: { type: String, enum: rolesEnum, required: true },
   photoUrl: { type: String },
   riderId: {
@@ -39,11 +50,13 @@ module.exports.User = mongoose.model("User", UserSchema);
 module.exports.validateSignup = function (user) {
   const schema = Joi.object({
     email: Joi.string().email().required(),
+    newEmail: Joi.string().email(),
     password: joiPassword
       .string()
       .noWhiteSpaces()
       .onlyLatinCharacters()
       .required(),
+    newPassword: Joi.string().noWhiteSpaces().onlyLatinCharacters(),
     isValid: Joi.boolean(),
     role: Joi.string()
       .valid(...Object.values(rolesEnum))
