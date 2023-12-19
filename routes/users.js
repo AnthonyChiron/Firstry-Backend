@@ -12,8 +12,9 @@ router.post("/", users.register);
 router.delete("/:id", users.deleteById);
 router.put("/:id", users.update);
 
-// UPDATE EMAIL
-router.post("/updateemail", users.updateEmail);
+// UPDATE EMAIL AND PASSWORD
+router.post("/updateEmail/:id", users.updateEmail);
+router.post("/updatePassword/:id", users.updatePassword);
 
 router.post("/isEmailAvailable", users.isEmailAvailable);
 

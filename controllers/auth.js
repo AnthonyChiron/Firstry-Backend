@@ -109,22 +109,18 @@ module.exports = class AuthController {
   };
 
   login = async (req, res) => {
-    console.log("a");
-    console.log(req.body);
     const { error } = validateLogin(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
     const user = await User.findOne({ email: req.body.email });
     if (!user) return res.status(400).send("Email is not found");
 
-    console.log("b");
     // Check if password is correct
     const validPass = await hash.isValid(req.body.password, user.password);
     if (!validPass) return res.status(400).send("Invalid password");
 
     let rider;
     let organizer;
-    console.log(user);
     if (user.role == rolesEnum.RIDER) {
       rider = await Rider.findById(user.riderId);
       organizer = null;
@@ -133,7 +129,6 @@ module.exports = class AuthController {
       rider = null;
     }
 
-    console.log("c");
     res.send(JSON.stringify(this.createToken(user, rider, organizer)));
   };
 
@@ -182,6 +177,7 @@ module.exports = class AuthController {
 
   createToken(user, rider, organizer) {
     console.log(rider);
+    console.log(user);
     const token = jwt.sign(
       {
         _id: user._id,

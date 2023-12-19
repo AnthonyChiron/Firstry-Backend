@@ -30,6 +30,7 @@ module.exports = class CRUDController {
     console.log(error);
     if (error) return res.status(400).send(error.details[0].message);
 
+    console.log(req.params.id);
     const result = await this.model.findByIdAndUpdate(req.params.id, req.body);
 
     console.log(result);
