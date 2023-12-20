@@ -9,7 +9,7 @@ module.exports.mailSubjectsEnum = {
 module.exports.mailContentEnum = {
   CONFIRM_REGISTER: "Firstry - Confirmation de votre inscription",
   NEW_EMAIL_CONFIRMATION:
-    "Veuillez cliquer sur ce lien pour confirmer votre nouvelle adresse mail :",
+    "Veuillez cliquer sur ce lien pour confirmer votre nouvelle adresse mail : ",
   NEW_PASSWORD_CONFIRMATION:
-    "Veuillez cliquer sur ce lien pour confirmer votre nouveau mot de passe :",
+    "Veuillez cliquer sur ce lien pour confirmer votre nouveau mot de passe : ",
 };

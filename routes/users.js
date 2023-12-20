@@ -16,6 +16,10 @@ router.put("/:id", users.update);
 router.post("/updateEmail/:id", users.updateEmail);
 router.post("/updatePassword/:id", users.updatePassword);
 
+// VALIDATE NEW EMAIL AND NEW PASSWORD
+router.post("/validateNewEmail/:token", users.validateNewEmail);
+router.post("/validateNewPassword/:token", users.validateNewPassword);
+
 router.post("/isEmailAvailable", users.isEmailAvailable);
 
 module.exports = router;
