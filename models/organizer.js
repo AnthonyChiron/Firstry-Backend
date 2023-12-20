@@ -6,7 +6,7 @@ module.exports.Organizer = mongoose.model(
   "Organizer",
   mongoose.Schema({
     name: { type: String, required: true },
-    siretNumber: { type: String, required: true },
+    bio: { type: String },
     photoUrl: { type: String },
     socials: {
       instagram: String,
@@ -19,7 +19,7 @@ module.exports.Organizer = mongoose.model(
 module.exports.validate = function (organizer) {
   const schema = Joi.object({
     name: Joi.string().min(2).required(),
-    siretNumber: Joi.string().min(2).required(),
+    bio: Joi.string(),
     socials: Joi.object({
       instagram: Joi.string().min(3).pattern(new RegExp("^@")),
       twitter: Joi.string().min(3).pattern(new RegExp("^@")),
