@@ -33,6 +33,7 @@ const UserSchema = mongoose.Schema({
   verifyEmailToken: String,
   verifyNewEmailToken: String,
   verifyNewPasswordToken: String,
+  resetPasswordToken: String,
   role: { type: String, enum: rolesEnum, required: true },
   photoUrl: { type: String },
   riderId: {

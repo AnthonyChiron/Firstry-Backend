@@ -20,6 +20,11 @@ router.post("/updatePassword/:id", users.updatePassword);
 router.post("/validateNewEmail/:token", users.validateNewEmail);
 router.post("/validateNewPassword/:token", users.validateNewPassword);
 
+// RESET PASSWORD
+router.post("/resetPassword", users.resetPassword);
+router.post("/resetPassword/:token", users.validateResetPassword);
+router.post("/checkResetPasswordToken/:token", users.checkResetPasswordToken);
+
 router.post("/isEmailAvailable", users.isEmailAvailable);
 
 module.exports = router;

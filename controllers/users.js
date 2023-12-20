@@ -115,4 +115,50 @@ module.exports = class UsersController extends CRUDController {
 
     res.send(user);
   };
+
+  resetPassword = async (req, res) => {
+    console.log(req.body);
+    const user = await this.model.findOne({
+      email: req.body.email,
+    });
+    if (!user) return res.status(400).send("Invalid email");
+
+    const resetPasswordToken = crypto.randomBytes(20).toString("hex");
+    user.resetPasswordToken = resetPasswordToken;
+
+    user.save();
+
+    mailService.sendEmail(
+      user.email,
+      mailSubjectsEnum.RESET_PASSWORD,
+      mailContentEnum.RESET_PASSWORD +
+        "https://firstry-7e136.web.app/account/resetPassword/" +
+        resetPasswordToken
+    );
+
+    res.send(user);
+  };
+
+  validateResetPassword = async (req, res) => {
+    const user = await this.model.findOne({
+      resetPasswordToken: req.params.token,
+    });
+    if (!user) return res.status(400).send("Invalid token");
+
+    user.password = await hash.encrypt(req.body.newPassword);
+    user.verifyNewPasswordToken = null;
+
+    user.save();
+
+    res.send(user);
+  };
+
+  checkResetPasswordToken = async (req, res) => {
+    const user = await this.model.findOne({
+      resetPasswordToken: req.params.token,
+    });
+    if (!user) return res.status(400).send("Invalid token");
+
+    res.send(user);
+  };
 };
