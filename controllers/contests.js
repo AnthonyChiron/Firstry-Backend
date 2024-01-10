@@ -5,6 +5,7 @@ const { Organizer } = require("../models/organizer");
 const mongoose = require("mongoose");
 const { checkPreferences } = require("joi");
 const { uploadFile } = require("../services/storage");
+const { subDays } = require("date-fns");
 
 module.exports = class ContestsController extends CRUDController {
   name = "contest";
@@ -25,6 +26,7 @@ module.exports = class ContestsController extends CRUDController {
       description: req.body.description,
       startDate: req.body.startDate,
       endDate: req.body.endDate,
+      registrationEndDate: subDays(req.body.startDate, 2),
       location: req.body.location,
       sports: req.body.sports,
       organizerId: req.user.organizerId,
@@ -59,6 +61,22 @@ module.exports = class ContestsController extends CRUDController {
                 localField: "_id", // Ici, nous utilisons l'ID de la catégorie
                 foreignField: "categoryId", // Assurez-vous que c'est le champ correct dans la collection `steps`
                 as: "steps",
+                pipeline: [
+                  {
+                    $lookup: {
+                      from: "rules",
+                      localField: "rules",
+                      foreignField: "_id",
+                      as: "rules",
+                    },
+                  },
+                  {
+                    $unwind: {
+                      path: "$rules",
+                      preserveNullAndEmptyArrays: true, // Utilisez ceci si vous voulez conserver les étapes sans règles
+                    },
+                  },
+                ],
               },
             },
           ],
