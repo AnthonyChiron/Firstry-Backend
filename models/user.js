@@ -57,7 +57,7 @@ module.exports.validateSignup = function (user) {
       .noWhiteSpaces()
       .onlyLatinCharacters()
       .required(),
-    newPassword: Joi.string().noWhiteSpaces().onlyLatinCharacters(),
+    newPassword: joiPassword.string().noWhiteSpaces().onlyLatinCharacters(),
     isValid: Joi.boolean(),
     role: Joi.string()
       .valid(...Object.values(rolesEnum))

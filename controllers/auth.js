@@ -12,6 +12,9 @@ const {
 const { Rider, validate: validateRider } = require("../models/rider");
 const functions = require("firebase-functions");
 const { uploadFile } = require("../services/storage");
+const stripe = require("stripe")(
+  "sk_test_51OPhx3ExeV2TEn3koFSQVt3FZFYFFWwPu9U2RC1yrrfA5mXZ5IUdEcwsJnUfPoLPQzlwcLK1aZa9nBLVToh9dYB80053sqNZdH"
+);
 
 module.exports = class AuthController {
   signup = async (req, res) => {
@@ -29,7 +32,11 @@ module.exports = class AuthController {
 
     let savedOrganizer = null;
     if (body.user.role == rolesEnum.CONTEST) {
-      savedOrganizer = await this.createOrganizer(body.organizer, req.file);
+      savedOrganizer = await this.createOrganizer(
+        user.email,
+        body.organizer,
+        req.file
+      );
       user.organizerId = savedOrganizer._id;
     }
 
@@ -61,7 +68,7 @@ module.exports = class AuthController {
     });
   };
 
-  createOrganizer = async (organizerData, file) => {
+  createOrganizer = async (email, organizerData, file) => {
     const { error } = validateOrganizer(organizerData);
     if (error) throw new Error(error.details[0].message);
 
@@ -71,6 +78,20 @@ module.exports = class AuthController {
       "pdp/" + organizerData.name + "_" + organizerData.siretNumber
     );
     organizer.photoUrl = photoUrlOrganizer;
+
+    try {
+      const account = await stripe.accounts.create({
+        type: "express", // ou 'standard' selon votre choix
+        country: "FR", // ou le code de pays approprié
+        email: email,
+      });
+
+      organizer.stripeAccountId = account.id;
+    } catch (error) {
+      console.error("Erreur lors de la création du compte Stripe:", error);
+      throw error; // Ou gérer l'erreur comme vous le souhaitez
+    }
+
     return organizer.save();
   };
 

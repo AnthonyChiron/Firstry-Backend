@@ -7,6 +7,7 @@ const registrations = require("./registrations");
 const pools = require("./pools");
 const steps = require("./steps");
 const users = require("./users");
+const payment = require("./payment");
 const organizers = require("./organizers");
 const express = require("express");
 const error = require("../middlewares/error");
@@ -16,6 +17,7 @@ const cors = require("cors");
 const functions = require("firebase-functions");
 const bodyParser = require("body-parser");
 const currentUser = require("../middlewares/currentUser");
+const stripeWebhook = require("../webhooks/stripe");
 
 module.exports = function (app) {
   // Middlewares
@@ -26,6 +28,11 @@ module.exports = function (app) {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(currentUser);
+  app.post(
+    "/webhook",
+    express.raw({ type: "application/json" }),
+    stripeWebhook.handler
+  );
 
   if (functions.config().env.type == "dev") {
     app.use("/api/riders", riders);
@@ -38,6 +45,7 @@ module.exports = function (app) {
     app.use("/api/steps", steps);
     app.use("/api/users", users);
     app.use("/api/organizers", organizers);
+    app.use("/api/payment", payment);
   }
 
   if (functions.config().env.type == "production") {
@@ -50,7 +58,8 @@ module.exports = function (app) {
     app.use("/pools", pools);
     app.use("/steps", steps);
     app.use("/users", users);
-    app.use("/api/organizers", organizers);
+    app.use("/organizers", organizers);
+    app.use("/payment", payment);
   }
   // Logger
   app.use(error);

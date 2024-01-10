@@ -13,6 +13,7 @@ module.exports.Organizer = mongoose.model(
       twitter: String,
       youtube: String,
     },
+    stripeAccountId: { type: String },
   })
 );
 
