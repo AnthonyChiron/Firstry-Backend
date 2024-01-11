@@ -5,6 +5,7 @@ const PaymentController = require("../controllers/payment");
 const payment = new PaymentController();
 
 router.post("/createpayment", payment.createPayment);
-router.get("/createLoginLink/:id", payment.createLoginLink);
+router.get("/createLoginLink/:accountId", payment.createLoginLink);
+router.get("/isStripeAccountUsable/:accountId", payment.isStripeAccountUsable);
 
 module.exports = router;

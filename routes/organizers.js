@@ -14,5 +14,13 @@ router.delete("/:id", organizers.deleteById);
 router.put("/:id", organizers.update);
 
 router.put("/updatePhoto/:id", upload.single("photo"), organizers.updatePhoto);
+router.get(
+  "/isContestPaymentEnabledByOrganizerId/:id",
+  organizers.isContestPaymentEnabledByOrganizerId
+);
+router.get(
+  "/isOrganizerContest/:organizerId/:contestId",
+  organizers.IsOrganizerContest
+);
 
 module.exports = router;

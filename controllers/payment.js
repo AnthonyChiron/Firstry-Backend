@@ -3,6 +3,7 @@ const CRUDController = require("./CRUD");
 const stripe = require("stripe")(
   "sk_test_51OPhx3ExeV2TEn3koFSQVt3FZFYFFWwPu9U2RC1yrrfA5mXZ5IUdEcwsJnUfPoLPQzlwcLK1aZa9nBLVToh9dYB80053sqNZdH"
 );
+const { checkStripeAccountValidity } = require("../services/stripe");
 
 module.exports = class PaymentsController extends CRUDController {
   name = "payments";
@@ -46,18 +47,20 @@ module.exports = class PaymentsController extends CRUDController {
   };
 
   createLoginLink = async (req, res) => {
-    console.log(req.params.id);
     try {
       const accountLink = await stripe.accountLinks.create({
         account: req.params.id,
-        refresh_url: "https://votre-site.com/reauth",
-        return_url: "https://votre-site.com/return",
+        refresh_url: "http://localhost:4200/account",
+        return_url: "http://localhost:4200/account",
         type: "account_onboarding",
       });
-      console.log(accountLink);
       res.send(accountLink);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
+  };
+
+  isStripeAccountUsable = async (req, res) => {
+    res.send(await checkStripeAccountValidity(req.params.accountId));
   };
 };

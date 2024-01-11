@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const { checkPreferences } = require("joi");
 const { uploadFile } = require("../services/storage");
 const { subDays } = require("date-fns");
+const { checkStripeAccountValidity } = require("../services/stripe");
 
 module.exports = class ContestsController extends CRUDController {
   name = "contest";
@@ -29,6 +30,7 @@ module.exports = class ContestsController extends CRUDController {
       registrationEndDate: subDays(req.body.startDate, 2),
       location: req.body.location,
       sports: req.body.sports,
+      enablePayment: req.body.enablePayment,
       organizerId: req.user.organizerId,
     });
 
@@ -159,6 +161,68 @@ module.exports = class ContestsController extends CRUDController {
       contest.branding.banner = imageUrl;
     if (req.file.originalname.includes("poster"))
       contest.branding.poster = imageUrl;
+
+    const savedContest = contest.save();
+    res.send(savedContest);
+  };
+
+  isContestPublishable = async (req, res) => {
+    const contest = await this.model.findById(req.params.id);
+
+    if (!contest) return res.status(404).send("Contest not found");
+
+    const result = {
+      isValid: true,
+      errors: [],
+    };
+
+    // Check if contest has a valid stripe account
+    // In case of no payment, we don't need to check
+    if (contest.enablePayment) {
+      const organizer = await Organizer.findById(contest.organizerId);
+      if (!organizer) return res.status(404).send("Organizer not found");
+
+      if (!organizer.stripeAccountId)
+        return res.status(400).send("Organizer has no stripe account");
+
+      if (!(await checkStripeAccountValidity(organizer.stripeAccountId))) {
+        result.isValid = false;
+        result.errors.push(
+          "Votre compte Stripe n'est pas valide : rendez-vous dans 'Mon compte' pour le mettre à jour"
+        );
+      }
+    }
+
+    // Check if contest has at least one category
+    const categories = await Category.find({ contestId: contest._id });
+    if (categories.length == 0) {
+      result.isValid = false;
+      result.errors.push(
+        "Il vous faut au minimum une catégorie pour publier votre contest."
+      );
+    }
+
+    // Check if contest has description
+    if (!contest.description) {
+      result.isValid = false;
+      result.errors.push("La description de votre contest est vide.");
+    }
+
+    // Check if contest has poster
+    if (!contest.branding.poster) {
+      result.isValid = false;
+      result.errors.push("Vous devez ajouter un poster à votre contest.");
+    }
+
+    res.send(result);
+  };
+
+  publishContest = async (req, res) => {
+    const contest = await this.model.findById(req.params.id);
+
+    if (!contest) return res.status(404).send("Contest not found");
+
+    contest.isPublished = true;
 
     const savedContest = contest.save();
     res.send(savedContest);
