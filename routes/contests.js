@@ -33,4 +33,7 @@ router.put("/:id", contests.update);
 // DELETE CONTEST
 router.delete("/:id", contests.deleteById);
 
+router.get("/publishContest/:id", contests.publishContest);
+router.get("/isContestPublishable/:id", contests.isContestPublishable);
+
 module.exports = router;

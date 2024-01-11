@@ -10,6 +10,8 @@ module.exports.Contest = mongoose.model(
     endDate: Date,
     registrationEndDate: Date,
     sports: { type: Array },
+    enablePayment: { type: Boolean, default: false },
+    isPublished: { type: Boolean, default: false },
     location: {
       country: { type: String },
       postalCode: { type: String },
@@ -52,6 +54,8 @@ module.exports.validate = function (contest) {
       trailer: Joi.string().uri().min(2),
     },
     sports: Joi.array().items(Joi.string()).min(1),
+    enablePayment: Joi.boolean().required(),
+    isPublished: Joi.boolean(),
     socials: Joi.object({
       instagram: Joi.string().allow(null, ""),
       twitter: Joi.string().allow(null, ""),

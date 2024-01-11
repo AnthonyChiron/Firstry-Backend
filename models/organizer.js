@@ -8,6 +8,12 @@ module.exports.Organizer = mongoose.model(
     name: { type: String, required: true },
     bio: { type: String },
     photoUrl: { type: String },
+    location: {
+      country: { type: String },
+      postalCode: { type: String },
+      city: { type: String },
+      address: { type: String },
+    },
     socials: {
       instagram: String,
       twitter: String,
@@ -21,6 +27,13 @@ module.exports.validate = function (organizer) {
   const schema = Joi.object({
     name: Joi.string().min(2).required(),
     bio: Joi.string(),
+    photoUrl: Joi.string().uri().min(2),
+    location: {
+      country: Joi.string(),
+      postalCode: Joi.string(),
+      city: Joi.string(),
+      address: Joi.string(),
+    },
     socials: Joi.object({
       instagram: Joi.string().min(3).pattern(new RegExp("^@")),
       twitter: Joi.string().min(3).pattern(new RegExp("^@")),
