@@ -7,7 +7,11 @@ module.exports = class RulesController extends CRUDController {
   validate = validate;
 
   getRulesByContestId = async (req, res) => {
-    const rules = await this.model.find({ contestId: req.params.id });
+    // Get rules by contest id or rules isDefault = true
+    const rules = await Rules.find({
+      $or: [{ contestId: req.params.contestId }, { isDefault: true }],
+    });
+
     res.send(rules);
   };
 };

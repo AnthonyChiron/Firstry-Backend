@@ -10,6 +10,7 @@ module.exports.Rules = mongoose.model(
     stepFormats: { type: Array, required: true },
     pointCategories: { type: Array, required: true },
     contestId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    isDefault: { type: Boolean, default: false },
   })
 );
 
@@ -36,6 +37,7 @@ module.exports.validate = function (rules) {
         points: Joi.number().required(),
       })
     ),
+    isDefault: Joi.boolean(),
     contestId: Joi.objectId().required(),
   });
 

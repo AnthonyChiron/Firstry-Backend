@@ -84,6 +84,10 @@ module.exports = class AuthController {
         type: "express", // ou 'standard' selon votre choix
         country: "FR", // ou le code de pays approprié
         email: email,
+        capabilities: {
+          card_payments: { requested: true },
+          transfers: { requested: true },
+        },
       });
 
       organizer.stripeAccountId = account.id;
