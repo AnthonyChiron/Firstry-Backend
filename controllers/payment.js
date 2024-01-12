@@ -15,17 +15,17 @@ module.exports = class PaymentsController extends CRUDController {
 
     console.log(req.body);
     try {
-      const paymentIntent = await stripe.paymentIntents.create(
-        {
-          amount: amount, // Le montant en centimes
-          currency: "eur", // ou la devise de votre choix
-          receipt_email: user.email,
-          application_fee_amount: amount * 0.04,
+      console.log(user.stripeAccountId);
+      console.log(Math.floor(amount * 0.04));
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: amount, // Le montant en centimes
+        currency: "eur", // ou la devise de votre choix
+        receipt_email: user.email,
+        application_fee_amount: Math.floor(amount * 0.04), // Frais d'application
+        transfer_data: {
+          destination: user.organizer.stripeAccountId, // ID du compte Stripe de l'organisateur
         },
-        {
-          stripeAccount: user.stripeAccountId,
-        }
-      );
+      });
 
       console.log(paymentIntent);
 
@@ -46,17 +46,38 @@ module.exports = class PaymentsController extends CRUDController {
     }
   };
 
-  createLoginLink = async (req, res) => {
+  createOnboardingLink = async (req, res) => {
     try {
+      console.log(req.params.accountId);
       const accountLink = await stripe.accountLinks.create({
-        account: req.params.id,
+        account: req.params.accountId,
         refresh_url: "http://localhost:4200/account",
         return_url: "http://localhost:4200/account",
         type: "account_onboarding",
       });
+      console.log(accountLink);
       res.send(accountLink);
     } catch (err) {
+      console.log(err);
       res.status(500).json({ error: err.message });
+    }
+  };
+
+  createLoginLink = async (req, res) => {
+    try {
+      const accountId = req.params.accountId;
+
+      const loginLink = await stripe.accounts.createLoginLink(accountId, {
+        redirect_url: "http://localhost:4200/account", // URL optionnelle de redirection après la déconnexion
+      });
+
+      res.send(loginLink);
+    } catch (error) {
+      console.error(
+        "Erreur lors de la création du lien du Dashboard Stripe:",
+        error
+      );
+      res.status(500).send("Erreur lors de la création du lien");
     }
   };
 
