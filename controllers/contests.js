@@ -84,8 +84,17 @@ module.exports = class ContestsController extends CRUDController {
           ],
         },
       },
+      {
+        $lookup: {
+          from: "organizers", // nom de la collection en minuscules
+          localField: "organizerId", // nom du champ dans la collection `Contest`
+          foreignField: "_id", // nom du champ dans la collection `Category`
+          as: "organizer", // comment vous voulez nommer le champ dans le document résultant
+        },
+      },
     ])
       .then((results) => {
+        results[0].organizer = results[0].organizer[0];
         res.send(results[0]);
       })
       .catch((error) => {

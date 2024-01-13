@@ -1,4 +1,8 @@
-module.exports.registrationStateEnum = {
-  PENDING_RIDER_CONFIRMATION: "",
-  PENDING_APPROVAL: "",
+module.exports.registrationState = {
+  PENDING_PAYMENT: "pending_payment",
+  PENDING_APPROVAL: "pending_approval",
+  PAYMENT_FAILED: "payment_failed",
+  VALID: "valid",
+  REFUSED: "refused",
+  CANCELLED_AND_REFUNDED: "cancelled_and_refunded",
 };

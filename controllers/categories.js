@@ -1,7 +1,7 @@
 const CRUDController = require("./CRUD");
 const { Category, validate } = require("../models/category");
 const { Step, validate: validateStep } = require("../models/step");
-const { forEach } = require("lodash");
+const mongoose = require("mongoose");
 
 module.exports = class CategoriesController extends CRUDController {
   name = "category";
@@ -129,4 +129,79 @@ module.exports = class CategoriesController extends CRUDController {
     // Send the deleted category
     res.send(category);
   };
+
+  getAllCategoriesForRegistrations = async (req, res) => {
+    // Get all categories from contestId including steps
+    console.log(req.params.id);
+    Category.aggregate([
+      {
+        $match: {
+          contestId: new mongoose.Types.ObjectId(req.params.id), // Assurez-vous que la valeur est un ObjectId
+        },
+      },
+      {
+        $lookup: {
+          from: "registrations", // Le nom de la collection des registrations dans MongoDB
+          localField: "_id",
+          foreignField: "category",
+          as: "registrations",
+        },
+      },
+      {
+        $lookup: {
+          from: "steps",
+          localField: "_id",
+          foreignField: "categoryId",
+          as: "steps",
+          pipeline: [
+            {
+              $lookup: {
+                from: "rules",
+                localField: "rules",
+                foreignField: "_id",
+                as: "rules",
+              },
+            },
+            {
+              $unwind: {
+                path: "$rules",
+                preserveNullAndEmptyArrays: true, // Utilisez ceci si vous voulez conserver les étapes sans règles
+              },
+            },
+          ],
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          description: 1,
+          cashprize: 1,
+          sports: 1,
+          maxRiders: 1,
+          registerPrice: 1,
+          isQualificationStep: 1,
+          contestId: 1,
+          steps: 1,
+          NbRegistration: { $size: "$registrations" }, // Compter le nombre de registrations
+        },
+      },
+    ])
+      .then((result) => {
+        console.log(result); // Votre résultat avec NbRegistration pour chaque catégorie
+        res.send(result);
+      })
+      .catch((err) => {
+        console.error(err); // Gérer les erreurs
+      });
+  };
+
+  async getNbLeftPlacesInCategory(categoryId) {
+    const category = await Category.findById(categoryId);
+    const registrations = await Registration.find({
+      category: categoryId,
+      registrationState: "valid",
+    });
+
+    return category.nbPlaces - registrations.length;
+  }
 };

@@ -4,30 +4,28 @@ const stripe = require("stripe")(
   "sk_test_51OPhx3ExeV2TEn3koFSQVt3FZFYFFWwPu9U2RC1yrrfA5mXZ5IUdEcwsJnUfPoLPQzlwcLK1aZa9nBLVToh9dYB80053sqNZdH"
 );
 const { checkStripeAccountValidity } = require("../services/stripe");
+const { Registration } = require("../models/registration");
+const { registrationState } = require("../constants/registrationEnum");
 
 module.exports = class PaymentsController extends CRUDController {
   name = "payments";
   model = Payment;
   validate = validate;
 
-  createPayment = async (req, res) => {
-    const { amount, user } = req.body; // Assurez-vous de valider et de nettoyer cet input
+  createRegistrationPayment = async (req, res) => {
+    const { amount, user, organizer, categoryId } = req.body; // Assurez-vous de valider et de nettoyer cet input
 
-    console.log(req.body);
     try {
-      console.log(user.stripeAccountId);
-      console.log(Math.floor(amount * 0.04));
+      // CREATE PAYMENT
       const paymentIntent = await stripe.paymentIntents.create({
         amount: amount, // Le montant en centimes
         currency: "eur", // ou la devise de votre choix
         receipt_email: user.email,
         application_fee_amount: Math.floor(amount * 0.04), // Frais d'application
         transfer_data: {
-          destination: user.organizer.stripeAccountId, // ID du compte Stripe de l'organisateur
+          destination: organizer.stripeAccountId, // ID du compte Stripe de l'organisateur
         },
       });
-
-      console.log(paymentIntent);
 
       // Créez un document Payment dans votre base de données
       const payment = new Payment({
@@ -35,7 +33,20 @@ module.exports = class PaymentsController extends CRUDController {
         amount: amount,
         paymentIntentId: paymentIntent.id,
         paymentState: paymentIntent.status,
+        stripeAccountId: organizer.stripeAccountId,
       });
+
+      payment.save();
+
+      // Créez un document Registration dans votre base de données
+      const registration = new Registration({
+        rider: user.rider._id,
+        category: categoryId,
+        registrationState: registrationState.PENDING_PAYMENT,
+        paymentId: payment._id,
+      });
+
+      registration.save();
 
       res.send({
         clientSecret: paymentIntent.client_secret,

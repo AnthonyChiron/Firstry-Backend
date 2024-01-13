@@ -12,4 +12,8 @@ router.post("/", categories.createCategory);
 router.put("/:id", categories.updateCategory);
 router.delete("/:id", categories.deleteCategory);
 
+router.get(
+  "/getAllCategoriesForRegistrations/:id",
+  categories.getAllCategoriesForRegistrations
+);
 module.exports = router;

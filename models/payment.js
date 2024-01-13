@@ -15,7 +15,3 @@ module.exports.Payment = mongoose.model(
     failedMessage: { type: String },
   })
 );
-
-module.exports.validate = function (category) {
-  return schema.validate(category);
-};

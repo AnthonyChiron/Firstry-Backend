@@ -31,6 +31,7 @@ module.exports.Registration = mongoose.model(
         message: "Category not found",
       },
     },
+    paymentId: { type: mongoose.Schema.Types.ObjectId, ref: "Payment" },
     registrationState: String,
   })
 );
