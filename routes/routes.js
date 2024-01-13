@@ -23,16 +23,16 @@ module.exports = function (app) {
   // Middlewares
   app.use(helmet());
   app.use(cors());
+  app.post(
+    "/stripe",
+    express.raw({ type: "application/json" }),
+    stripeWebhook.handler
+  );
   app.use(express.json());
   app.use(logger);
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(currentUser);
-  app.post(
-    "/webhook",
-    express.raw({ type: "application/json" }),
-    stripeWebhook.handler
-  );
 
   if (functions.config().env.type == "dev") {
     app.use("/api/riders", riders);
