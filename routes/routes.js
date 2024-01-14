@@ -19,10 +19,14 @@ const bodyParser = require("body-parser");
 const currentUser = require("../middlewares/currentUser");
 const stripeWebhook = require("../webhooks/stripe");
 
+const corsOptions = {
+  origin: "https://firstry-7e136.web.app",
+};
+
 module.exports = function (app) {
   // Middlewares
   app.use(helmet());
-  app.use(cors());
+  app.use(cors(corsOptions));
   app.post(
     "/stripe",
     express.raw({ type: "application/json" }),
