@@ -46,4 +46,9 @@ router.get(
   registrations.isRiderRegisteredToContest
 );
 
+router.get(
+  "/getRegistrationsByContestId/:contestId",
+  registrations.getRegistrationsByContestId
+);
+
 module.exports = router;

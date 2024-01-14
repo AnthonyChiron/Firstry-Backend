@@ -9,6 +9,57 @@ module.exports = class CategoriesController extends CRUDController {
   model = Registration;
   validate = validate;
 
+  getRegistrationsByContestId = async (req, res) => {
+    Registration.aggregate([
+      {
+        $lookup: {
+          from: "categories", // Le nom de votre collection de catégories dans MongoDB
+          localField: "category",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      { $unwind: "$category" },
+      {
+        $lookup: {
+          from: "contests", // Le nom de votre collection de contests dans MongoDB
+          localField: "category.contestId",
+          foreignField: "_id",
+          as: "contest",
+        },
+      },
+      { $unwind: "$contest" },
+      {
+        $match: {
+          "contest._id": new mongoose.Types.ObjectId(req.params.contestId), // Remplacer 'contestId' par l'ID du contest concerné
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          rider: 1,
+          category: 1,
+          registrationState: 1,
+          contest: {
+            _id: 1,
+            name: 1,
+            startDate: 1,
+            endDate: 1,
+            location: 1,
+            sports: 1,
+          },
+        },
+      },
+    ])
+      .then((result) => {
+        console.log(result); // Les registrations avec les infos de Category et Contest
+        res.send(result);
+      })
+      .catch((err) => {
+        console.error(err); // Gérer les erreurs
+      });
+  };
+
   getRiderRegistrations = async (req, res) => {
     Registration.aggregate([
       {
