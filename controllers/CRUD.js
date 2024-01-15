@@ -7,6 +7,10 @@ module.exports = class CRUDController {
     res.send(result);
   };
 
+  test = async (req, res) => {
+    res.send("test");
+  };
+
   getAll = async (req, res) => {
     const results = await this.model.find();
     res.send(results);

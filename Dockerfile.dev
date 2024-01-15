@@ -1,0 +1,23 @@
+# Utilisez l'image Node.js en tant qu'image de base
+FROM node:18
+
+# Définissez le répertoire de travail dans le conteneur
+WORKDIR ./
+
+# Copiez le fichier package.json et package-lock.json
+COPY package*.json ./
+
+# Installez les dépendances
+RUN npm install
+
+# Installez nodemon globalement
+RUN npm install -g nodemon
+
+# Copiez le code source dans le conteneur
+COPY . .
+
+# Exposez le port sur lequel votre serveur Node.js écoute (par exemple : 3000)
+EXPOSE 3000
+
+# Commande pour exécuter le serveur Node.js
+CMD ["nodemon"]
