@@ -20,7 +20,7 @@ const currentUser = require("../middlewares/currentUser");
 const stripeWebhook = require("../webhooks/stripe");
 
 const corsOptions = {
-  origin: "https://firstry-7e136.web.app",
+  origin: "http://localhost",
 };
 
 module.exports = function (app) {

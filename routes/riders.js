@@ -12,6 +12,7 @@ router.get("/getById/:id", riders.getById);
 router.post("/", riders.post);
 router.delete("/:id", riders.deleteById);
 router.put("/:id", riders.update);
+router.get("test", riders.test);
 
 router.put("/updatePhoto/:id", upload.single("photo"), riders.updatePhoto);
 
