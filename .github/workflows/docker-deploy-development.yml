@@ -42,6 +42,6 @@ jobs:
             echo "JWT_SECRET_TOKEN=${{ secrets.ENV_JWT_SECRET_TOKEN }}" >> .envDevBack
             echo "NODE_MAILER_PASS=${{ secrets.ENV_NODE_MAILER_PASS }}" >> .envDevBack
 
-            docker compose pull
-            docker-compose -f docker-compose.dev.yml up -d
+            docker compose -f docker-compose.dev.yml pull
+            docker compose -f docker-compose.dev.yml up -d
             docker system prune -f
