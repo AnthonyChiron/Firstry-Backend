@@ -2,7 +2,7 @@ const admin = require("firebase-admin");
 
 let privateKey = process.env.FIREBASE_PRIVATE_KEY;
 
-if (process.env.ENV == "development") {
+if (process.env.ENV == "local") {
   privateKey = JSON.parse(process.env.FIREBASE_PRIVATE_KEY).privateKey;
 }
 
@@ -19,7 +19,8 @@ const bucket = admin.storage().bucket();
 
 module.exports.uploadFile = async (file, fileName) => {
   // Créer un fichier dans le bucket
-  fileName = process.env.ENV + "/" + fileName;
+  if (!process.env.ENV == "local") fileName = process.env.ENV + "/" + fileName;
+  else fileName = "development/" + fileName;
 
   const bucketFile = bucket.file(fileName);
 
@@ -43,7 +44,8 @@ module.exports.uploadFile = async (file, fileName) => {
 };
 
 module.exports.getFile = async (file, fileName) => {
-  fileName = process.env.ENV + "/" + fileName;
+  if (!process.env.ENV == "local") fileName = process.env.ENV + "/" + fileName;
+  else fileName = "development/" + fileName;
 
   // Créer un fichier dans le bucket
   const bucketFile = bucket.file(fileName);
