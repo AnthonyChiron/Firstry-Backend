@@ -29,6 +29,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            cd PRODUCTION
+
             echo "ENV=${{ secrets.ENV_ENV }}" > .envBack
             echo "DB_HOST=${{ secrets.DB_HOST }}" > .envBack
             echo "APP_URL=${{ secrets.ENV_APP_URL }}" > .envBack
@@ -39,7 +41,6 @@ jobs:
             echo "JWT_SECRET_TOKEN=${{ secrets.ENV_JWT_SECRET_TOKEN }}" > .envBack
             echo "NODE_MAILER_PASS=${{ secrets.ENV_NODE_MAILER_PASS }}" > .envBack
 
-            cd PRODUCTION
             docker compose pull
             docker compose up -d
             docker system prune -f
