@@ -5,7 +5,7 @@ let privateKey;
 if (process.env.ENV == "development") {
   privateKey = JSON.parse(process.env.FIREBASE_PRIVATE_KEY).privateKey;
 } else {
-  privateKey = process.env.FIREBASE_PRIVATE_KEY.privateKey;
+  privateKey = JSON.stringify(process.env.FIREBASE_PRIVATE_KEY).privateKey;
 }
 
 console.log(privateKey);
