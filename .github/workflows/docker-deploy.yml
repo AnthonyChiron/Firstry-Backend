@@ -29,7 +29,15 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            echo "ENV=${{ secrets.ENV_ENV }}" > .envBack
             echo "DB_HOST=${{ secrets.DB_HOST }}" > .envBack
+            echo "APP_URL=${{ secrets.ENV_APP_URL }}" > .envBack
+            echo "FIREBASE_CLIENT_EMAIL=${{ secrets.ENV_FIREBASE_CLIENT_EMAIL }}" > .envBack
+            echo "FIREBASE_PRIVATE_KEY=${{ secrets.ENV_FIREBASE_PRIVATE_KEY }}" > .envBack
+            echo "FIREBASE_PROJECT_ID=${{ secrets.ENV_FIREBASE_PROJECT_ID }}" > .envBack
+            echo "FIREBASE_STORAGE_BUCKET=${{ secrets.ENV_FIREBASE_STORAGE_BUCKET }}" > .envBack
+            echo "JWT_SECRET_TOKEN=${{ secrets.ENV_JWT_SECRET_TOKEN }}" > .envBack
+            echo "NODE_MAILER_PASS=${{ secrets.ENV_NODE_MAILER_PASS }}" > .envBack
 
             cd PRODUCTION
             docker compose pull
