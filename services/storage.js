@@ -1,9 +1,10 @@
 const admin = require("firebase-admin");
+const { privateKey } = JSON.parse(process.env.FIREBASE_PRIVATE_KEY);
 
 admin.initializeApp({
   credential: admin.credential.cert({
     projectId: process.env.FIREBASE_PROJECT_ID,
-    private_key: process.env.FIREBASE_PRIVATE_KEY,
+    private_key: privateKey.replace(/\\n/g, "\n"),
     client_email: process.env.FIREBASE_CLIENT_EMAIL,
   }),
   storageBucket: "gs://firstry-7e136.appspot.com/", // Remplacez par le nom de votre bucket
@@ -15,6 +16,8 @@ module.exports.uploadFile = async (file, fileName) => {
   // Créer un fichier dans le bucket
   const bucketFile = bucket.file(fileName);
 
+  console.log(fileName);
+  console.log(file);
   // Configuration des options de métadonnées
   const options = {
     metadata: {
