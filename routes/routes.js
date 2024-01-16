@@ -20,7 +20,7 @@ const currentUser = require("../middlewares/currentUser");
 const stripeWebhook = require("../webhooks/stripe");
 
 const corsOptions = {
-  origin: "http://front:80",
+  origin: true,
 };
 
 module.exports = function (app) {
