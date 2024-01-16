@@ -29,6 +29,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            echo "DB_HOST=${{ secrets.DB_HOST }}" > .envBack
+
             cd PRODUCTION
             docker compose pull
             docker compose up -d
