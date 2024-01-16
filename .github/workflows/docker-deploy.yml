@@ -32,7 +32,7 @@ jobs:
             cd PRODUCTION
 
             echo "ENV=${{ secrets.ENV_ENV }}" > .envBack
-            echo "DB_HOST=${{ secrets.DB_HOST }}" >> .envBack
+            echo "DB_HOST=${{ secrets.ENV_DB_HOST }}" >> .envBack
             echo "APP_URL=${{ secrets.ENV_APP_URL }}" >> .envBack
             echo "FIREBASE_CLIENT_EMAIL=${{ secrets.ENV_FIREBASE_CLIENT_EMAIL }}" >> .envBack
             echo "FIREBASE_PRIVATE_KEY=${{ secrets.ENV_FIREBASE_PRIVATE_KEY }}" >> .envBack
