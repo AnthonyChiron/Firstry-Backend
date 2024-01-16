@@ -1,11 +1,9 @@
 const admin = require("firebase-admin");
 
-let privateKey;
+let privateKey = process.env.FIREBASE_PRIVATE_KEY;
 
 if (process.env.ENV == "development") {
   privateKey = JSON.parse(process.env.FIREBASE_PRIVATE_KEY).privateKey;
-} else {
-  privateKey = process.env.FIREBASE_PRIVATE_KEY;
 }
 
 console.log(privateKey);
