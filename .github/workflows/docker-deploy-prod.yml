@@ -1,0 +1,47 @@
+name: Deploy App to Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: PRODUCTION
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Build and Push Backend Image
+        run: |
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/firstry-production-back:latest .
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/firstry-production-back:latest
+
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd PRODUCTION
+
+            echo "ENV=${{ secrets.ENV_ENV }}" > .envProdBack
+            echo "DB_HOST=${{ secrets.ENV_DB_HOST }}" >> .envProdBack
+            echo "APP_URL=${{ secrets.ENV_APP_URL }}" >> .envProdBack
+            echo "FIREBASE_CLIENT_EMAIL=${{ secrets.ENV_FIREBASE_CLIENT_EMAIL }}" >> .envProdBack
+            echo "FIREBASE_PRIVATE_KEY=${{ secrets.ENV_FIREBASE_PRIVATE_KEY }}" >> .envProdBack
+            echo "FIREBASE_PROJECT_ID=${{ secrets.ENV_FIREBASE_PROJECT_ID }}" >> .envProdBack
+            echo "FIREBASE_STORAGE_BUCKET=${{ secrets.ENV_FIREBASE_STORAGE_BUCKET }}" >> .envProdBack
+            echo "JWT_SECRET_TOKEN=${{ secrets.ENV_JWT_SECRET_TOKEN }}" >> .envProdBack
+            echo "NODE_MAILER_PASS=${{ secrets.ENV_NODE_MAILER_PASS }}" >> .envProdBack
+
+            docker compose pull
+            docker compose up -d
+            docker system prune -f
