@@ -119,13 +119,7 @@ module.exports = class AuthController {
   };
 
   sendVerificationEmail = (email, verifyEmailToken) => {
-    let url = "";
-    if (functions.config().env.type == "production")
-      url =
-        "https://firstry-7e136.web.app/account/validateEmail/" +
-        verifyEmailToken;
-    else
-      url = "http://localhost:4200/account/validateEmail/" + verifyEmailToken;
+    let url = process.env.APP_URL + "account/validateEmail/" + verifyEmailToken;
     sendEmail(
       email,
       "Firstry - Validation de votre compte",
@@ -215,7 +209,7 @@ module.exports = class AuthController {
         rider: rider,
         organizer: organizer,
       },
-      functions.config().env.secret_token
+      process.env.JWT_SECRET_TOKEN
     );
     return token;
   }
