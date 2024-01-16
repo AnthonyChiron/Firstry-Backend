@@ -6,21 +6,21 @@ if (process.env.ENV == "development") {
   privateKey = JSON.parse(process.env.FIREBASE_PRIVATE_KEY).privateKey;
 }
 
-console.log(privateKey);
-
 admin.initializeApp({
   credential: admin.credential.cert({
     projectId: process.env.FIREBASE_PROJECT_ID,
     private_key: privateKey.replace(/\\n/g, "\n"),
     client_email: process.env.FIREBASE_CLIENT_EMAIL,
   }),
-  storageBucket: "gs://firstry-7e136.appspot.com/", // Remplacez par le nom de votre bucket
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET, // Remplacez par le nom de votre bucket
 });
 
 const bucket = admin.storage().bucket();
 
 module.exports.uploadFile = async (file, fileName) => {
   // Créer un fichier dans le bucket
+  fileName = process.env.ENV + "/" + fileName;
+
   const bucketFile = bucket.file(fileName);
 
   console.log(fileName);
@@ -43,6 +43,8 @@ module.exports.uploadFile = async (file, fileName) => {
 };
 
 module.exports.getFile = async (file, fileName) => {
+  fileName = process.env.ENV + "/" + fileName;
+
   // Créer un fichier dans le bucket
   const bucketFile = bucket.file(fileName);
 
