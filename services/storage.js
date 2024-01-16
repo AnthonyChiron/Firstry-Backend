@@ -1,11 +1,10 @@
 const admin = require("firebase-admin");
-const functions = require("firebase-functions");
 
 admin.initializeApp({
   credential: admin.credential.cert({
-    projectId: functions.config().config.project_id,
-    private_key: functions.config().config.private_key.replace(/\\n/g, "\n"),
-    client_email: functions.config().config.client_email,
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    private_key: process.env.FIREBASE_PRIVATE_KEY,
+    client_email: process.env.FIREBASE_CLIENT_EMAIL,
   }),
   storageBucket: "gs://firstry-7e136.appspot.com/", // Remplacez par le nom de votre bucket
 });

@@ -38,33 +38,18 @@ module.exports = function (app) {
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(currentUser);
 
-  if (functions.config().env.type == "dev") {
-    app.use("/api/riders", riders);
-    app.use("/api/auth", auth);
-    app.use("/api/contests", contests);
-    app.use("/api/categories", categories);
-    app.use("/api/rules", rules);
-    app.use("/api/registrations", registrations);
-    app.use("/api/pools", pools);
-    app.use("/api/steps", steps);
-    app.use("/api/users", users);
-    app.use("/api/organizers", organizers);
-    app.use("/api/payment", payment);
-  }
+  app.use("/api/riders", riders);
+  app.use("/api/auth", auth);
+  app.use("/api/contests", contests);
+  app.use("/api/categories", categories);
+  app.use("/api/rules", rules);
+  app.use("/api/registrations", registrations);
+  app.use("/api/pools", pools);
+  app.use("/api/steps", steps);
+  app.use("/api/users", users);
+  app.use("/api/organizers", organizers);
+  app.use("/api/payment", payment);
 
-  if (functions.config().env.type == "production") {
-    app.use("/riders", riders);
-    app.use("/auth", auth);
-    app.use("/contests", contests);
-    app.use("/categories", categories);
-    app.use("/rules", rules);
-    app.use("/registrations", registrations);
-    app.use("/pools", pools);
-    app.use("/steps", steps);
-    app.use("/users", users);
-    app.use("/organizers", organizers);
-    app.use("/payment", payment);
-  }
   // Logger
   app.use(error);
 };
