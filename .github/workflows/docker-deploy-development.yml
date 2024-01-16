@@ -8,7 +8,7 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    environment: DEVLOPMENT
+    environment: DEVELOPMENT
     steps:
       - uses: actions/checkout@v2
 
@@ -30,7 +30,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd PRODUCTION
+            cd FIRSTRY
 
             echo "ENV=${{ secrets.ENV_ENV }}" > .envDevBack
             echo "DB_HOST=${{ secrets.ENV_DB_HOST }}" >> .envDevBack

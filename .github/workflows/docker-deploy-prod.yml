@@ -30,7 +30,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd PRODUCTION
+            cd FIRSTRY
 
             echo "ENV=${{ secrets.ENV_ENV }}" > .envProdBack
             echo "DB_HOST=${{ secrets.ENV_DB_HOST }}" >> .envProdBack
