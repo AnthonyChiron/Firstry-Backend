@@ -9,7 +9,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 const riders = new RidersController();
 
 // CRUD
-router.get("/", isAuth, riders.getAll);
+router.get("/", riders.getAll);
 router.get("/getById/:id", riders.getById);
 router.post("/", riders.post);
 router.delete("/:id", isAdmin, riders.deleteById);
