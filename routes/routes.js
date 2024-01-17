@@ -22,7 +22,7 @@ const stripeWebhook = require("../webhooks/stripe");
 module.exports = function (app) {
   // Middlewares
   app.use(cors());
-  // app.use(helmet());
+  app.use(helmet());
   app.post(
     "/stripe",
     express.raw({ type: "application/json" }),

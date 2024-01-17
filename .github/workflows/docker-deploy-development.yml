@@ -41,6 +41,8 @@ jobs:
             echo "FIREBASE_STORAGE_BUCKET=${{ secrets.ENV_FIREBASE_STORAGE_BUCKET }}" >> .envDevBack
             echo "JWT_SECRET_TOKEN=${{ secrets.ENV_JWT_SECRET_TOKEN }}" >> .envDevBack
             echo "NODE_MAILER_PASS=${{ secrets.ENV_NODE_MAILER_PASS }}" >> .envDevBack
+            echo "STRIPE_SECRET_KEY=${{ secrets.ENV_STRIPE_SECRET_KEY }}" >> .envDevBack
+            echo "STRIPE_WEBHOOK_SECRET=${{ secrets.ENV_STRIPE_WEBHOOK_SECRET }}" >> .envDevBack
 
             docker compose -f docker-compose.dev.yml pull
             docker compose -f docker-compose.dev.yml -p firstry-dev up -d

@@ -1,11 +1,8 @@
 const { Payment } = require("../models/payment");
 
 // Importez le package Stripe
-const stripe = require("stripe")(
-  "pk_test_51OPhx3ExeV2TEn3k0EWYu7LkqusSy8cewkqOMeV6ydwt6ICp84mIxzw2oPzyh8v3awLSP9ymlJqrx2ysjS00TKlU00yuzgNMzN"
-);
-const endpointSecret =
-  "whsec_2ed01a23b126f2f7a82b31cc838c47ada0aee814c9302530c148440eeb01b422"; // Votre clé secrète de webhook Stripe
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET; // Votre clé secrète de webhook Stripe
 
 // Fonction de gestion du webhook
 exports.handler = async (req, res) => {

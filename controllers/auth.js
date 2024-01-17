@@ -12,9 +12,7 @@ const {
 const { Rider, validate: validateRider } = require("../models/rider");
 const functions = require("firebase-functions");
 const { uploadFile } = require("../services/storage");
-const stripe = require("stripe")(
-  "sk_test_51OPhx3ExeV2TEn3koFSQVt3FZFYFFWwPu9U2RC1yrrfA5mXZ5IUdEcwsJnUfPoLPQzlwcLK1aZa9nBLVToh9dYB80053sqNZdH"
-);
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 module.exports = class AuthController {
   signup = async (req, res) => {
