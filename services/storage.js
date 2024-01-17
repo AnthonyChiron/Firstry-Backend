@@ -19,7 +19,7 @@ const bucket = admin.storage().bucket();
 
 module.exports.uploadFile = async (file, fileName) => {
   // Créer un fichier dans le bucket
-  if (!process.env.ENV == "local") fileName = process.env.ENV + "/" + fileName;
+  if (process.env.ENV != "local") fileName = process.env.ENV + "/" + fileName;
   else fileName = "development/" + fileName;
 
   const bucketFile = bucket.file(fileName);
