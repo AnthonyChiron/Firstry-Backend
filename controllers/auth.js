@@ -18,8 +18,10 @@ module.exports = class AuthController {
   signup = async (req, res) => {
     const body = JSON.parse(req.body.signUpForm);
     console.log(body);
+    console.log(req.file);
 
     const { error } = validateSignup(body.user);
+    console.log(error);
     if (error) return res.status(400).send(error.details[0].message);
 
     const emailExist = await User.findOne({ email: body.user.email });
@@ -29,7 +31,7 @@ module.exports = class AuthController {
     const user = await this.createUser(body.user, verifyEmailToken);
 
     let savedOrganizer = null;
-    if (body.user.role == rolesEnum.CONTEST) {
+    if (body.user.role == rolesEnum.ORGANIZER) {
       savedOrganizer = await this.createOrganizer(
         user.email,
         body.organizer,
@@ -68,9 +70,11 @@ module.exports = class AuthController {
 
   createOrganizer = async (email, organizerData, file) => {
     const { error } = validateOrganizer(organizerData);
+    console.log(error);
     if (error) throw new Error(error.details[0].message);
 
     const organizer = new Organizer(organizerData);
+    console.log("a");
     const photoUrlOrganizer = await uploadFile(
       file,
       "pdp/" + organizerData.name + "_" + organizerData.siretNumber

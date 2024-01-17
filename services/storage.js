@@ -18,10 +18,12 @@ admin.initializeApp({
 const bucket = admin.storage().bucket();
 
 module.exports.uploadFile = async (file, fileName) => {
+  console.log("uploadFile");
   // Créer un fichier dans le bucket
   if (process.env.ENV != "local") fileName = process.env.ENV + "/" + fileName;
   else fileName = "development/" + fileName;
 
+  console.log(fileName);
   const bucketFile = bucket.file(fileName);
 
   console.log(fileName);
@@ -41,23 +43,4 @@ module.exports.uploadFile = async (file, fileName) => {
   const [url] = await bucket.file(fileName).getSignedUrl(signedUrlConfig);
   console.log(url);
   return url;
-};
-
-module.exports.getFile = async (file, fileName) => {
-  if (!process.env.ENV == "local") fileName = process.env.ENV + "/" + fileName;
-  else fileName = "development/" + fileName;
-
-  // Créer un fichier dans le bucket
-  const bucketFile = bucket.file(fileName);
-
-  // Configuration des options de métadonnées
-  const options = {
-    metadata: {
-      contentType: "image/jpg",
-    },
-    public: true,
-  };
-
-  // Télécharger le fichier
-  await bucketFile.save(file.buffer, options);
 };

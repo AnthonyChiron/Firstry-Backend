@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const ContestsController = require("../controllers/contests");
-const currentUser = require("../middlewares/currentUser");
 const multer = require("multer");
+const { isOrganizer } = require("../middlewares/roleGuard");
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -18,7 +18,7 @@ router.get("/getById/:id", contests.getContestById);
 router.get("/getOrganizerContests", contests.getOrganizerContests);
 
 // POST CONTEST
-router.post("/", contests.createContest);
+router.post("/", isOrganizer, contests.createContest);
 
 // UPLOAD BRAND IMAGE
 router.post(
@@ -28,12 +28,16 @@ router.post(
 );
 
 // PUT CONTEST
-router.put("/:id", contests.update);
+router.put("/:id", isOrganizer, contests.update);
 
 // DELETE CONTEST
-router.delete("/:id", contests.deleteById);
+router.delete("/:id", isOrganizer, contests.deleteById);
 
-router.get("/publishContest/:id", contests.publishContest);
-router.get("/isContestPublishable/:id", contests.isContestPublishable);
+router.get("/publishContest/:id", isOrganizer, contests.publishContest);
+router.get(
+  "/isContestPublishable/:id",
+  isOrganizer,
+  contests.isContestPublishable
+);
 
 module.exports = router;
