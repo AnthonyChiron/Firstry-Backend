@@ -31,7 +31,7 @@ module.exports = class ContestsController extends CRUDController {
       location: req.body.location,
       sports: req.body.sports,
       enablePayment: req.body.enablePayment,
-      organizerId: req.user.organizerId,
+      organizerId: req.user._id,
     });
 
     try {
@@ -104,11 +104,10 @@ module.exports = class ContestsController extends CRUDController {
 
   // Get organizer's contests
   getOrganizerContests = async (req, res) => {
-    console.log(req.user.organizerId);
     Contest.aggregate([
       {
         $match: {
-          organizerId: new mongoose.Types.ObjectId(req.user.organizerId), // Assurez-vous que la valeur est un ObjectId
+          organizerId: new mongoose.Types.ObjectId(req.user._id), // Assurez-vous que la valeur est un ObjectId
         },
       },
       {
@@ -176,7 +175,9 @@ module.exports = class ContestsController extends CRUDController {
   };
 
   isContestPublishable = async (req, res) => {
+    console.log("a");
     const contest = await this.model.findById(req.params.id);
+    console.log(contest.organizerId);
 
     if (!contest) return res.status(404).send("Contest not found");
 

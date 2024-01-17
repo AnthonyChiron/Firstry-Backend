@@ -29,10 +29,10 @@ module.exports.validate = function (organizer) {
     bio: Joi.string(),
     photoUrl: Joi.string().uri().min(2),
     location: {
-      country: Joi.string(),
-      postalCode: Joi.string(),
-      city: Joi.string(),
-      address: Joi.string(),
+      country: Joi.string().allow(""),
+      postalCode: Joi.string().allow(""),
+      city: Joi.string().allow(""),
+      address: Joi.string().allow(""),
     },
     socials: Joi.object({
       instagram: Joi.string().min(3).pattern(new RegExp("^@")),
