@@ -1,8 +1,6 @@
 const { validate, Payment } = require("../models/payment");
 const CRUDController = require("./CRUD");
-const stripe = require("stripe")(
-  "sk_test_51OPhx3ExeV2TEn3koFSQVt3FZFYFFWwPu9U2RC1yrrfA5mXZ5IUdEcwsJnUfPoLPQzlwcLK1aZa9nBLVToh9dYB80053sqNZdH"
-);
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const { checkStripeAccountValidity } = require("../services/stripe");
 const { Registration } = require("../models/registration");
 const { registrationState } = require("../constants/registrationEnum");
