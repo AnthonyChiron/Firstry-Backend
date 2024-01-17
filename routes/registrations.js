@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const RegistrationsController = require("../controllers/registrations");
+const { isOrganizer } = require("../middlewares/roleGuard");
 
 const registrations = new RegistrationsController();
 
@@ -13,6 +14,7 @@ router.delete("/:id", registrations.deleteById);
 
 router.get(
   "/validRiderRegistration/:riderId/:categoryId",
+  isOrganizer,
   registrations.validRiderRegistration
 );
 

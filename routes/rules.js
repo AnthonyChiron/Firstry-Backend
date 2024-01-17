@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const RulesController = require("../controllers/rules");
+const { isOrganizer } = require("../middlewares/roleGuard");
 
 const rules = new RulesController();
 
@@ -8,8 +9,8 @@ const rules = new RulesController();
 router.get("/", rules.getAll);
 router.get("/getAllByContestId/:id", rules.getRulesByContestId);
 router.get("/getById/:id", rules.getById);
-router.post("/", rules.post);
-router.put("/:id", rules.update);
-router.delete("/:id", rules.deleteById);
+router.post("/", isOrganizer, rules.post);
+router.put("/:id", isOrganizer, rules.update);
+router.delete("/:id", isOrganizer, rules.deleteById);
 
 module.exports = router;

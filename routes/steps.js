@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const StepsController = require("../controllers/steps");
+const { isOrganizer } = require("../middlewares/roleGuard");
 
 const steps = new StepsController();
 
@@ -11,12 +12,12 @@ router.get("/", steps.getAll);
 router.get("/getById/:id", steps.getById);
 
 // POST RESULTS
-router.post("/", steps.post);
+router.post("/", isOrganizer, steps.post);
 
 // DELETE RESULTS
-router.delete("/:id", steps.deleteById);
+router.delete("/:id", isOrganizer, steps.deleteById);
 
 // PUT RESULTS
-router.put("/:id", steps.update);
+router.put("/:id", isOrganizer, steps.update);
 
 module.exports = router;
