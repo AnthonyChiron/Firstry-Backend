@@ -43,5 +43,5 @@ jobs:
             echo "NODE_MAILER_PASS=${{ secrets.ENV_NODE_MAILER_PASS }}" >> .envProdBack
 
             docker compose pull
-            docker compose up -p firstry-prod -d
+            docker compose -p PRODUCTION up -d
             docker system prune -f
