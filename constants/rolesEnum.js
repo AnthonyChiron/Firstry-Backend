@@ -1,5 +1,5 @@
 module.exports = {
   ADMIN: "admin",
-  CONTEST: "contest",
+  ORGANIZER: "organizer",
   RIDER: "rider",
 };

@@ -1,22 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const PoolsController = require("../controllers/pools");
+const { isOrganizer } = require("../middlewares/roleGuard");
 
 const pools = new PoolsController();
 
-// GET ALL RESULTS
+// CRUD
 router.get("/", pools.getAll);
-
-// GET RESULTS BY ID
 router.get("/getById/:id", pools.getById);
-
-// POST RESULTS
-router.post("/", pools.post);
-
-// DELETE RESULTS
-router.delete("/:id", pools.deleteById);
-
-// PUT RESULTS
-router.put("/:id", pools.update);
+router.post("/", isOrganizer, pools.post);
+router.delete("/:id", isOrganizer, pools.deleteById);
+router.put("/:id", isOrganizer, pools.update);
 
 module.exports = router;

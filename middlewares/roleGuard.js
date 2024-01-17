@@ -6,9 +6,10 @@ module.exports.isAdmin = function (req, res, next) {
   next();
 };
 
-module.exports.isContest = function (req, res, next) {
-  if (req.user.role !== role.ADMIN || req.user.role !== role.CONTEST)
-    return res.status(403).send("Acces denied. User isn't contest.");
+module.exports.isOrganizer = function (req, res, next) {
+  console.log(req.user);
+  if (req.user.role !== role.ADMIN || req.user.role !== role.ORGANIZER)
+    return res.status(403).send("Acces denied. User isn't organizer.");
   next();
 };
 
