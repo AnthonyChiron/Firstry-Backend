@@ -17,7 +17,8 @@ module.exports = class OrganizersController extends CRUDController {
 
     const photoUrlOrganizer = await uploadFile(
       req.file,
-      "pdp/" + organizer.name + "_" + crypto.randomBytes(5).toString("hex")
+      "pdp/" + organizer.name + "_" + crypto.randomBytes(5).toString("hex"),
+      true
     );
     organizer.photoUrl = photoUrlOrganizer;
     organizer.save();
