@@ -27,9 +27,32 @@ module.exports.uploadFile = async (file, fileName) => {
   console.log("filename: " + fileName);
   try {
     // Conversion de l'image en WebP
-    const webpBuffer = await sharp(file.buffer)
-      .webp({ quality: 80 })
-      .toBuffer();
+
+    let webpBuffer = await sharp(file.buffer).webp({ quality: 80 }).toBuffer();
+
+    const formData = new FormData();
+    const blob = new Blob([file.buffer], { type: "image/webp" });
+    formData.append("image_file", blob, "test.webp");
+
+    const clipDropResponse = await fetch(
+      "https://clipdrop-api.co/remove-background/v1",
+      {
+        method: "POST",
+        headers: {
+          "x-api-key": process.env.CLIPDROP_API_KEY,
+        },
+        body: formData,
+      }
+    );
+
+    if (!clipDropResponse.ok) {
+      throw new Error("Erreur lors de l'appel à ClipDrop");
+    }
+
+    const clipDropArrayBuffer = await clipDropResponse.arrayBuffer();
+    const clipDropBuffer = Buffer.from(clipDropArrayBuffer);
+
+    webpBuffer = await sharp(clipDropBuffer).webp({ quality: 80 }).toBuffer();
 
     const bucketFile = bucket.file(fileName);
 

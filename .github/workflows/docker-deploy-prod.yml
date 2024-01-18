@@ -41,8 +41,9 @@ jobs:
             echo "FIREBASE_STORAGE_BUCKET=${{ secrets.ENV_FIREBASE_STORAGE_BUCKET }}" >> .envProdBack
             echo "JWT_SECRET_TOKEN=${{ secrets.ENV_JWT_SECRET_TOKEN }}" >> .envProdBack
             echo "NODE_MAILER_PASS=${{ secrets.ENV_NODE_MAILER_PASS }}" >> .envProdBack
-            echo "STRIPE_SECRET_KEY=${{ secrets.ENV_STRIPE_SECRET_KEY }}" >> .envDevBack
-            echo "STRIPE_WEBHOOK_SECRET=${{ secrets.ENV_STRIPE_WEBHOOK_SECRET }}" >> .envDevBack
+            echo "STRIPE_SECRET_KEY=${{ secrets.ENV_STRIPE_SECRET_KEY }}" >> .envProdBack
+            echo "STRIPE_WEBHOOK_SECRET=${{ secrets.ENV_STRIPE_WEBHOOK_SECRET }}" >> .envProdBack
+            echo "CLIPDROP_API_KEY=${{ secrets.ENV_CLIPDROP_API_KEY }}" >> .envProdBack
 
             docker compose pull
             docker compose -p firstry-prod up -d
