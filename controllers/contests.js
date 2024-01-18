@@ -31,7 +31,7 @@ module.exports = class ContestsController extends CRUDController {
       location: req.body.location,
       sports: req.body.sports,
       enablePayment: req.body.enablePayment,
-      organizerId: req.user._id,
+      organizerId: req.user.organizerId,
     });
 
     try {
@@ -107,7 +107,7 @@ module.exports = class ContestsController extends CRUDController {
     Contest.aggregate([
       {
         $match: {
-          organizerId: new mongoose.Types.ObjectId(req.user._id), // Assurez-vous que la valeur est un ObjectId
+          organizerId: new mongoose.Types.ObjectId(req.user.organizerId), // Assurez-vous que la valeur est un ObjectId
         },
       },
       {

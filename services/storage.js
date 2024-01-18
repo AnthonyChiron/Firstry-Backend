@@ -1,4 +1,5 @@
 const admin = require("firebase-admin");
+const sharp = require("sharp");
 
 let privateKey = process.env.FIREBASE_PRIVATE_KEY;
 
@@ -18,29 +19,42 @@ admin.initializeApp({
 const bucket = admin.storage().bucket();
 
 module.exports.uploadFile = async (file, fileName) => {
-  console.log("uploadFile");
-  // Créer un fichier dans le bucket
-  if (process.env.ENV != "local") fileName = process.env.ENV + "/" + fileName;
+  // Définir le nouveau nom de fichier avec l'extension .webp
+  if (process.env.ENV !== "local") fileName = process.env.ENV + "/" + fileName;
   else fileName = "development/" + fileName;
 
-  console.log(fileName);
-  const bucketFile = bucket.file(fileName);
+  fileName = fileName + ".webp";
+  console.log("filename: " + fileName);
+  try {
+    // Conversion de l'image en WebP
+    const webpBuffer = await sharp(file.buffer)
+      .webp({ quality: 80 })
+      .toBuffer();
 
-  console.log(fileName);
-  console.log(file);
-  // Configuration des options de métadonnées
-  const options = {
-    metadata: {
-      contentType: "image/png",
-    },
-    public: true,
-  };
+    const bucketFile = bucket.file(fileName);
 
-  // Télécharger le fichier
-  await bucketFile.save(file.buffer, options);
+    // Configuration des options de métadonnées pour le fichier WebP
+    const options = {
+      metadata: {
+        contentType: "image/webp",
+      },
+      public: true,
+    };
 
-  const signedUrlConfig = { action: "read", expires: "03-09-2491" }; // Configurer l'expiration comme vous le souhaitez
-  const [url] = await bucket.file(fileName).getSignedUrl(signedUrlConfig);
-  console.log(url);
-  return url;
+    // Téléversement du fichier WebP dans le bucket
+    await bucketFile.save(webpBuffer, options);
+
+    const signedUrlConfig = { action: "read", expires: "03-09-2491" };
+    const [url] = await bucket.file(fileName).getSignedUrl(signedUrlConfig);
+    console.log(url);
+
+    // Retourner l'URL ou toute autre information nécessaire
+    return url;
+  } catch (err) {
+    console.error(
+      "Erreur lors de la conversion ou du téléversement de l'image",
+      err
+    );
+    throw err;
+  }
 };
