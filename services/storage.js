@@ -28,6 +28,7 @@ module.exports.uploadFile = async (file, fileName, isRemovebg) => {
   try {
     let webpBuffer = await convertToWebp(file.buffer);
 
+    console.log("isRemovebg: " + isRemovebg);
     if (isRemovebg) webpBuffer = await removeBg(webpBuffer);
 
     const bucketFile = bucket.file(fileName);

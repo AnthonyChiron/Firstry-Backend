@@ -151,6 +151,8 @@ module.exports = class ContestsController extends CRUDController {
 
     if (!contest) return res.status(404).send("Contest not found");
 
+    console.log(req.file);
+
     const imageUrl = await uploadFile(
       req.file,
       "contests/" +
@@ -158,17 +160,17 @@ module.exports = class ContestsController extends CRUDController {
         "/" +
         contest.name +
         "_" +
-        req.file.originalname
+        req.file.originalname,
+      false
     );
 
-    console.log(req.file.originalname);
+    console.log(console.log(imageUrl));
 
-    if (req.file.originalname.includes("logo"))
-      contest.branding.logo = imageUrl;
-    if (req.file.originalname.includes("banner"))
-      contest.branding.banner = imageUrl;
-    if (req.file.originalname.includes("poster"))
-      contest.branding.poster = imageUrl;
+    if (req.params.type == "logo") contest.branding.logo = imageUrl;
+    if (req.params.type == "poster") contest.branding.poster = imageUrl;
+    if (req.params.type == "banner") contest.branding.banner = imageUrl;
+
+    console.log(contest.branding);
 
     const savedContest = contest.save();
     res.send(savedContest);

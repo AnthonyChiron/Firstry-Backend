@@ -78,7 +78,7 @@ module.exports = class AuthController {
     const photoUrlOrganizer = await uploadFile(
       file,
       "pdp/" + organizerData.name + "_" + organizerData.siretNumber,
-      true
+      false
     );
     organizer.photoUrl = photoUrlOrganizer;
 
