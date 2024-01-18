@@ -77,7 +77,8 @@ module.exports = class AuthController {
     console.log("a");
     const photoUrlOrganizer = await uploadFile(
       file,
-      "pdp/" + organizerData.name + "_" + organizerData.siretNumber
+      "pdp/" + organizerData.name + "_" + organizerData.siretNumber,
+      false
     );
     organizer.photoUrl = photoUrlOrganizer;
 
@@ -114,7 +115,8 @@ module.exports = class AuthController {
         "_" +
         riderData.lastName +
         "_" +
-        crypto.randomBytes(5).toString("hex")
+        crypto.randomBytes(5).toString("hex"),
+      true
     );
     rider.photoUrl = photoUrlRider;
     return rider.save();

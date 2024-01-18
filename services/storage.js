@@ -18,7 +18,7 @@ admin.initializeApp({
 
 const bucket = admin.storage().bucket();
 
-module.exports.uploadFile = async (file, fileName) => {
+module.exports.uploadFile = async (file, fileName, isRemovebg) => {
   // Définir le nouveau nom de fichier avec l'extension .webp
   if (process.env.ENV !== "local") fileName = process.env.ENV + "/" + fileName;
   else fileName = "development/" + fileName;
@@ -26,33 +26,10 @@ module.exports.uploadFile = async (file, fileName) => {
   fileName = fileName + ".webp";
   console.log("filename: " + fileName);
   try {
-    // Conversion de l'image en WebP
+    let webpBuffer = await convertToWebp(file.buffer);
 
-    let webpBuffer = await sharp(file.buffer).webp({ quality: 80 }).toBuffer();
-
-    const formData = new FormData();
-    const blob = new Blob([file.buffer], { type: "image/webp" });
-    formData.append("image_file", blob, "test.webp");
-
-    const clipDropResponse = await fetch(
-      "https://clipdrop-api.co/remove-background/v1",
-      {
-        method: "POST",
-        headers: {
-          "x-api-key": process.env.CLIPDROP_API_KEY,
-        },
-        body: formData,
-      }
-    );
-
-    if (!clipDropResponse.ok) {
-      throw new Error("Erreur lors de l'appel à ClipDrop");
-    }
-
-    const clipDropArrayBuffer = await clipDropResponse.arrayBuffer();
-    const clipDropBuffer = Buffer.from(clipDropArrayBuffer);
-
-    webpBuffer = await sharp(clipDropBuffer).webp({ quality: 80 }).toBuffer();
+    console.log("isRemovebg: " + isRemovebg);
+    if (isRemovebg) webpBuffer = await removeBg(webpBuffer);
 
     const bucketFile = bucket.file(fileName);
 
@@ -69,7 +46,6 @@ module.exports.uploadFile = async (file, fileName) => {
 
     const signedUrlConfig = { action: "read", expires: "03-09-2491" };
     const [url] = await bucket.file(fileName).getSignedUrl(signedUrlConfig);
-    console.log(url);
 
     // Retourner l'URL ou toute autre information nécessaire
     return url;
@@ -80,4 +56,34 @@ module.exports.uploadFile = async (file, fileName) => {
     );
     throw err;
   }
+};
+
+removeBg = async (buffer) => {
+  const formData = new FormData();
+  const blob = new Blob([buffer], { type: "image/webp" });
+  formData.append("image_file", blob, "file.webp");
+
+  const clipDropResponse = await fetch(
+    "https://clipdrop-api.co/remove-background/v1",
+    {
+      method: "POST",
+      headers: {
+        "x-api-key": process.env.CLIPDROP_API_KEY,
+      },
+      body: formData,
+    }
+  );
+
+  if (!clipDropResponse.ok) {
+    throw new Error("Erreur lors de l'appel à ClipDrop");
+  }
+
+  const clipDropArrayBuffer = await clipDropResponse.arrayBuffer();
+  const clipDropBuffer = Buffer.from(clipDropArrayBuffer);
+
+  return await convertToWebp(clipDropBuffer);
+};
+
+convertToWebp = async (buffer) => {
+  return await sharp(buffer).webp({ quality: 80 }).toBuffer();
 };

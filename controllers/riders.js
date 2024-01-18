@@ -22,7 +22,8 @@ module.exports = class RidersController extends CRUDController {
         "_" +
         rider.lastName +
         "_" +
-        crypto.randomBytes(5).toString("hex")
+        crypto.randomBytes(5).toString("hex"),
+      true
     );
     rider.photoUrl = photoUrlRider;
     rider.save();

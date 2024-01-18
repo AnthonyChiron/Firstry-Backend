@@ -22,7 +22,7 @@ router.post("/", isOrganizer, contests.createContest);
 
 // UPLOAD BRAND IMAGE
 router.post(
-  "/uploadBrandImage/:id",
+  "/uploadBrandImage/:id/:type",
   upload.single("image"),
   contests.uploadBrandImage
 );
