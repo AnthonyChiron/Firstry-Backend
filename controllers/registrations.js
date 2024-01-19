@@ -22,6 +22,15 @@ module.exports = class CategoriesController extends CRUDController {
       { $unwind: "$category" },
       {
         $lookup: {
+          from: "riders", // Le nom de votre collection de catégories dans MongoDB
+          localField: "rider",
+          foreignField: "_id",
+          as: "rider",
+        },
+      },
+      { $unwind: "$rider" },
+      {
+        $lookup: {
           from: "contests", // Le nom de votre collection de contests dans MongoDB
           localField: "category.contestId",
           foreignField: "_id",
@@ -39,6 +48,7 @@ module.exports = class CategoriesController extends CRUDController {
           _id: 1,
           rider: 1,
           category: 1,
+          rider: 1,
           registrationState: 1,
           contest: {
             _id: 1,
@@ -96,6 +106,7 @@ module.exports = class CategoriesController extends CRUDController {
             name: 1,
             startDate: 1,
             endDate: 1,
+            registrationEndDate: 1,
             location: 1,
             sports: 1,
           },
@@ -132,11 +143,14 @@ module.exports = class CategoriesController extends CRUDController {
   };
 
   pendingApprovalRiderRegistration = async (req, res) => {
+    console.log("pendingApprovalRiderRegistration");
     try {
-      this.changeState(
-        req.params.riderId,
-        req.params.categoryId,
-        registrationState.PENDING_APPROVAL
+      res.send(
+        this.changeState(
+          req.params.riderId,
+          req.params.categoryId,
+          registrationState.PENDING_APPROVAL
+        )
       );
     } catch (error) {
       res.status(400).send({ error: error.message });
@@ -145,10 +159,11 @@ module.exports = class CategoriesController extends CRUDController {
 
   cancelRiderRegistration = async (req, res) => {
     try {
-      this.changeState(
-        req.params.riderId,
-        req.params.categoryId,
-        registrationState.CANCELLED_AND_REFUNDED
+      res.send(
+        this.changeStateByRegistrationId(
+          req.params.registrationId,
+          registrationState.CANCELLED_AND_REFUNDED
+        )
       );
     } catch (error) {
       res.status(400).send({ error: error.message });
@@ -157,10 +172,11 @@ module.exports = class CategoriesController extends CRUDController {
 
   validRiderRegistration = async (req, res) => {
     try {
-      this.changeState(
-        req.params.riderId,
-        req.params.categoryId,
-        registrationState.VALID
+      res.send(
+        this.changeStateByRegistrationId(
+          req.params.registrationId,
+          registrationState.VALID
+        )
       );
     } catch (error) {
       res.status(400).send({ error: error.message });
@@ -169,10 +185,11 @@ module.exports = class CategoriesController extends CRUDController {
 
   refuseRiderRegistration = async (req, res) => {
     try {
-      this.changeState(
-        req.params.riderId,
-        req.params.categoryId,
-        registrationState.REFUSED
+      res.send(
+        this.changeStateByRegistrationId(
+          req.params.registrationId,
+          registrationState.REFUSED
+        )
       );
     } catch (error) {
       res.status(400).send({ error: error.message });
@@ -181,24 +198,37 @@ module.exports = class CategoriesController extends CRUDController {
 
   paymentFailedRiderRegistration = async (req, res) => {
     try {
-      this.changeState(
-        req.params.riderId,
-        req.params.categoryId,
-        registrationState.PAYMENT_FAILED
+      res.send(
+        this.changeState(
+          req.params.riderId,
+          req.params.categoryId,
+          registrationState.PAYMENT_FAILED
+        )
       );
     } catch (error) {
       res.status(400).send({ error: error.message });
     }
   };
 
-  changeState(riderId, categoryId, registrationState) {
-    const registration = new Registration({
+  async changeState(riderId, categoryId, registrationState) {
+    const registration = await Registration.findOne({
       rider: riderId,
       category: categoryId,
-      registrationState: registrationState,
     });
 
-    registration.save();
+    registration.registrationState = registrationState;
+
+    await registration.save();
+
+    return registration;
+  }
+
+  async changeStateByRegistrationId(registrationId, registrationState) {
+    const registration = await Registration.findById(registrationId);
+
+    registration.registrationState = registrationState;
+
+    await registration.save();
 
     return registration;
   }

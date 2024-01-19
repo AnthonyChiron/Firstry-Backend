@@ -13,18 +13,18 @@ router.put("/:id", registrations.update);
 router.delete("/:id", registrations.deleteById);
 
 router.get(
-  "/validRiderRegistration/:riderId/:categoryId",
+  "/validRiderRegistration/:registrationId",
   isOrganizer,
   registrations.validRiderRegistration
 );
 
 router.get(
-  "/cancelRiderRegistration/:riderId/:categoryId",
+  "/cancelRiderRegistration/:registrationId",
   registrations.cancelRiderRegistration
 );
 
 router.get(
-  "/refuseRiderRegistration/:riderId/:categoryId",
+  "/refuseRiderRegistration/:registrationId",
   registrations.refuseRiderRegistration
 );
 
