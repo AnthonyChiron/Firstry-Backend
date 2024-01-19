@@ -177,9 +177,7 @@ module.exports = class ContestsController extends CRUDController {
   };
 
   isContestPublishable = async (req, res) => {
-    console.log("a");
     const contest = await this.model.findById(req.params.id);
-    console.log(contest.organizerId);
 
     if (!contest) return res.status(404).send("Contest not found");
 
