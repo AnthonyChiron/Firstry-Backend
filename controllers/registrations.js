@@ -49,7 +49,7 @@ module.exports = class CategoriesController extends CRUDController {
           rider: 1,
           category: 1,
           rider: 1,
-          registrationState: 1,
+          state: 1,
           contest: {
             _id: 1,
             name: 1,
@@ -100,7 +100,7 @@ module.exports = class CategoriesController extends CRUDController {
           _id: 1,
           rider: 1,
           category: 1,
-          registrationState: 1,
+          state: 1,
           contest: {
             _id: 1,
             name: 1,
@@ -216,7 +216,7 @@ module.exports = class CategoriesController extends CRUDController {
       category: categoryId,
     });
 
-    registration.registrationState = registrationState;
+    registration.state = registrationState;
 
     await registration.save();
 
@@ -226,7 +226,7 @@ module.exports = class CategoriesController extends CRUDController {
   async changeStateByRegistrationId(registrationId, registrationState) {
     const registration = await Registration.findById(registrationId);
 
-    registration.registrationState = registrationState;
+    registration.state = registrationState;
 
     await registration.save();
 

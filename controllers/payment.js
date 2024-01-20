@@ -40,7 +40,7 @@ module.exports = class PaymentsController extends CRUDController {
       const registration = new Registration({
         rider: user.rider._id,
         category: categoryId,
-        registrationState: registrationState.PENDING_PAYMENT,
+        state: registrationState.PENDING_PAYMENT,
         paymentId: payment._id,
       });
 

@@ -2,6 +2,7 @@ const CRUDController = require("./CRUD");
 const { Category, validate } = require("../models/category");
 const { Step, validate: validateStep } = require("../models/step");
 const mongoose = require("mongoose");
+const { registrationState } = require("../constants/registrationEnum");
 
 module.exports = class CategoriesController extends CRUDController {
   name = "category";
@@ -199,7 +200,7 @@ module.exports = class CategoriesController extends CRUDController {
     const category = await Category.findById(categoryId);
     const registrations = await Registration.find({
       category: categoryId,
-      registrationState: "valid",
+      state: registrationState.VALID,
     });
 
     return category.nbPlaces - registrations.length;
