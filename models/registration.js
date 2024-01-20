@@ -32,7 +32,7 @@ module.exports.Registration = mongoose.model(
       },
     },
     paymentId: { type: mongoose.Schema.Types.ObjectId, ref: "Payment" },
-    registrationState: String,
+    state: String,
   })
 );
 
