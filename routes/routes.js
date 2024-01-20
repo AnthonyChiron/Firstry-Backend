@@ -34,6 +34,7 @@ module.exports = function (app) {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(currentUser);
+  app.use(compression());
 
   app.use("/api/riders", riders);
   app.use("/api/auth", auth);
@@ -46,8 +47,6 @@ module.exports = function (app) {
   app.use("/api/users", users);
   app.use("/api/organizers", organizers);
   app.use("/api/payment", payment);
-
-  app.use(compression());
 
   // Logger
   app.use(error);
