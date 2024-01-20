@@ -18,6 +18,7 @@ const functions = require("firebase-functions");
 const bodyParser = require("body-parser");
 const currentUser = require("../middlewares/currentUser");
 const stripeWebhook = require("../webhooks/stripe");
+const compression = require("compression");
 
 module.exports = function (app) {
   // Middlewares
@@ -45,6 +46,8 @@ module.exports = function (app) {
   app.use("/api/users", users);
   app.use("/api/organizers", organizers);
   app.use("/api/payment", payment);
+
+  app.use(compression());
 
   // Logger
   app.use(error);
