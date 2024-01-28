@@ -1,6 +1,7 @@
 const CRUDController = require("./CRUD");
 const { Pool, validate } = require("../models/pool");
 const { Step } = require("../models/step");
+const stepStateEnum = require("../constants/stepStateEnum");
 
 module.exports = class PoolsController extends CRUDController {
   name = "pool";
@@ -29,6 +30,9 @@ module.exports = class PoolsController extends CRUDController {
 
     await this.createPoolInDb(req.body.poolsEntries, req.params.stepId);
 
+    step.state = stepStateEnum.POOL_READY;
+    step.save();
+
     res.send(await this.getPoolInDb(stepId));
   };
 
@@ -44,6 +48,9 @@ module.exports = class PoolsController extends CRUDController {
 
     // Create new pools for this step
     await this.createPoolInDb(req.body.poolsEntries, req.params.stepId);
+
+    step.state = stepStateEnum.POOL_READY;
+    step.save();
 
     res.send(await this.getPoolInDb(stepId));
   };
