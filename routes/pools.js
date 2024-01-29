@@ -12,4 +12,13 @@ router.post("/", isOrganizer, pools.post);
 router.delete("/:id", isOrganizer, pools.deleteById);
 router.put("/:id", isOrganizer, pools.update);
 
+router.get("/getPoolsByStepId/:stepId", pools.getPoolsByStepId);
+router.post("/createPoolsByStepId/:stepId", isOrganizer, pools.createPools);
+router.post(
+  "/updatePoolsByStepId/:stepId",
+  isOrganizer,
+  pools.updatePoolsByStepId
+);
+router.post("/updatePoolResult/:stepId", isOrganizer, pools.updatePoolResult);
+
 module.exports = router;

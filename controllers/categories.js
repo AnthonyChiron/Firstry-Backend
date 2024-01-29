@@ -3,6 +3,7 @@ const { Category, validate } = require("../models/category");
 const { Step, validate: validateStep } = require("../models/step");
 const mongoose = require("mongoose");
 const { registrationState } = require("../constants/registrationEnum");
+const stepStateEnum = require("../constants/stepStateEnum");
 
 module.exports = class CategoriesController extends CRUDController {
   name = "category";
@@ -62,6 +63,7 @@ module.exports = class CategoriesController extends CRUDController {
       let newStep = new Step(step);
       newStep.startDate = newStep.startDate.setHours(8, 0, 0, 0);
       newStep.endDate = new Date(newStep.startDate).setHours(9, 0, 0, 0);
+      newStep.state = stepStateEnum.POOL_PENDING;
       newStep.save();
       newCategory.steps.push(newStep);
     });

@@ -22,7 +22,7 @@ module.exports = class RidersController extends CRUDController {
         "_" +
         rider.lastName +
         "_" +
-        crypto.randomBytes(5).toString("hex"),
+        new Date().toISOString(),
       true
     );
     rider.photoUrl = photoUrlRider;

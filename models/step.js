@@ -5,6 +5,7 @@ const { Category } = require("./category");
 const { Rules } = require("./rules");
 const { Registration } = require("./registration");
 const stepTypeEnum = require("../constants/stepTypeEnum");
+const stepStateEnum = require("../constants/stepStateEnum");
 
 module.exports.Step = mongoose.model(
   "Step",
@@ -22,6 +23,11 @@ module.exports.Step = mongoose.model(
       },
     },
     name: { type: String },
+    state: {
+      type: String,
+      enum: Object.values(stepStateEnum),
+      required: true,
+    },
     rules: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Rules",
@@ -47,6 +53,7 @@ module.exports.validate = function (result) {
     name: Joi.string()
       .valid(...Object.values(stepTypeEnum))
       .required(),
+    state: Joi.string().valid(...Object.values(stepStateEnum)),
     rules: Joi.objectId().required(),
     startDate: Joi.date(),
     endDate: Joi.date(),
