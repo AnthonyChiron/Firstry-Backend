@@ -36,23 +36,68 @@ module.exports = class PoolsController extends CRUDController {
     res.send(await this.getPoolInDb(stepId));
   };
 
+  createPoolInDb = async (poolsEntries, stepId) => {
+    let pools = [];
+    for (const poolEntry of poolsEntries) {
+      let pool = new Pool({
+        registration: poolEntry.registrationId,
+        step: stepId,
+        poolNumber: poolEntry.poolNumber,
+        isMissing: poolEntry.isMissing ? poolEntry.isMissing : false,
+      });
+      pool = await pool.save();
+      pools.push(pool);
+    }
+    return pools;
+  };
+
   updatePoolsByStepId = async (req, res) => {
     const stepId = req.params.stepId;
     console.log("STEP ID : " + stepId);
     const step = await Step.findById(stepId);
     if (!step) return res.status(404).send("Step not found");
 
-    // Delete all pools for this step
-    console.log(stepId);
-    await Pool.deleteMany({ step: stepId });
-
-    // Create new pools for this step
-    await this.createPoolInDb(req.body.poolsEntries, req.params.stepId);
+    // Mise à jour des pools pour cette étape
+    const updatedPools = await this.updatePoolsInDb(
+      req.body.poolsEntries,
+      stepId
+    );
 
     step.state = stepStateEnum.POOL_READY;
     step.save();
 
     res.send(await this.getPoolInDb(stepId));
+  };
+
+  updatePoolsInDb = async (poolsEntries, stepId) => {
+    let updatedPools = [];
+    for (const poolEntry of poolsEntries) {
+      // Recherche d'une pool existante
+      let pool = await Pool.findOne({
+        registration: poolEntry.registrationId,
+        step: stepId,
+      });
+
+      if (pool) {
+        // Mise à jour de la pool existante
+        pool.poolNumber = poolEntry.poolNumber;
+        pool.isMissing = poolEntry.isMissing ? poolEntry.isMissing : false;
+        pool = await pool.save();
+      } else {
+        // Création d'une nouvelle pool
+        pool = new Pool({
+          registration: poolEntry.registrationId,
+          step: stepId,
+          poolNumber: poolEntry.poolNumber,
+          isMissing: poolEntry.isMissing ? poolEntry.isMissing : false,
+        });
+        pool = await pool.save();
+      }
+      updatedPools.push(pool);
+    }
+
+    await this.updatePoolRank(stepId);
+    return updatedPools;
   };
 
   updatePoolResult = async (req, res) => {
@@ -76,20 +121,6 @@ module.exports = class PoolsController extends CRUDController {
     res.send(await this.getPoolInDb(stepId));
   };
 
-  createPoolInDb = async (poolsEntries, stepId) => {
-    let pools = [];
-    for (const poolEntry of poolsEntries) {
-      let pool = new Pool({
-        registration: poolEntry.registrationId,
-        step: stepId,
-        poolNumber: poolEntry.poolNumber,
-      });
-      pool = await pool.save();
-      pools.push(pool);
-    }
-    return pools;
-  };
-
   getPoolInDb = async (stepId) => {
     const pools = await this.model
       .find({ step: stepId })
@@ -106,8 +137,11 @@ module.exports = class PoolsController extends CRUDController {
 
   updatePoolRank = async (stepId) => {
     // Récupérer et trier les pools par score décroissant
-    const pools = await Pool.find({ step: stepId }).sort({ score: -1 });
+    const pools = await Pool.find({ step: stepId, isMissing: false }).sort({
+      score: -1,
+    });
 
+    console.log(pools);
     // Mettre à jour les rangs
     for (let i = 0; i < pools.length; i++) {
       pools[i].rank = i + 1; // Le rang commence à 1

@@ -38,6 +38,7 @@ module.exports.Pool = mongoose.model(
     isQualified: {
       type: Boolean,
     },
+    isMissing: Boolean,
     poolNumber: {
       type: Number,
       required: true,
