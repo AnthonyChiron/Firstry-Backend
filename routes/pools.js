@@ -19,5 +19,6 @@ router.post(
   isOrganizer,
   pools.updatePoolsByStepId
 );
+router.post("/updatePoolResult/:stepId", isOrganizer, pools.updatePoolResult);
 
 module.exports = router;
