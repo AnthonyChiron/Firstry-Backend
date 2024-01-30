@@ -37,6 +37,7 @@ module.exports.Pool = mongoose.model(
     },
     isQualified: {
       type: Boolean,
+      default: false,
     },
     isMissing: Boolean,
     poolNumber: {
