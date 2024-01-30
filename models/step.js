@@ -23,11 +23,7 @@ module.exports.Step = mongoose.model(
       },
     },
     name: { type: String },
-    state: {
-      type: String,
-      enum: Object.values(stepStateEnum),
-      required: true,
-    },
+    isResultPublished: { type: Boolean, default: false },
     rules: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Rules",

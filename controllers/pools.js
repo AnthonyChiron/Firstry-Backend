@@ -1,7 +1,6 @@
 const CRUDController = require("./CRUD");
 const { Pool, validate } = require("../models/pool");
 const { Step } = require("../models/step");
-const stepStateEnum = require("../constants/stepStateEnum");
 
 module.exports = class PoolsController extends CRUDController {
   name = "pool";
@@ -20,18 +19,43 @@ module.exports = class PoolsController extends CRUDController {
         },
       })
       .sort("poolNumber");
+
     res.send(pools);
+  };
+
+  getFinalPoolsByStepId = async (req, res) => {
+    // Include registrations
+    const pools = await this.model
+      .find({ step: req.params.stepId, isQualified: true })
+      .populate({
+        path: "registration", // Chemin vers le champ 'registration'
+        populate: {
+          path: "rider", // Chemin à partir de 'registration' vers 'rider'
+          model: "Riders", // Nom du modèle pour 'rider', si nécessaire
+        },
+      })
+      .sort("rank");
+
+    // Get 8 other best riders by rank after qualified riders
+    const otherBestRiders = await this.model
+      .find({ step: req.params.stepId, isQualified: false, isMissing: false })
+      .populate({
+        path: "registration", // Chemin vers le champ 'registration'
+        populate: {
+          path: "rider", // Chemin à partir de 'registration' vers 'rider'
+          model: "Riders", // Nom du modèle pour 'rider', si nécessaire
+        },
+      })
+      .sort("rank")
+      .limit(8);
+
+    res.send(pools.concat(otherBestRiders));
   };
 
   createPools = async (req, res) => {
     const stepId = req.params.stepId;
-    const step = await Step.findById(stepId);
-    if (!step) return res.status(404).send("Step not found");
 
     await this.createPoolInDb(req.body.poolsEntries, req.params.stepId);
-
-    step.state = stepStateEnum.POOL_READY;
-    step.save();
 
     res.send(await this.getPoolInDb(stepId));
   };
@@ -45,6 +69,7 @@ module.exports = class PoolsController extends CRUDController {
         poolNumber: poolEntry.poolNumber,
         isMissing: poolEntry.isMissing ? poolEntry.isMissing : false,
       });
+      console.log(pool);
       pool = await pool.save();
       pools.push(pool);
     }
@@ -53,18 +78,9 @@ module.exports = class PoolsController extends CRUDController {
 
   updatePoolsByStepId = async (req, res) => {
     const stepId = req.params.stepId;
-    console.log("STEP ID : " + stepId);
-    const step = await Step.findById(stepId);
-    if (!step) return res.status(404).send("Step not found");
 
     // Mise à jour des pools pour cette étape
-    const updatedPools = await this.updatePoolsInDb(
-      req.body.poolsEntries,
-      stepId
-    );
-
-    step.state = stepStateEnum.POOL_READY;
-    step.save();
+    await this.updatePoolsInDb(req.body.poolsEntries, stepId);
 
     res.send(await this.getPoolInDb(stepId));
   };
@@ -96,12 +112,16 @@ module.exports = class PoolsController extends CRUDController {
       updatedPools.push(pool);
     }
 
-    await this.updatePoolRank(stepId);
+    const step = await Step.findById(stepId);
+
+    await this.updatePoolRank(stepId, step.ridersQualifiedCount);
     return updatedPools;
   };
 
   updatePoolResult = async (req, res) => {
     const stepId = req.params.stepId;
+
+    const step = await Step.findById(stepId);
 
     await req.body.poolsEntries.forEach(async (poolEntry) => {
       const pool = await Pool.findById(poolEntry._id);
@@ -110,13 +130,7 @@ module.exports = class PoolsController extends CRUDController {
       await pool.save();
     });
 
-    // Get step id
-    const step = await Step.findById(stepId);
-    if (!step) return res.status(404).send("Step not found");
-    step.state = stepStateEnum.RESULT_PENDING;
-    await step.save();
-
-    await this.updatePoolRank(stepId);
+    await this.updatePoolRank(stepId, step.ridersQualifiedCount);
 
     res.send(await this.getPoolInDb(stepId));
   };
@@ -135,7 +149,7 @@ module.exports = class PoolsController extends CRUDController {
     return pools;
   };
 
-  updatePoolRank = async (stepId) => {
+  updatePoolRank = async (stepId, qualifiedNumber) => {
     // Récupérer et trier les pools par score décroissant
     const pools = await Pool.find({ step: stepId, isMissing: false }).sort({
       score: -1,
@@ -144,8 +158,34 @@ module.exports = class PoolsController extends CRUDController {
     console.log(pools);
     // Mettre à jour les rangs
     for (let i = 0; i < pools.length; i++) {
+      if (i < qualifiedNumber) pools[i].isQualified = true;
+      else pools[i].isQualified = false;
       pools[i].rank = i + 1; // Le rang commence à 1
       await pools[i].save();
     }
+  };
+
+  publishResult = async (req, res) => {
+    const stepId = req.params.stepId;
+
+    // Get step id
+    const step = await Step.findById(stepId);
+    if (!step) return res.status(404).send("Step not found");
+    step.isResultPublished = true;
+    await step.save();
+
+    res.send(await this.getPoolInDb(stepId));
+  };
+
+  unpublishResult = async (req, res) => {
+    const stepId = req.params.stepId;
+
+    // Get step id
+    const step = await Step.findById(stepId);
+    if (!step) return res.status(404).send("Step not found");
+    step.isResultPublished = false;
+    await step.save();
+
+    res.send(await this.getPoolInDb(stepId));
   };
 };

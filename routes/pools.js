@@ -13,6 +13,8 @@ router.delete("/:id", isOrganizer, pools.deleteById);
 router.put("/:id", isOrganizer, pools.update);
 
 router.get("/getPoolsByStepId/:stepId", pools.getPoolsByStepId);
+router.get("/getFinalPoolsByStepId/:stepId", pools.getFinalPoolsByStepId);
+
 router.post("/createPoolsByStepId/:stepId", isOrganizer, pools.createPools);
 router.post(
   "/updatePoolsByStepId/:stepId",
@@ -20,5 +22,8 @@ router.post(
   pools.updatePoolsByStepId
 );
 router.post("/updatePoolResult/:stepId", isOrganizer, pools.updatePoolResult);
+
+router.post("/publishResult/:stepId", isOrganizer, pools.publishResult);
+router.post("/unpublishResult/:stepId", isOrganizer, pools.unpublishResult);
 
 module.exports = router;
