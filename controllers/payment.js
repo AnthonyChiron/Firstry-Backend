@@ -47,6 +47,7 @@ module.exports = class PaymentsController extends CRUDController {
       registration.save();
 
       res.send({
+        registration: registration,
         clientSecret: paymentIntent.client_secret,
       });
     } catch (error) {

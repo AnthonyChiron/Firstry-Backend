@@ -148,6 +148,13 @@ module.exports = class CategoriesController extends CRUDController {
           localField: "_id",
           foreignField: "category",
           as: "registrations",
+          pipeline: [
+            {
+              $match: {
+                state: { $in: ["validated", "pending_approval"] }, // Filtre les registrations par leur état
+              },
+            },
+          ],
         },
       },
       {
