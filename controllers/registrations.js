@@ -133,7 +133,9 @@ module.exports = class CategoriesController extends CRUDController {
       res.send(
         registrations.some(
           (registration) =>
-            registration.category.contestId == req.params.contestId
+            registration.category.contestId == req.params.contestId &&
+            (registration.state == registrationState.VALID ||
+              registration.state == registrationState.PENDING_APPROVAL)
         )
       );
     } catch (err) {
@@ -146,9 +148,8 @@ module.exports = class CategoriesController extends CRUDController {
     console.log("pendingApprovalRiderRegistration");
     try {
       res.send(
-        this.changeState(
-          req.params.riderId,
-          req.params.categoryId,
+        this.changeStateByRegistrationId(
+          req.params.registrationId,
           registrationState.PENDING_APPROVAL
         )
       );
@@ -159,12 +160,11 @@ module.exports = class CategoriesController extends CRUDController {
 
   cancelRiderRegistration = async (req, res) => {
     try {
-      res.send(
-        this.changeStateByRegistrationId(
-          req.params.registrationId,
-          registrationState.CANCELLED_AND_REFUNDED
-        )
+      // delete registration
+      const registration = await Registration.findByIdAndDelete(
+        req.params.registrationId
       );
+      res.send(true);
     } catch (error) {
       res.status(400).send({ error: error.message });
     }
@@ -199,9 +199,8 @@ module.exports = class CategoriesController extends CRUDController {
   paymentFailedRiderRegistration = async (req, res) => {
     try {
       res.send(
-        this.changeState(
-          req.params.riderId,
-          req.params.categoryId,
+        this.changeStateByRegistrationId(
+          req.params.registrationId,
           registrationState.PAYMENT_FAILED
         )
       );
@@ -225,6 +224,9 @@ module.exports = class CategoriesController extends CRUDController {
 
   async changeStateByRegistrationId(registrationId, registrationState) {
     const registration = await Registration.findById(registrationId);
+    if (!registration) {
+      throw new Error("Registration not found");
+    }
 
     registration.state = registrationState;
 

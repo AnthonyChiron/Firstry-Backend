@@ -29,12 +29,12 @@ router.get(
 );
 
 router.get(
-  "/pendingApprovalRiderRegistration/:riderId/:categoryId",
+  "/pendingApprovalRiderRegistration/:registrationId",
   registrations.pendingApprovalRiderRegistration
 );
 
 router.get(
-  "/paymentFailedRiderRegistration/:riderId/:categoryId",
+  "/paymentFailedRiderRegistration/:registrationId",
   registrations.paymentFailedRiderRegistration
 );
 

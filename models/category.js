@@ -7,7 +7,6 @@ module.exports.Category = mongoose.model(
   "Category",
   mongoose.Schema({
     name: { type: String, required: true },
-    description: { type: String, required: true },
     cashprize: { type: String },
     sports: { type: Array, required: true },
     maxRiders: { type: Number, required: true },

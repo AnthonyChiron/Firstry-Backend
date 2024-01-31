@@ -50,6 +50,7 @@ module.exports.validate = function (result) {
       .valid(...Object.values(stepTypeEnum))
       .required(),
     state: Joi.string().valid(...Object.values(stepStateEnum)),
+    isResultPublished: Joi.boolean(),
     rules: Joi.objectId().required(),
     startDate: Joi.date(),
     endDate: Joi.date(),
