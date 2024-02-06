@@ -10,6 +10,7 @@ const riders = new RidersController();
 
 // CRUD
 router.get("/", riders.getAll);
+router.get("/getByPage/:page/:limit", riders.getAllByPage);
 router.get("/getById/:id", riders.getById);
 router.post("/", riders.post);
 router.delete("/:id", isAdmin, riders.deleteById);
