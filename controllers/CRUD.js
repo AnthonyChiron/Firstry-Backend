@@ -16,6 +16,32 @@ module.exports = class CRUDController {
     res.send(results);
   };
 
+  getAllByPage = async (req, res) => {
+    let { page, limit } = req.params;
+    page = parseInt(page, 10) || 1;
+    limit = parseInt(limit, 10) || 10;
+    const skipIndex = (page - 1) * limit;
+
+    try {
+      const results = await this.model
+        .find()
+        .skip(skipIndex)
+        .limit(limit)
+        .exec();
+
+      const count = await this.model.countDocuments();
+
+      res.send({
+        data: results,
+        count: count,
+        totalPages: Math.ceil(count / limit),
+        currentPage: page,
+      });
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  };
+
   post = async (req, res) => {
     console.log(req.body);
     const { error } = this.validate(req.body);

@@ -1,11 +1,87 @@
 const CRUDController = require("./CRUD");
 const { Pool, validate } = require("../models/pool");
 const { Step } = require("../models/step");
+const mongoose = require("mongoose");
 
 module.exports = class PoolsController extends CRUDController {
   name = "pool";
   model = Pool;
   validate = validate;
+
+  getRiderResults = async (req, res) => {
+    try {
+      const riderId = req.params.riderId;
+      const results = await Pool.aggregate([
+        {
+          $lookup: {
+            from: "registrations", // le nom de la collection MongoDB pour Registration
+            localField: "registration",
+            foreignField: "_id",
+            as: "registrationDetails",
+            pipeline: [
+              {
+                $lookup: {
+                  from: "categories", // le nom de la collection MongoDB pour Registration
+                  localField: "category",
+                  foreignField: "_id",
+                  as: "category",
+                  pipeline: [
+                    {
+                      $lookup: {
+                        from: "contests",
+                        localField: "contestId",
+                        foreignField: "_id",
+                        as: "contest",
+                      },
+                    },
+                    { $unwind: "$contest" },
+                  ],
+                },
+              },
+              { $unwind: "$category" },
+            ],
+          },
+        },
+        { $unwind: "$registrationDetails" },
+        {
+          $match: {
+            "registrationDetails.rider": new mongoose.Types.ObjectId(riderId),
+          },
+        },
+        {
+          $lookup: {
+            from: "steps", // le nom de la collection MongoDB pour Registration
+            localField: "step",
+            foreignField: "_id",
+            as: "steps",
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            steps: 1,
+            category: "$registrationDetails.category",
+            contest: "$registrationDetails.category.contest",
+            rank: 1,
+            score: 1,
+          },
+        },
+      ]);
+
+      // Si deux fois le même registration, prendre l'étape step.name == 'FINALE'
+      let finalResults = [];
+      for (let i = 0; i < results.length; i++) {
+        if (results[i].steps[0].name === "FINALE") {
+          finalResults.push(results[i]);
+        }
+      }
+
+      res.json(finalResults);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Server error");
+    }
+  };
 
   getPoolsByStepId = async (req, res) => {
     // Include registrations

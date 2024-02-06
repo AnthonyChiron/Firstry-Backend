@@ -14,6 +14,7 @@ router.put("/:id", isOrganizer, pools.update);
 
 router.get("/getPoolsByStepId/:stepId", pools.getPoolsByStepId);
 router.get("/getFinalPoolsByStepId/:stepId", pools.getFinalPoolsByStepId);
+router.get("/getRiderResults/:riderId", pools.getRiderResults);
 
 router.post("/createPoolsByStepId/:stepId", isOrganizer, pools.createPools);
 router.post(
