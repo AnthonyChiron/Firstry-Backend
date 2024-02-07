@@ -40,4 +40,6 @@ router.get(
   contests.isContestPublishable
 );
 
+router.get("/getAdminStats", contests.getAdminStats);
+
 module.exports = router;
