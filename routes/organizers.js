@@ -12,6 +12,7 @@ router.get("/getById/:id", organizers.getById);
 router.post("/", organizers.post);
 router.delete("/:id", organizers.deleteById);
 router.put("/:id", organizers.update);
+router.get("/getAdminStats", organizers.getAdminStats);
 
 router.put("/updatePhoto/:id", upload.single("photo"), organizers.updatePhoto);
 router.get(

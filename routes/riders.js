@@ -16,6 +16,7 @@ router.get(
   riders.getFilteredRidersByPage
 );
 router.get("/getById/:id", riders.getById);
+router.get("/getAdminStats", riders.getAdminStats);
 router.post("/", riders.post);
 router.delete("/:id", isAdmin, riders.deleteById);
 router.put("/:id", riders.update);

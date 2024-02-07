@@ -3,11 +3,89 @@ const { Organizer, validate } = require("../models/organizer");
 const { uploadFile } = require("../services/storage");
 const crypto = require("crypto");
 const { Contest } = require("../models/contest");
+const mongoose = require("mongoose");
 
 module.exports = class OrganizersController extends CRUDController {
   name = "organizer";
   model = Organizer;
   validate = validate;
+
+  getAdminStats = async (req, res) => {
+    const totalOrganizers = await Organizer.countDocuments();
+
+    const aWeekAgo = new Date();
+    aWeekAgo.setDate(aWeekAgo.getDate() - 7);
+    const aMonthAgo = new Date();
+    aMonthAgo.setDate(aWeekAgo.getDate() - 31);
+    const objectIdFromAWeekDate = new mongoose.Types.ObjectId(
+      Math.floor(aWeekAgo.getTime() / 1000).toString(16) + "0000000000000000"
+    );
+    const objectIdFromAMonthDate = new mongoose.Types.ObjectId(
+      Math.floor(aMonthAgo.getTime() / 1000).toString(16) + "0000000000000000"
+    );
+
+    const totalOrganizersLastWeek = await Organizer.countDocuments({
+      _id: { $gte: objectIdFromAWeekDate },
+    });
+    const totalOrganizersLastMonth = await Organizer.countDocuments({
+      _id: { $gte: objectIdFromAMonthDate },
+    });
+
+    const organizersLastWeekPerDay = await Organizer.aggregate([
+      {
+        $match: {
+          _id: { $gte: objectIdFromAWeekDate },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dayOfWeek: { $toDate: "$_id" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { _id: 1 },
+      },
+    ]);
+
+    const daysOfWeek = {
+      1: "Dimanche",
+      2: "Lundi",
+      3: "Mardi",
+      4: "Mercredi",
+      5: "Jeudi",
+      6: "Vendredi",
+      7: "Samedi",
+    };
+
+    // Créez un objet de résultat pour chaque jour de la semaine
+    let resultsByDay = {
+      Dimanche: 0,
+      Lundi: 0,
+      Mardi: 0,
+      Mercredi: 0,
+      Jeudi: 0,
+      Vendredi: 0,
+      Samedi: 0,
+    };
+
+    // Mettez à jour le compte basé sur les données récupérées
+    organizersLastWeekPerDay.forEach((entry) => {
+      const dayName = daysOfWeek[entry._id];
+      if (dayName) {
+        resultsByDay[dayName] = entry.count;
+      }
+    });
+
+    res.send({
+      totalOrganizers,
+      totalOrganizersLastMonth,
+      totalOrganizersLastWeek,
+      resultsByDay,
+    });
+  };
 
   updatePhoto = async (req, res) => {
     // get organizer from id
