@@ -15,24 +15,25 @@ require("./routes/routes")(app); // routes & middlewares
 require("./config/db")(); // db
 
 // Chemins vers les fichiers de certificat et clé privée
-const certificatPath = "/etc/letsencrypt/live/firstry.fr/fullchain.pem";
-const clePriveePath = "/etc/letsencrypt/live/firstry.fr/privkey.pem";
+if (process.env.ENV !== "local") {
+  const certificatPath = "/etc/letsencrypt/live/firstry.fr/fullchain.pem";
+  const clePriveePath = "/etc/letsencrypt/live/firstry.fr/privkey.pem";
 
-// Création du serveur HTTPS avec les certificats
-https
-  .createServer(
-    {
-      key: fs.readFileSync(clePriveePath),
-      cert: fs.readFileSync(certificatPath),
-    },
-    app
-  )
-  .listen(443, () =>
-    infoLogger.log("info", "Le serveur HTTPS écoute sur le port 443 !")
-  );
+  // Création du serveur HTTPS avec les certificats
+  https
+    .createServer(
+      {
+        key: fs.readFileSync(clePriveePath),
+        cert: fs.readFileSync(certificatPath),
+      },
+      app
+    )
+    .listen(3000, () =>
+      infoLogger.log("info", "Le serveur HTTPS écoute sur le port 3000 !")
+    );
+}
 
 // Écoute sur HTTP également, si nécessaire
-const port = process.env.PORT || 3000;
-app.listen(port, () =>
-  infoLogger.log("info", `Le serveur HTTP est sur le port ${port}!`)
+app.listen(3001, () =>
+  infoLogger.log("info", `Le serveur HTTP est sur le port 3001 !`)
 );
