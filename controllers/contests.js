@@ -13,6 +13,32 @@ module.exports = class ContestsController extends CRUDController {
   model = Contest;
   validate = validate;
 
+  getAdminStats = async (req, res) => {
+    const totalContests = await Contest.countDocuments({});
+
+    const publishedContests = await Contest.countDocuments({
+      isPublished: true,
+    });
+
+    const now = new Date();
+    const publishedPastContests = await Contest.countDocuments({
+      isPublished: true,
+      endDate: { $lt: now },
+    });
+
+    const publishedUpcomingContests = await Contest.countDocuments({
+      isPublished: true,
+      startDate: { $gt: now },
+    });
+
+    res.send({
+      totalContests,
+      publishedContests,
+      publishedPastContests,
+      publishedUpcomingContests,
+    });
+  };
+
   // Create Contest and add it to the organizer
   createContest = async (req, res) => {
     const { error } = this.validate(req.body);
