@@ -46,7 +46,7 @@ module.exports = class UsersController extends CRUDController {
       user.newEmail,
       mailSubjectsEnum.NEW_EMAIL_CONFIRMATION,
       mailContentEnum.NEW_EMAIL_CONFIRMATION +
-        "https://firstry-7e136.web.app/account/validateNewEmail/" +
+        "https://firstry.fr/account/validateNewEmail/" +
         verifyEmailToken
     );
 
@@ -72,7 +72,7 @@ module.exports = class UsersController extends CRUDController {
       user.email,
       mailSubjectsEnum.NEW_PASSWORD_CONFIRMATION,
       mailContentEnum.NEW_PASSWORD_CONFIRMATION +
-        "https://firstry-7e136.web.app/account/validateNewPassword/" +
+        "https://firstry.fr/account/validateNewPassword/" +
         verifyNewPasswordToken
     );
 
@@ -132,7 +132,7 @@ module.exports = class UsersController extends CRUDController {
       user.email,
       mailSubjectsEnum.RESET_PASSWORD,
       mailContentEnum.RESET_PASSWORD +
-        "https://firstry-7e136.web.app/account/resetPassword/" +
+        "https://firstry.fr/account/resetPassword/" +
         resetPasswordToken
     );
 
