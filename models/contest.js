@@ -12,6 +12,7 @@ module.exports.Contest = mongoose.model(
     sports: { type: Array },
     enablePayment: { type: Boolean, default: false },
     isPublished: { type: Boolean, default: false },
+    isValidatedByAdmin: { type: Boolean, default: false },
     location: {
       country: { type: String },
       postalCode: { type: String },
@@ -42,10 +43,10 @@ module.exports.validate = function (contest) {
     endDate: Joi.date(),
     registrationEndDate: Joi.date(),
     location: {
-      country: Joi.string().min(2),
+      country: Joi.string().allow(null, ""),
       postalCode: Joi.string().allow(null, ""),
-      city: Joi.string(),
-      address: Joi.string(),
+      city: Joi.string().allow(null, ""),
+      address: Joi.string().allow(null, ""),
     },
     branding: {
       logo: Joi.string().uri().min(2),
@@ -56,6 +57,7 @@ module.exports.validate = function (contest) {
     sports: Joi.array().items(Joi.string()).min(1),
     enablePayment: Joi.boolean().required(),
     isPublished: Joi.boolean(),
+    isValidatedByAdmin: Joi.boolean(),
     socials: Joi.object({
       instagram: Joi.string().allow(null, ""),
       twitter: Joi.string().allow(null, ""),
