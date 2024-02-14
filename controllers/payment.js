@@ -13,14 +13,15 @@ module.exports = class PaymentsController extends CRUDController {
   createRegistrationPayment = async (req, res) => {
     const { amount, user, organizer, categoryId } = req.body; // Assurez-vous de valider et de nettoyer cet input
 
-    console.log(req.body);
+    const feeAmount = Math.floor(amount * 0.06) + 25;
+
     try {
       // CREATE PAYMENT
       const paymentIntent = await stripe.paymentIntents.create({
         amount: amount, // Le montant en centimes
         currency: "eur", // ou la devise de votre choix
         receipt_email: user.email,
-        application_fee_amount: Math.floor(amount * 0.04), // Frais d'application
+        application_fee_amount: feeAmount, // Frais d'application
         transfer_data: {
           destination: organizer.stripeAccountId, // ID du compte Stripe de l'organisateur
         },
