@@ -7,6 +7,7 @@ module.exports.Category = mongoose.model(
   "Category",
   mongoose.Schema({
     name: { type: String, required: true },
+    description: { type: String },
     cashprize: { type: String },
     sports: { type: Array, required: true },
     maxRiders: { type: Number, required: true },
@@ -23,7 +24,7 @@ module.exports.Category = mongoose.model(
 module.exports.validate = function (category) {
   const schema = Joi.object({
     name: Joi.string().min(2).required(),
-    description: Joi.string().min(2).required(),
+    description: Joi.string().allow(null, ""),
     cashprize: Joi.string(),
     sports: Joi.array().items(Joi.string()).min(1).required(),
     maxRiders: Joi.number().required(),
