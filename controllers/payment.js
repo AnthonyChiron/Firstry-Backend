@@ -68,8 +68,8 @@ module.exports = class PaymentsController extends CRUDController {
       console.log(req.params.accountId);
       const accountLink = await stripe.accountLinks.create({
         account: req.params.accountId,
-        refresh_url: "http://localhost:4200/account",
-        return_url: "http://localhost:4200/account",
+        refresh_url: "https://firstry.fr/account",
+        return_url: "https://firstry.fr/account",
         type: "account_onboarding",
       });
       console.log(accountLink);
@@ -85,7 +85,7 @@ module.exports = class PaymentsController extends CRUDController {
       const accountId = req.params.accountId;
 
       const loginLink = await stripe.accounts.createLoginLink(accountId, {
-        redirect_url: "http://localhost:4200/account", // URL optionnelle de redirection après la déconnexion
+        redirect_url: "https://firstry.fr/account", // URL optionnelle de redirection après la déconnexion
       });
 
       res.send(loginLink);

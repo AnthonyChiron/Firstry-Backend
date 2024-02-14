@@ -12,6 +12,7 @@ const {
 const { Rider, validate: validateRider } = require("../models/rider");
 const functions = require("firebase-functions");
 const { uploadFile } = require("../services/storage");
+const { confirmRegisterMail } = require("../constants/mailEnum");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 module.exports = class AuthController {
@@ -123,11 +124,10 @@ module.exports = class AuthController {
   };
 
   sendVerificationEmail = (email, verifyEmailToken) => {
-    let url = process.env.APP_URL + "account/validateEmail/" + verifyEmailToken;
     sendEmail(
       email,
       "Firstry - Validation de votre compte",
-      "Veuillez cliquer sur ce lien pour vérifier votre compte: " + url
+      confirmRegisterMail(verifyEmailToken)
     );
   };
 

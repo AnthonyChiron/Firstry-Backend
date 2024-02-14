@@ -2,9 +2,17 @@ const CRUDController = require("./CRUD");
 const crypto = require("crypto");
 const { User, validateRegister } = require("../models/user");
 const hash = require("../services/hash");
-const { mailSubjectsEnum, mailContentEnum } = require("../constants/mailEnum");
+const {
+  mailSubjectsEnum,
+  mailContentEnum,
+  newConfirmRegister,
+  resetPasswordConfirmationMail,
+  newPasswordConfirmationMail,
+  newEmailConfirmationMail,
+} = require("../constants/mailEnum");
 const mailService = require("../services/mail");
 const _ = require("lodash");
+const { reset } = require("nodemon");
 
 module.exports = class UsersController extends CRUDController {
   name = "user";
@@ -45,9 +53,7 @@ module.exports = class UsersController extends CRUDController {
     mailService.sendEmail(
       user.newEmail,
       mailSubjectsEnum.NEW_EMAIL_CONFIRMATION,
-      mailContentEnum.NEW_EMAIL_CONFIRMATION +
-        "https://firstry.fr/account/validateNewEmail/" +
-        verifyEmailToken
+      newEmailConfirmationMail(verifyEmailToken)
     );
 
     res.send(user);
@@ -71,9 +77,7 @@ module.exports = class UsersController extends CRUDController {
     mailService.sendEmail(
       user.email,
       mailSubjectsEnum.NEW_PASSWORD_CONFIRMATION,
-      mailContentEnum.NEW_PASSWORD_CONFIRMATION +
-        "https://firstry.fr/account/validateNewPassword/" +
-        verifyNewPasswordToken
+      newPasswordConfirmationMail(verifyNewPasswordToken)
     );
 
     res.send(user);
@@ -131,9 +135,7 @@ module.exports = class UsersController extends CRUDController {
     mailService.sendEmail(
       user.email,
       mailSubjectsEnum.RESET_PASSWORD,
-      mailContentEnum.RESET_PASSWORD +
-        "https://firstry.fr/account/resetPassword/" +
-        resetPasswordToken
+      resetPasswordConfirmationMail(resetPasswordToken)
     );
 
     res.send(user);
