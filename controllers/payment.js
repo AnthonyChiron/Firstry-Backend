@@ -13,6 +13,7 @@ module.exports = class PaymentsController extends CRUDController {
   createRegistrationPayment = async (req, res) => {
     const { amount, user, organizer, categoryId } = req.body; // Assurez-vous de valider et de nettoyer cet input
 
+    console.log(req.body);
     try {
       // CREATE PAYMENT
       const paymentIntent = await stripe.paymentIntents.create({
@@ -23,7 +24,11 @@ module.exports = class PaymentsController extends CRUDController {
         transfer_data: {
           destination: organizer.stripeAccountId, // ID du compte Stripe de l'organisateur
         },
+        // Utilisez capture_method pour indiquer que la capture sera effectuée plus tard
+        capture_method: "manual",
       });
+
+      console.log(paymentIntent);
 
       // Créez un document Payment dans votre base de données
       const payment = new Payment({
@@ -34,7 +39,9 @@ module.exports = class PaymentsController extends CRUDController {
         stripeAccountId: organizer.stripeAccountId,
       });
 
-      payment.save();
+      await payment.save();
+
+      console.log(payment);
 
       // Créez un document Registration dans votre base de données
       const registration = new Registration({
@@ -44,7 +51,7 @@ module.exports = class PaymentsController extends CRUDController {
         paymentId: payment._id,
       });
 
-      registration.save();
+      await registration.save();
 
       res.send({
         registration: registration,
