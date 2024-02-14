@@ -2,7 +2,11 @@ const CRUDController = require("./CRUD");
 const { Registration, validate } = require("../models/registration");
 const { registrationState } = require("../constants/registrationEnum");
 const mongoose = require("mongoose");
-const c = require("config");
+const { Payment } = require("../models/payment");
+const {
+  confirmPaymentIntent,
+  refusePaymentIntent,
+} = require("../services/stripe");
 
 module.exports = class CategoriesController extends CRUDController {
   name = "registration";
@@ -172,6 +176,30 @@ module.exports = class CategoriesController extends CRUDController {
 
   validRiderRegistration = async (req, res) => {
     try {
+      // Get payment intent
+      const registration = await Registration.findById(
+        req.params.registrationId
+      );
+      console.log(registration);
+      if (!registration) {
+        throw new Error("Registration not found");
+      }
+
+      // Trouver le document Payment et mettre à jour son état
+      const payment = await Payment.findById(
+        new mongoose.Types.ObjectId(registration.paymentId)
+      );
+      console.log(payment);
+      if (!payment) {
+        return res.status(404).send({ error: "Paiement non trouvé" });
+      }
+
+      // Mettez ici votre logique de validation...
+      // Par exemple, mettre à jour l'état du paiement à 'validated' ou similaire
+      payment.paymentState = "validated";
+      await payment.save();
+      await confirmPaymentIntent(payment.paymentIntentId);
+
       res.send(
         this.changeStateByRegistrationId(
           req.params.registrationId,
@@ -185,6 +213,27 @@ module.exports = class CategoriesController extends CRUDController {
 
   refuseRiderRegistration = async (req, res) => {
     try {
+      // Get payment intent
+      const registration = await Registration.findById(
+        req.params.registrationId
+      );
+      console.log(registration);
+      if (!registration) {
+        throw new Error("Registration not found");
+      }
+
+      // Trouver le document Payment et mettre à jour son état
+      const payment = await Payment.findById(
+        new mongoose.Types.ObjectId(registration.paymentId)
+      );
+
+      if (!payment) {
+        return res.status(404).send({ error: "Paiement non trouvé" });
+      }
+
+      payment.paymentState = "refused";
+      await payment.save();
+      await refusePaymentIntent(payment.paymentIntentId);
       res.send(
         this.changeStateByRegistrationId(
           req.params.registrationId,
