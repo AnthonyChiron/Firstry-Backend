@@ -25,6 +25,7 @@ module.exports.Rider = mongoose.model(
       required: true,
     },
     category: String,
+    isVerified: { type: Boolean, default: false },
     socials: {
       instagram: String,
       twitter: String,
@@ -47,6 +48,7 @@ module.exports.validate = function (rider) {
       .items(Joi.string().valid(...Object.values(sportsEnum)))
       .required(),
     category: Joi.string().min(2),
+    isVerified: Joi.boolean(),
     socials: Joi.object({
       instagram: Joi.string().allow(null, ""),
       twitter: Joi.string().allow(null, ""),
