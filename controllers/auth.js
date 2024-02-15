@@ -11,7 +11,7 @@ const {
 } = require("../models/organizer");
 const { Rider, validate: validateRider } = require("../models/rider");
 const functions = require("firebase-functions");
-const { uploadFile } = require("../services/storage");
+const { uploadImg } = require("../services/storage");
 const { confirmRegisterMail } = require("../constants/mailEnum");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
@@ -76,7 +76,7 @@ module.exports = class AuthController {
 
     const organizer = new Organizer(organizerData);
     console.log("a");
-    const photoUrlOrganizer = await uploadFile(
+    const photoUrlOrganizer = await uploadImg(
       file,
       "pdp/" + organizerData.name + "_" + organizerData.siretNumber,
       false
@@ -109,7 +109,7 @@ module.exports = class AuthController {
     if (error) throw new Error(error.details[0].message);
 
     const rider = new Rider(riderData);
-    const photoUrlRider = await uploadFile(
+    const photoUrlRider = await uploadImg(
       file,
       "pdp/" +
         riderData.firstName +

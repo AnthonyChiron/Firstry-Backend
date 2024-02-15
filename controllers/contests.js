@@ -4,7 +4,7 @@ const { Category } = require("../models/category");
 const { Organizer } = require("../models/organizer");
 const mongoose = require("mongoose");
 const { checkPreferences } = require("joi");
-const { uploadFile } = require("../services/storage");
+const { uploadImg, uploadFile } = require("../services/storage");
 const { subDays } = require("date-fns");
 const { checkStripeAccountValidity } = require("../services/stripe");
 
@@ -177,7 +177,31 @@ module.exports = class ContestsController extends CRUDController {
 
     if (!contest) return res.status(404).send("Contest not found");
 
-    console.log(req.file);
+    const imageUrl = await uploadImg(
+      req.file,
+      "contests/" +
+        contest._id +
+        "/" +
+        contest.name +
+        "_" +
+        req.file.originalname +
+        "_" +
+        new Date().toISOString(),
+      false
+    );
+
+    if (req.params.type == "logo") contest.branding.logo = imageUrl;
+    if (req.params.type == "poster") contest.branding.poster = imageUrl;
+    if (req.params.type == "banner") contest.branding.banner = imageUrl;
+
+    const savedContest = contest.save();
+    res.send(savedContest);
+  };
+
+  uploadParentalAuthorization = async (req, res) => {
+    const contest = await this.model.findById(req.params.id);
+
+    if (!contest) return res.status(404).send("Contest not found");
 
     const imageUrl = await uploadFile(
       req.file,
@@ -186,19 +210,13 @@ module.exports = class ContestsController extends CRUDController {
         "/" +
         contest.name +
         "_" +
-        req.file.originalname,
-      false
+        req.file.originalname
     );
 
-    console.log(console.log(imageUrl));
+    contest.parentalAuthorizationUrl = imageUrl;
 
-    if (req.params.type == "logo") contest.branding.logo = imageUrl;
-    if (req.params.type == "poster") contest.branding.poster = imageUrl;
-    if (req.params.type == "banner") contest.branding.banner = imageUrl;
-
-    console.log(contest.branding);
-
-    const savedContest = contest.save();
+    const savedContest = await contest.save();
+    console.log(savedContest);
     res.send(savedContest);
   };
 

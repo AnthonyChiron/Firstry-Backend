@@ -13,6 +13,9 @@ module.exports.Contest = mongoose.model(
     enablePayment: { type: Boolean, default: false },
     isPublished: { type: Boolean, default: false },
     isValidatedByAdmin: { type: Boolean, default: false },
+    parentalAuthorizationUrl: {
+      type: String,
+    },
     location: {
       country: { type: String },
       postalCode: { type: String },
@@ -58,6 +61,7 @@ module.exports.validate = function (contest) {
     enablePayment: Joi.boolean().required(),
     isPublished: Joi.boolean(),
     isValidatedByAdmin: Joi.boolean(),
+    parentalAuthorizationUrl: Joi.string().uri().allow(null, ""),
     socials: Joi.object({
       instagram: Joi.string().allow(null, ""),
       twitter: Joi.string().allow(null, ""),

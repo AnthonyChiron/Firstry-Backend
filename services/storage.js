@@ -18,7 +18,7 @@ admin.initializeApp({
 
 const bucket = admin.storage().bucket();
 
-module.exports.uploadFile = async (file, fileName, isRemovebg) => {
+module.exports.uploadImg = async (file, fileName, isRemovebg) => {
   // Définir le nouveau nom de fichier avec l'extension .webp
   if (process.env.ENV !== "local") fileName = process.env.ENV + "/" + fileName;
   else fileName = "development/" + fileName;
@@ -86,4 +86,34 @@ removeBg = async (buffer) => {
 
 convertToWebp = async (buffer) => {
   return await sharp(buffer).webp({ quality: 80 }).toBuffer();
+};
+
+module.exports.uploadFile = async (file, fileName) => {
+  // Définir le nouveau nom de fichier
+  if (process.env.ENV !== "local") fileName = process.env.ENV + "/" + fileName;
+  else fileName = "development/" + fileName;
+
+  try {
+    const bucketFile = bucket.file(fileName);
+
+    // Configuration des options de métadonnées pour le fichier PDF
+    const options = {
+      metadata: {
+        contentType: "application/pdf",
+      },
+      public: true,
+    };
+
+    // Téléversement du fichier PDF dans le bucket
+    await bucketFile.save(file.buffer, options);
+
+    const signedUrlConfig = { action: "read", expires: "03-09-2491" };
+    const [url] = await bucket.file(fileName).getSignedUrl(signedUrlConfig);
+
+    // Retourner l'URL ou toute autre information nécessaire
+    return url;
+  } catch (err) {
+    console.error("Erreur lors du téléversement du fichier PDF", err);
+    throw err;
+  }
 };
