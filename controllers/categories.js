@@ -108,6 +108,9 @@ module.exports = class CategoriesController extends CRUDController {
       const { error } = validateStep(step);
       if (error) return res.status(400).send(error.details[0].message);
 
+      step.startDate = newStep.startDate.setHours(8, 0, 0, 0);
+      step.endDate = new Date(newStep.startDate).setHours(9, 0, 0, 0);
+
       const newStep = await Step.findByIdAndUpdate(stepId, step);
       newCategory.steps.push(newStep);
     }
