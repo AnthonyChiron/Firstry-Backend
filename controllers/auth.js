@@ -12,7 +12,10 @@ const {
 const { Rider, validate: validateRider } = require("../models/rider");
 const functions = require("firebase-functions");
 const { uploadImg } = require("../services/storage");
-const { confirmRegisterMail } = require("../constants/mailEnum");
+const {
+  confirmRegisterMail,
+  newEmailConfirmationMail,
+} = require("../constants/mailEnum");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 module.exports = class AuthController {
