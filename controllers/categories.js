@@ -190,6 +190,7 @@ module.exports = class CategoriesController extends CRUDController {
           maxRiders: 1,
           registerPrice: 1,
           isQualificationStep: 1,
+          isParentalAuthorizationRequired: 1,
           contestId: 1,
           steps: 1,
           NbRegistration: { $size: "$registrations" }, // Compter le nombre de registrations
