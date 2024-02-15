@@ -12,6 +12,7 @@ module.exports.Category = mongoose.model(
     sports: { type: Array, required: true },
     maxRiders: { type: Number, required: true },
     registerPrice: { type: Number, required: true },
+    isParentalAuthorizationRequired: { type: Boolean },
     isQualificationStep: { type: Boolean },
     contestId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -30,6 +31,7 @@ module.exports.validate = function (category) {
     maxRiders: Joi.number().required(),
     registerPrice: Joi.number().required(),
     isQualificationStep: Joi.boolean(),
+    isParentalAuthorizationRequired: Joi.boolean(),
     contestId: Joi.objectId().required(),
   });
 
