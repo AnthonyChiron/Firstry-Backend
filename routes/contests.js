@@ -26,6 +26,11 @@ router.post(
   upload.single("image"),
   contests.uploadBrandImage
 );
+router.post(
+  "/uploadParentalAuthorization/:id",
+  upload.single("file"),
+  contests.uploadParentalAuthorization
+);
 
 // PUT CONTEST
 router.put("/:id", isOrganizer, contests.update);
