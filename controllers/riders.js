@@ -167,4 +167,13 @@ module.exports = class RidersController extends CRUDController {
     rider.save();
     res.send(rider);
   };
+
+  toggleVerification = async (req, res) => {
+    let rider = await Rider.findById(req.params.id);
+    if (!rider) return res.status(404).send("Rider not found");
+
+    rider.isVerified = !rider.isVerified;
+    rider = await rider.save();
+    res.send(rider);
+  };
 };
