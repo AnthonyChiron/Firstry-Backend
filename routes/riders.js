@@ -26,5 +26,6 @@ router.put(
   [isAuth, upload.single("photo")],
   riders.updatePhoto
 );
+router.put("/toggleVerification/:id", isAdmin, riders.toggleVerification);
 
 module.exports = router;
