@@ -13,7 +13,10 @@ module.exports.Contest = mongoose.model(
     enablePayment: { type: Boolean, default: false },
     isPublished: { type: Boolean, default: false },
     isValidatedByAdmin: { type: Boolean, default: false },
-    parentalAuthorizationUrl: {
+    parentalAuthorizationFileUrl: {
+      type: String,
+    },
+    rulesFileUrl: {
       type: String,
     },
     location: {
