@@ -36,18 +36,18 @@ module.exports.Rider = mongoose.model(
 
 module.exports.validate = function (rider) {
   const schema = Joi.object({
-    firstName: Joi.string().min(2).required(),
-    lastName: Joi.string().min(2).required(),
+    firstName: Joi.string().required(),
+    lastName: Joi.string().required(),
     photoUrl: Joi.string(),
     gender: Joi.string().min(2),
     birthDate: Joi.date().required(),
     nationality: Joi.object().required(),
-    city: Joi.string().min(2).required(),
+    city: Joi.string().required(),
     bio: Joi.string().allow(null, ""),
     sports: Joi.array()
       .items(Joi.string().valid(...Object.values(sportsEnum)))
       .required(),
-    category: Joi.string().min(2),
+    category: Joi.string().allow(null, ""),
     isVerified: Joi.boolean(),
     socials: Joi.object({
       instagram: Joi.string().allow(null, ""),

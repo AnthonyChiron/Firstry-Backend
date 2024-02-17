@@ -112,16 +112,19 @@ module.exports = class AuthController {
     if (error) throw new Error(error.details[0].message);
 
     const rider = new Rider(riderData);
-    const photoUrlRider = await uploadImg(
-      file,
-      "pdp/" +
-        riderData.firstName +
-        "_" +
-        riderData.lastName +
-        "_" +
-        crypto.randomBytes(5).toString("hex"),
-      true
-    );
+    let photoUrlRider =
+      "https://storage.googleapis.com/firstry-7e136.appspot.com/production/pdp/Anthony_CHIRON_2024-02-17T11%3A13%3A47.712Z.webp?GoogleAccessId=firebase-adminsdk-v4ylh%40firstry-7e136.iam.gserviceaccount.com&Expires=16447017600&Signature=P6RTB9JACigUz6Pi1O9%2BRNZEXtxX950lVLGV2E%2FMt5OeZa3hNOB3F2dOoL0YIpo3vSGZmh3Z13gYhiYFinwvWRyl2FqeKjdIMhMUo9ij6lEEnLr%2FaqB%2F4Is7Cc%2FWvA0UARVxoFrkmukFZIh7EOIFvW3Zxy6dGwzNCum0AggfMiisKiCx0G9J0uyKBfcXSju595qMT1335DxePrpZnqRU0nrZlB8Mrv3upF%2FtYtM0i%2BU5ACyHymvp%2FLgXneLz7aeWkj6Apnc8c8y634wT%2FkZR0jMVRqvmx9j970Yrt3hvjHvzZRafMIo%2BkAe9MGIH79ah0sP9%2BoTE7l6uJ%2F4DITculw%3D%3D";
+    if (file)
+      photoUrlRider = await uploadImg(
+        file,
+        "pdp/" +
+          riderData.firstName +
+          "_" +
+          riderData.lastName +
+          "_" +
+          crypto.randomBytes(5).toString("hex"),
+        true
+      );
     rider.photoUrl = photoUrlRider;
     return rider.save();
   };
