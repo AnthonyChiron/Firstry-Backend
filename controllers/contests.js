@@ -198,26 +198,37 @@ module.exports = class ContestsController extends CRUDController {
     res.send(savedContest);
   };
 
-  uploadParentalAuthorization = async (req, res) => {
+  uploadParentalAuthorizationFile = async (req, res) => {
     const contest = await this.model.findById(req.params.id);
 
     if (!contest) return res.status(404).send("Contest not found");
 
     const imageUrl = await uploadFile(
       req.file,
-      "contests/" +
-        contest._id +
-        "/" +
-        contest.name +
-        "_" +
-        req.file.originalname
+      "contests/" + contest._id + "/" + contest.name + "_autorisation_parentale"
     );
 
-    contest.parentalAuthorizationUrl = imageUrl;
+    contest.parentalAuthorizationFileUrl = imageUrl;
 
-    const savedContest = await contest.save();
-    console.log(savedContest);
-    res.send(savedContest);
+    await contest.save();
+    res.send(contest);
+  };
+
+  uploadRulesFile = async (req, res) => {
+    const contest = await this.model.findById(req.params.id);
+
+    if (!contest) return res.status(404).send("Contest not found");
+
+    console.log(req.file);
+    const imageUrl = await uploadFile(
+      req.file,
+      "contests/" + contest._id + "/" + contest.name + "_reglement"
+    );
+
+    contest.rulesFileUrl = imageUrl;
+
+    await contest.save();
+    res.send(contest);
   };
 
   isContestPublishable = async (req, res) => {

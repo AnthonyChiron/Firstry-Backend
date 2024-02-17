@@ -113,6 +113,8 @@ module.exports = class CategoriesController extends CRUDController {
             registrationEndDate: 1,
             location: 1,
             sports: 1,
+            parentalAuthorizationFileUrl: 1,
+            rulesFileUrl: 1,
           },
         },
       },

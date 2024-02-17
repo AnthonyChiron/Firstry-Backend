@@ -27,9 +27,14 @@ router.post(
   contests.uploadBrandImage
 );
 router.post(
-  "/uploadParentalAuthorization/:id",
+  "/uploadParentalAuthorizationFile/:id",
   upload.single("file"),
-  contests.uploadParentalAuthorization
+  contests.uploadParentalAuthorizationFile
+);
+router.post(
+  "/uploadRulesFile/:id",
+  upload.single("file"),
+  contests.uploadRulesFile
 );
 
 // PUT CONTEST
