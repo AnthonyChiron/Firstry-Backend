@@ -175,7 +175,7 @@ module.exports = class AuthController {
       sendEmail(
         savedUser.email,
         "Firstry - Validation de votre compte",
-        newEmailConfirmationMail(verifyEmailToken)
+        confirmRegisterMail(verifyEmailToken)
       );
 
       res.send(savedUser);
