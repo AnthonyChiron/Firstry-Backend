@@ -1,4 +1,5 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const Payment = require("../models/payment");
 
 module.exports.checkStripeAccountValidity = async function (stripeAccountId) {
   try {
