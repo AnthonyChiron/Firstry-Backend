@@ -53,7 +53,7 @@ module.exports = class UsersController extends CRUDController {
     mailService.sendEmail(
       user.newEmail,
       mailSubjectsEnum.NEW_EMAIL_CONFIRMATION,
-      newEmailConfirmationMail(verifyEmailToken)
+      newEmailConfirmationMail(verifyEmailToken, user._id)
     );
 
     res.send(user);

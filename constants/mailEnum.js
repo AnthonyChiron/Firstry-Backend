@@ -17,7 +17,7 @@ module.exports.mailContentEnum = {
     "Veuillez cliquer sur ce lien pour réinitialiser votre mot de passe : ",
 };
 
-module.exports.confirmRegisterMail = (token) => {
+module.exports.confirmRegisterMail = (token, userId) => {
   return `
   <html lang="fr">
   <head>
@@ -34,7 +34,7 @@ module.exports.confirmRegisterMail = (token) => {
     <div class="container">
       <h2>Bienvenue sur Firstry !</h2>
       <p>Nous sommes ravis de vous compter parmi nous. Avant de commencer, veuillez confirmer votre adresse email en cliquant sur le lien ci-dessous :</p>
-      <a href="https://firstry.fr/account/validateEmail/${token}" class="button">Confirmer mon email</a>
+      <a href="https://firstry.fr/account/validateEmail/${token}/${userId}" class="button">Confirmer mon email</a>
       <p class="footer">Si vous n'avez pas demandé à créer un compte sur Firstry, veuillez ignorer cet email.</p>
   
     </div>
@@ -43,7 +43,7 @@ module.exports.confirmRegisterMail = (token) => {
 `;
 };
 
-module.exports.newEmailConfirmationMail = (token) => {
+module.exports.newEmailConfirmationMail = (token, userId) => {
   return `
   <html lang="fr">
   <head>
@@ -60,7 +60,7 @@ module.exports.newEmailConfirmationMail = (token) => {
     <div class="container">
       <h2>Hello !</h2>
       <p>Nous avons bien reçu votre demande de mise à jour de votre email. Veuillez confirmer votre nouvelle adresse email en cliquant sur le lien ci-dessous :</p>
-      <a href="https://firstry.fr/account/validateNewEmail/${token}" class="button">Confirmer mon email</a>
+      <a href="https://firstry.fr/account/validateNewEmail/${token}/${userId}" class="button">Confirmer mon email</a>
       <p class="footer">Si vous n'avez pas demandé à mettre à jour votre email, veuillez ignorer cet email.</p>  
     </div>
   </body>

@@ -52,7 +52,11 @@ module.exports = class AuthController {
 
     try {
       const savedUser = await user.save();
-      this.sendVerificationEmail(savedUser.email, verifyEmailToken);
+      this.sendVerificationEmail(
+        savedUser.email,
+        verifyEmailToken,
+        savedUser._id
+      );
       res.send(
         JSON.stringify(this.createToken(savedUser, savedRider, savedOrganizer))
       );
@@ -129,11 +133,11 @@ module.exports = class AuthController {
     return rider.save();
   };
 
-  sendVerificationEmail = (email, verifyEmailToken) => {
+  sendVerificationEmail = (email, verifyEmailToken, userId) => {
     sendEmail(
       email,
       "Firstry - Validation de votre compte",
-      confirmRegisterMail(verifyEmailToken)
+      confirmRegisterMail(verifyEmailToken, userId)
     );
   };
 
@@ -175,7 +179,7 @@ module.exports = class AuthController {
       sendEmail(
         savedUser.email,
         "Firstry - Validation de votre compte",
-        confirmRegisterMail(verifyEmailToken)
+        confirmRegisterMail(verifyEmailToken, user._id)
       );
 
       res.send(savedUser);

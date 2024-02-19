@@ -10,7 +10,7 @@ const auth = new AuthController();
 // CRUD
 router.post("/signup", upload.single("photo"), auth.signup);
 router.post("/login", auth.login);
-router.post("/sendNewValidationEmail/:id", isAuth, auth.sendNewValidationEmail);
-router.post("/validateEmail/:id", isAuth, auth.validateEmail);
+router.post("/sendNewValidationEmail/:id", auth.sendNewValidationEmail);
+router.post("/validateEmail/:id", auth.validateEmail);
 
 module.exports = router;
