@@ -28,7 +28,9 @@ module.exports = class AuthController {
     console.log(error);
     if (error) return res.status(400).send(error.details[0].message);
 
-    const emailExist = await User.findOne({ email: body.user.email });
+    const emailExist = await User.findOne({
+      email: body.user.email.toLowerCase(),
+    });
     if (emailExist) return res.status(400).send("Email already exists");
 
     const verifyEmailToken = crypto.randomBytes(20).toString("hex");
@@ -37,7 +39,7 @@ module.exports = class AuthController {
     let savedOrganizer = null;
     if (body.user.role == rolesEnum.ORGANIZER) {
       savedOrganizer = await this.createOrganizer(
-        user.email,
+        user.email.toLowerCase(),
         body.organizer,
         req.file
       );
@@ -68,7 +70,7 @@ module.exports = class AuthController {
 
   createUser = async (userData, verifyEmailToken) => {
     return await new User({
-      email: userData.email,
+      email: userData.email.toLowerCase(),
       password: await hash.encrypt(userData.password),
       isValid: false,
       verifyEmailToken: verifyEmailToken,
@@ -145,7 +147,7 @@ module.exports = class AuthController {
     const { error } = validateLogin(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    const user = await User.findOne({ email: req.body.email });
+    const user = await User.findOne({ email: req.body.email.toLowerCase() });
     if (!user) return res.status(400).send("Email is not found");
 
     // Check if password is correct
