@@ -47,3 +47,16 @@ module.exports.refusePaymentIntent = async function (paymentIntentId) {
     console.error("Erreur lors du refus du paiement", error);
   }
 };
+
+module.exports.refundPaymentIntent = async function (paymentIntentId) {
+  try {
+    // Effectuez le remboursement
+    await stripe.refunds.create({
+      payment_intent: paymentIntentId,
+    });
+
+    console.log("Paiement remboursé avec succès");
+  } catch (error) {
+    console.error("Erreur lors du remboursement du paiement", error);
+  }
+};
