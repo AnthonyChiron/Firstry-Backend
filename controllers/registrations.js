@@ -286,7 +286,7 @@ module.exports = class CategoriesController extends CRUDController {
       res.send(
         this.changeStateByRegistrationId(
           req.params.registrationId,
-          registrationState.DELETED_AND_REFUNDED
+          registrationState.REFUNDED
         )
       );
     } catch (error) {

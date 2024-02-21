@@ -55,6 +55,11 @@ module.exports.refundPaymentIntent = async function (paymentIntentId) {
       payment_intent: paymentIntentId,
     });
 
+    await Payment.findOneAndUpdate(
+      { paymentIntentId },
+      { paymentState: "refunded" }
+    );
+
     console.log("Paiement remboursé avec succès");
   } catch (error) {
     console.error("Erreur lors du remboursement du paiement", error);
