@@ -6,6 +6,7 @@ const { Payment } = require("../models/payment");
 const {
   confirmPaymentIntent,
   refusePaymentIntent,
+  refundPaymentIntent,
 } = require("../services/stripe");
 
 module.exports = class CategoriesController extends CRUDController {
@@ -35,6 +36,15 @@ module.exports = class CategoriesController extends CRUDController {
       { $unwind: "$rider" },
       {
         $lookup: {
+          from: "users", // Le nom de votre collection de catégories dans MongoDB
+          localField: "rider._id",
+          foreignField: "riderId",
+          as: "user",
+        },
+      },
+      { $unwind: "$user" },
+      {
+        $lookup: {
           from: "contests", // Le nom de votre collection de contests dans MongoDB
           localField: "category.contestId",
           foreignField: "_id",
@@ -51,6 +61,9 @@ module.exports = class CategoriesController extends CRUDController {
         $project: {
           _id: 1,
           rider: 1,
+          user: {
+            email: 1,
+          },
           category: 1,
           rider: 1,
           state: 1,
@@ -240,6 +253,40 @@ module.exports = class CategoriesController extends CRUDController {
         this.changeStateByRegistrationId(
           req.params.registrationId,
           registrationState.REFUSED
+        )
+      );
+    } catch (error) {
+      res.status(400).send({ error: error.message });
+    }
+  };
+
+  refundRiderRegistration = async (req, res) => {
+    try {
+      // Get payment intent
+      const registration = await Registration.findById(
+        req.params.registrationId
+      );
+      console.log(registration);
+      if (!registration) {
+        throw new Error("Registration not found");
+      }
+
+      // Trouver le document Payment et mettre à jour son état
+      const payment = await Payment.findById(
+        new mongoose.Types.ObjectId(registration.paymentId)
+      );
+
+      if (!payment) {
+        return res.status(404).send({ error: "Paiement non trouvé" });
+      }
+
+      payment.paymentState = "refunded";
+      await payment.save();
+      await refundPaymentIntent(payment.paymentIntentId);
+      res.send(
+        this.changeStateByRegistrationId(
+          req.params.registrationId,
+          registrationState.REFUNDED
         )
       );
     } catch (error) {

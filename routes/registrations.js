@@ -39,6 +39,11 @@ router.get(
 );
 
 router.get(
+  "/refundRiderRegistration/:registrationId",
+  registrations.refundRiderRegistration
+);
+
+router.get(
   "/getRiderRegistrations/:riderId",
   registrations.getRiderRegistrations
 );

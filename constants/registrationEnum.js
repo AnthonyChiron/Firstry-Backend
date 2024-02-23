@@ -1,9 +1,9 @@
 module.exports.registrationState = {
   PENDING_PAYMENT: "pending_payment",
-  PENDING_APPROVAL: "pending_approval",
+  CANCELLED_BEFORE_PAYMENT: "cancelled_before_payment",
   PAYMENT_FAILED: "payment_failed",
+  PENDING_APPROVAL: "pending_approval",
   VALID: "validated",
   REFUSED: "refused",
-  CANCELLED_AND_REFUNDED: "cancelled_and_refunded",
-  CANCELLED_BEFORE_PAYMENT: "cancelled_before_payment",
+  REFUNDED: "refunded",
 };
