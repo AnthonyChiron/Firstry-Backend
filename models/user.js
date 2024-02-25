@@ -74,7 +74,6 @@ module.exports.validateLogin = function (user) {
     email: Joi.string().email().required(),
     password: joiPassword
       .string()
-      .minOfNumeric(2)
       .noWhiteSpaces()
       .onlyLatinCharacters()
       .required(),
