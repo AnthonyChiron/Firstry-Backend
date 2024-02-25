@@ -84,7 +84,6 @@ module.exports = class AuthController {
     if (error) throw new Error(error.details[0].message);
 
     const organizer = new Organizer(organizerData);
-    console.log("a");
     const photoUrlOrganizer = await uploadImg(
       file,
       "pdp/" + organizerData.name + "_" + organizerData.siretNumber,
