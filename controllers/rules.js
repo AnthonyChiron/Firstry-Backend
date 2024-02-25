@@ -9,7 +9,7 @@ module.exports = class RulesController extends CRUDController {
   getRulesByContestId = async (req, res) => {
     // Get rules by contest id or rules isDefault = true
     const rules = await Rules.find({
-      $or: [{ contestId: req.params.contestId }, { isDefault: true }],
+      $or: [{ contestId: req.params.id }, { isDefault: true }],
     });
 
     res.send(rules);
