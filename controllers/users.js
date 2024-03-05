@@ -163,4 +163,11 @@ module.exports = class UsersController extends CRUDController {
 
     res.send(user);
   };
+
+  getUserByRiderId = async (req, res) => {
+    const user = await this.model.findOne({ riderId: req.params.riderId });
+    if (!user) return res.status(404).send("User not found.");
+
+    res.send(user);
+  };
 };
