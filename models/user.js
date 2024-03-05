@@ -72,11 +72,7 @@ module.exports.validateSignup = function (user) {
 module.exports.validateLogin = function (user) {
   const schema = Joi.object({
     email: Joi.string().email().required(),
-    password: joiPassword
-      .string()
-      .noWhiteSpaces()
-      .onlyLatinCharacters()
-      .required(),
+    password: joiPassword.string().noWhiteSpaces().required(),
   });
   return schema.validate(user);
 };

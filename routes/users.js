@@ -13,6 +13,8 @@ router.post("/", users.register);
 router.delete("/:id", isAdmin, users.deleteById);
 router.put("/:id", isAdmin, users.update);
 
+router.get("/getUserByRiderId/:riderId", users.getUserByRiderId);
+
 // UPDATE EMAIL AND PASSWORD
 router.post("/updateEmail/:id", isAuth, users.updateEmail);
 router.post("/updatePassword/:id", isAuth, users.updatePassword);
