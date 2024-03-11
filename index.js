@@ -55,8 +55,26 @@ io.on("connection", (socket) => {
   console.log("Un utilisateur est connecté");
 
   socket.on("updateCurrentCategory", (data) => {
-    // data contient currentRider, currentPool, etc.
-    // Transmettez cette info à tous les clients connectés à 'liveAssets'
     io.emit("currentCategory", data);
+  });
+
+  socket.on("updateCurrentStep", (data) => {
+    io.emit("currentStep", data);
+  });
+
+  socket.on("updateCurrentPool", (data) => {
+    io.emit("currentPool", data);
+  });
+
+  socket.on("updateCurrentRiders", (data) => {
+    io.emit("currentRiders", data);
+  });
+
+  socket.on("updateCurrentRider", (data) => {
+    io.emit("currentRider", data);
+  });
+
+  socket.on("updateNbPools", (data) => {
+    io.emit("nbPools", data);
   });
 });
