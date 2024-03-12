@@ -46,7 +46,6 @@ const io = new Server(server, {
   cors: {
     origin: "*", // Permet à toutes les origines. Pour une sécurité accrue, remplacez "*" par l'origine spécifique de votre client, par exemple "http://localhost:4200"
     methods: ["GET", "POST"],
-    allowedHeaders: ["my-custom-header"],
     credentials: true,
   },
 });
@@ -74,7 +73,27 @@ io.on("connection", (socket) => {
     io.emit("currentRider", data);
   });
 
+  socket.on("updateCurrentStepFormat", (data) => {
+    io.emit("currentStepFormat", data);
+  });
+
+  socket.on("updateCurrentTimer", (data) => {
+    io.emit("currentTimer", data);
+  });
+
   socket.on("updateNbPools", (data) => {
     io.emit("nbPools", data);
+  });
+
+  socket.on("startTimer", (data) => {
+    io.emit("startTimer", data);
+  });
+
+  socket.on("stopTimer", (data) => {
+    io.emit("stopTimer", data);
+  });
+
+  socket.on("resetTimer", (data) => {
+    io.emit("resetTimer", data);
   });
 });
