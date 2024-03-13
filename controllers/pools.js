@@ -94,7 +94,7 @@ module.exports = class PoolsController extends CRUDController {
           model: "Riders", // Nom du modèle pour 'rider', si nécessaire
         },
       })
-      .sort("poolNumber");
+      .sort({ poolNumber: 1, order: 1 });
 
     res.send(pools);
   };
@@ -143,6 +143,7 @@ module.exports = class PoolsController extends CRUDController {
         registration: poolEntry.registrationId,
         step: stepId,
         poolNumber: poolEntry.poolNumber,
+        order: poolEntry.order,
         isMissing: poolEntry.isMissing ? poolEntry.isMissing : false,
       });
       console.log(pool);
@@ -173,6 +174,7 @@ module.exports = class PoolsController extends CRUDController {
       if (pool) {
         // Mise à jour de la pool existante
         pool.poolNumber = poolEntry.poolNumber;
+        pool.order = poolEntry.order;
         pool.isMissing = poolEntry.isMissing ? poolEntry.isMissing : false;
         pool = await pool.save();
       } else {
@@ -182,6 +184,7 @@ module.exports = class PoolsController extends CRUDController {
           step: stepId,
           poolNumber: poolEntry.poolNumber,
           isMissing: poolEntry.isMissing ? poolEntry.isMissing : false,
+          order: poolEntry.order,
         });
         pool = await pool.save();
       }
