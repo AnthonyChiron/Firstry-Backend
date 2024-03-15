@@ -97,6 +97,18 @@ io.on("connection", (socket) => {
     io.emit("resetTimer", data);
   });
 
+  socket.on("callToWaitingStartTimer", (data) => {
+    io.emit("startWaitingTimer", data);
+  });
+
+  socket.on("callToWaitingStopTimer", (data) => {
+    io.emit("stopWaitingTimer", data);
+  });
+
+  socket.on("callWaitingToResetTimer", (data) => {
+    io.emit("resetWaitingTimer", data);
+  });
+
   socket.on("updateIsWaitingDisplayed", (data) => {
     io.emit("isWaitingAssetDisplayed", data);
   });
