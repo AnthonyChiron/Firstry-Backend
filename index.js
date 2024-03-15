@@ -97,11 +97,11 @@ io.on("connection", (socket) => {
     io.emit("resetTimer", data);
   });
 
-  socket.on("updateWaitingScreen", (data) => {
-    io.emit("isWaitingScreen", data);
+  socket.on("updateIsWaitingDisplayed", (data) => {
+    io.emit("isWaitingAssetDisplayed", data);
   });
 
-  socket.on("updateMainScreen", (data) => {
-    io.emit("isMainScreen", data);
+  socket.on("updateIsMainDisplayed", (data) => {
+    io.emit("isMainAssetDisplayed", data);
   });
 });
