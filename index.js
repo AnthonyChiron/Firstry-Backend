@@ -96,4 +96,12 @@ io.on("connection", (socket) => {
   socket.on("callToResetTimer", (data) => {
     io.emit("resetTimer", data);
   });
+
+  socket.on("updateWaitingScreen", (data) => {
+    io.emit("isWaitingScreen", data);
+  });
+
+  socket.on("updateMainScreen", (data) => {
+    io.emit("isMainScreen", data);
+  });
 });
