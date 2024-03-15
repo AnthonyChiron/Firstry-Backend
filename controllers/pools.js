@@ -208,6 +208,9 @@ module.exports = class PoolsController extends CRUDController {
         return res.status(404).send("Pool not found");
       }
       pool.score = poolEntry.score;
+      pool.juge1 = poolEntry.juge1;
+      pool.juge2 = poolEntry.juge2;
+      pool.juge3 = poolEntry.juge3;
       await pool.save();
     }
 
