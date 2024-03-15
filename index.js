@@ -85,15 +85,15 @@ io.on("connection", (socket) => {
     io.emit("nbPools", data);
   });
 
-  socket.on("startTimer", (data) => {
+  socket.on("callToStartTimer", (data) => {
     io.emit("startTimer", data);
   });
 
-  socket.on("stopTimer", (data) => {
+  socket.on("callToStopTimer", (data) => {
     io.emit("stopTimer", data);
   });
 
-  socket.on("resetTimer", (data) => {
+  socket.on("callToResetTimer", (data) => {
     io.emit("resetTimer", data);
   });
 });
