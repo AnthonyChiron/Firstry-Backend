@@ -4,6 +4,7 @@ const { Step, validate: validateStep } = require("../models/step");
 const mongoose = require("mongoose");
 const { registrationState } = require("../constants/registrationEnum");
 const stepStateEnum = require("../constants/stepStateEnum");
+const { Rules } = require("../models/rules");
 
 module.exports = class CategoriesController extends CRUDController {
   name = "category";
@@ -56,7 +57,7 @@ module.exports = class CategoriesController extends CRUDController {
     });
 
     // Validate the step from body
-    steps.forEach((step) => {
+    for (let step of steps) {
       const { errorStep } = validateStep(step);
       if (errorStep) return res.status(400).send(error.details[0].message);
 
@@ -64,11 +65,15 @@ module.exports = class CategoriesController extends CRUDController {
       newStep.startDate = newStep.startDate.setHours(8, 0, 0, 0);
       newStep.endDate = new Date(newStep.startDate).setHours(9, 0, 0, 0);
       newStep.state = stepStateEnum.POOL_PENDING;
-      newStep.save();
-      newCategory.steps.push(newStep);
-    });
+      await newStep.save();
 
-    // Send the new category
+      let populatedStep = await Step.findById(newStep._id)
+        .populate("rules")
+        .exec();
+
+      newCategory.steps.push(populatedStep);
+    }
+
     res.send(newCategory);
   };
 

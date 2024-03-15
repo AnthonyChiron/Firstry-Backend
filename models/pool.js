@@ -40,6 +40,7 @@ module.exports.Pool = mongoose.model(
       default: false,
     },
     isMissing: Boolean,
+    order: Number,
     poolNumber: {
       type: Number,
       required: true,
@@ -54,6 +55,7 @@ module.exports.validate = function (result) {
     score: Joi.number(),
     rank: Joi.number(),
     isQualified: Joi.boolean(),
+    order: Joi.number(),
     poolNumber: Joi.number().required(),
   });
 
