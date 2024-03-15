@@ -109,7 +109,7 @@ io.on("connection", (socket) => {
     io.emit("stopWaitingTimer", data);
   });
 
-  socket.on("callWaitingToResetTimer", (data) => {
+  socket.on("callToWaitingResetTimer", (data) => {
     io.emit("resetWaitingTimer", data);
   });
 
