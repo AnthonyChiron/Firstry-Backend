@@ -131,6 +131,7 @@ module.exports = class RidersController extends CRUDController {
 
       // Récupérer les riders avec les filtres et la pagination
       const riders = await Rider.find(query)
+        .sort({ isVerified: -1 })
         .limit(limit * 1) // Convertir en nombre au cas où
         .skip((page - 1) * limit)
         .exec();
