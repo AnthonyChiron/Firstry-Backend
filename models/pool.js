@@ -31,7 +31,7 @@ module.exports.Pool = mongoose.model(
         message: "Step not found",
       },
     },
-    score: Number,
+    score: { type: Number, default: 0 },
     juge1: Number,
     juge2: Number,
     juge3: Number,
