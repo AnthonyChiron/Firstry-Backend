@@ -109,16 +109,27 @@ module.exports = class CategoriesController extends CRUDController {
       let stepId = req.body.stepsId[i];
       step.categoryId = req.params.id;
 
+      // Get the step from db
+      const oldStep = await Step.findById(stepId);
+
       // Validate the step from body
       const { error } = validateStep(step);
       if (error) return res.status(400).send(error.details[0].message);
 
-      step.startDate = new Date(step.startDate).setHours(8, 0, 0, 0);
-      step.endDate = new Date(step.startDate).setHours(9, 0, 0, 0);
-      console.log(step);
+      if (
+        new Date(step.startDate).getDate() !=
+        new Date(oldStep.startDate).getDate()
+      ) {
+        step.startDate = new Date(step.startDate).setHours(8, 0, 0, 0);
+        step.endDate = new Date(step.startDate).setHours(9, 0, 0, 0);
+      } else {
+        step.startDate = new Date(oldStep.startDate);
+        step.endDate = new Date(oldStep.endDate);
+      }
 
-      const newStep = await Step.findByIdAndUpdate(stepId, step);
-      newCategory.steps.push(step);
+      await Step.findByIdAndUpdate(stepId, step);
+      let newStep = await Step.findById(stepId);
+      newCategory.steps.push(newStep);
     }
 
     // Send the updated category
