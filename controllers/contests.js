@@ -51,6 +51,7 @@ module.exports = class ContestsController extends CRUDController {
     const contest = new Contest({
       name: req.body.name,
       description: req.body.description,
+      type: req.body.type,
       startDate: req.body.startDate,
       endDate: req.body.endDate,
       registrationEndDate: subDays(req.body.startDate, 2),

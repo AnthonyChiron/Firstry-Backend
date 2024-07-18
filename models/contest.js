@@ -6,6 +6,7 @@ module.exports.Contest = mongoose.model(
   mongoose.Schema({
     name: { type: String, required: true },
     description: { type: String },
+    type: { type: String, default: "private" },
     startDate: Date,
     endDate: Date,
     registrationEndDate: Date,
@@ -45,6 +46,7 @@ module.exports.validate = function (contest) {
   const schema = Joi.object({
     name: Joi.string().min(2).required(),
     description: Joi.string().min(2),
+    type: Joi.string().allow(null, ""),
     startDate: Joi.date(),
     endDate: Joi.date(),
     registrationEndDate: Joi.date(),
