@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const ContestsController = require("../controllers/contests");
 const multer = require("multer");
-const { isOrganizer } = require("../middlewares/roleGuard");
+const { isOrganizer, isAdmin } = require("../middlewares/roleGuard");
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -51,5 +51,7 @@ router.get(
 );
 
 router.get("/getAdminStats", contests.getAdminStats);
+
+router.put("/toggleIsFederalById/:id", isAdmin, contests.toggleIsFederalById);
 
 module.exports = router;

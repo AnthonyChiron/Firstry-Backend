@@ -206,6 +206,7 @@ module.exports = class CategoriesController extends CRUDController {
           name: 1,
           description: 1,
           cashprize: 1,
+          isFederal: 1,
           sports: 1,
           maxRiders: 1,
           registerPrice: 1,

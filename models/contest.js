@@ -6,7 +6,6 @@ module.exports.Contest = mongoose.model(
   mongoose.Schema({
     name: { type: String, required: true },
     description: { type: String },
-    type: { type: String, default: "private" },
     startDate: Date,
     endDate: Date,
     registrationEndDate: Date,
@@ -14,6 +13,7 @@ module.exports.Contest = mongoose.model(
     enablePayment: { type: Boolean, default: false },
     isPublished: { type: Boolean, default: false },
     isValidatedByAdmin: { type: Boolean, default: false },
+    isFederal: { type: Boolean, default: false },
     parentalAuthorizationFileUrl: {
       type: String,
     },
@@ -66,6 +66,7 @@ module.exports.validate = function (contest) {
     enablePayment: Joi.boolean().required(),
     isPublished: Joi.boolean(),
     isValidatedByAdmin: Joi.boolean(),
+    isFederal: Joi.boolean(),
     parentalAuthorizationUrl: Joi.string().uri().allow(null, ""),
     socials: Joi.object({
       instagram: Joi.string().allow(null, ""),
