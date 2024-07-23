@@ -8,6 +8,7 @@ module.exports.Rider = mongoose.model(
   mongoose.Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
+    licenceNumber: { type: String, default: "" },
     photoUrl: { type: String },
     gender: String,
     nationality: Object,
@@ -38,6 +39,7 @@ module.exports.validate = function (rider) {
   const schema = Joi.object({
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
+    licenceNumber: Joi.string().allow(null, ""),
     photoUrl: Joi.string(),
     gender: Joi.string().min(2),
     birthDate: Joi.date().required(),

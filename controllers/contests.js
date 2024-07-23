@@ -51,6 +51,7 @@ module.exports = class ContestsController extends CRUDController {
     const contest = new Contest({
       name: req.body.name,
       description: req.body.description,
+      type: req.body.type,
       startDate: req.body.startDate,
       endDate: req.body.endDate,
       registrationEndDate: subDays(req.body.startDate, 2),
@@ -291,5 +292,14 @@ module.exports = class ContestsController extends CRUDController {
 
     const savedContest = contest.save();
     res.send(savedContest);
+  };
+
+  toggleIsFederalById = async (req, res) => {
+    let contest = await Contest.findById(req.params.id);
+    if (!contest) return res.status(404).send("Contest not found");
+
+    contest.isFederal = !contest.isFederal;
+    contest = await contest.save();
+    res.send(contest);
   };
 };

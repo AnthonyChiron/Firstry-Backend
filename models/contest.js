@@ -13,6 +13,7 @@ module.exports.Contest = mongoose.model(
     enablePayment: { type: Boolean, default: false },
     isPublished: { type: Boolean, default: false },
     isValidatedByAdmin: { type: Boolean, default: false },
+    isFederal: { type: Boolean, default: false },
     parentalAuthorizationFileUrl: {
       type: String,
     },
@@ -45,6 +46,7 @@ module.exports.validate = function (contest) {
   const schema = Joi.object({
     name: Joi.string().min(2).required(),
     description: Joi.string().min(2),
+    type: Joi.string().allow(null, ""),
     startDate: Joi.date(),
     endDate: Joi.date(),
     registrationEndDate: Joi.date(),
@@ -64,6 +66,7 @@ module.exports.validate = function (contest) {
     enablePayment: Joi.boolean().required(),
     isPublished: Joi.boolean(),
     isValidatedByAdmin: Joi.boolean(),
+    isFederal: Joi.boolean(),
     parentalAuthorizationUrl: Joi.string().uri().allow(null, ""),
     socials: Joi.object({
       instagram: Joi.string().allow(null, ""),
