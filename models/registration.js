@@ -25,7 +25,6 @@ module.exports.Registration = mongoose.model(
       validate: {
         isAsync: true,
         validator: async function (v) {
-          console.log(await Category.findById(v));
           return await Category.findById(v);
         },
         message: "Category not found",

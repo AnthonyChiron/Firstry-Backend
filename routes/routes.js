@@ -9,6 +9,7 @@ const steps = require("./steps");
 const users = require("./users");
 const payment = require("./payment");
 const exportsRoutes = require("./export");
+const importsRoutes = require("./import");
 const organizers = require("./organizers");
 const express = require("express");
 const error = require("../middlewares/error");
@@ -49,6 +50,7 @@ module.exports = function (app) {
   app.use("/api/organizers", organizers);
   app.use("/api/payment", payment);
   app.use("/api/export", exportsRoutes);
+  app.use("/api/import", importsRoutes);
 
   // Logger
   app.use(error);
