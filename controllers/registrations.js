@@ -27,7 +27,7 @@ module.exports = class CategoriesController extends CRUDController {
       { $unwind: "$category" },
       {
         $lookup: {
-          from: "riders", // Le nom de votre collection de catégories dans MongoDB
+          from: "riders", // Le nom de votre collection de riders dans MongoDB
           localField: "rider",
           foreignField: "_id",
           as: "rider",
@@ -36,13 +36,13 @@ module.exports = class CategoriesController extends CRUDController {
       { $unwind: "$rider" },
       {
         $lookup: {
-          from: "users", // Le nom de votre collection de catégories dans MongoDB
+          from: "users", // Le nom de votre collection de users dans MongoDB
           localField: "rider._id",
           foreignField: "riderId",
           as: "user",
         },
       },
-      { $unwind: "$user" },
+      { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
       {
         $lookup: {
           from: "contests", // Le nom de votre collection de contests dans MongoDB
@@ -65,7 +65,6 @@ module.exports = class CategoriesController extends CRUDController {
             email: 1,
           },
           category: 1,
-          rider: 1,
           state: 1,
           contest: {
             _id: 1,
