@@ -5,6 +5,7 @@ const { Rider } = require("../models/rider");
 const { registrationState } = require("../constants/registrationEnum");
 const { Category } = require("../models/category");
 const sportsEnum = require("../constants/sportsEnum");
+const { cp } = require("fs");
 
 // Cette fonction va vérifier que les entêtes du fichier XLSX sont conformes
 module.exports.verifyRiderHeaders = (buffer) => {
@@ -163,9 +164,12 @@ async function processRiderImport(riderData, category) {
   }
 }
 
-async function checkCategoryExists(categoryName) {
+async function checkCategoryExists(categoryName, contestId) {
   try {
-    const category = await Category.findOne({ name: categoryName });
+    const category = await Category.findOne({
+      name: categoryName,
+      contestId: contestId,
+    });
     if (category) {
       return category;
     } else {
@@ -182,8 +186,8 @@ async function checkCategoryExists(categoryName) {
 
 async function removeOldRegistrations(ridersData, categoryId, contestId) {
   // Étape 2 : Extraire les numéros de licence des riders dans le fichier
-  const licenseNumbersFromFile = ridersData.map(
-    (riderData) => riderData["Numéro de licence"]
+  const licenseNumbersFromFile = ridersData.map((riderData) =>
+    String(riderData["Numéro de licence"])
   );
 
   // Étape 3 : Récupérer les registrations actuelles pour la catégorie et le contest
@@ -212,10 +216,21 @@ async function removeOldRegistrations(ridersData, categoryId, contestId) {
     console.log("License numbers to remove:", licenseNumbersToRemove);
 
   // Étape 6 : Supprimer les registrations des riders absents du fichier
-  await Registration.deleteMany({
-    "rider.licenseNumber": { $in: licenseNumbersToRemove },
-    category: categoryId,
-  });
+  const registrationsToRemove = currentRegistrations.filter((registration) =>
+    licenseNumbersToRemove.includes(registration.rider.licenceNumber)
+  );
+
+  console.log(registrationsToRemove);
+  const registrationIdsToRemove = registrationsToRemove.map((reg) => reg._id);
+
+  if (registrationIdsToRemove.length > 0) {
+    const result = await Registration.deleteMany({
+      _id: { $in: registrationIdsToRemove },
+    });
+    console.log(`Nombre de registrations supprimées : ${result.deletedCount}`);
+  } else {
+    console.log("Aucune registration à supprimer.");
+  }
 }
 
 module.exports.importRidersFromXlsx = async (buffer, contestId) => {
@@ -236,7 +251,7 @@ module.exports.importRidersFromXlsx = async (buffer, contestId) => {
 
   // Vérifier l'existence de chaque catégorie et lancer l'import si tout est valide
   for (const category in ridersByCategory) {
-    const categoryFromDb = await checkCategoryExists(category);
+    const categoryFromDb = await checkCategoryExists(category, contestId);
 
     if (!categoryFromDb) {
       console.log(
