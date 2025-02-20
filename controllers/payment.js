@@ -13,7 +13,7 @@ module.exports = class PaymentsController extends CRUDController {
   createRegistrationPayment = async (req, res) => {
     const { amount, user, organizer, categoryId } = req.body; // Assurez-vous de valider et de nettoyer cet input
 
-    const feeAmount = Math.floor(amount * 0.05) + 25;
+    const feeAmount = Math.floor(amount * 0.0125) + 25;
 
     try {
       // CREATE PAYMENT
