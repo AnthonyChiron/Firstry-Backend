@@ -14,6 +14,7 @@ module.exports.Contest = mongoose.model(
     isPublished: { type: Boolean, default: false },
     isValidatedByAdmin: { type: Boolean, default: false },
     isFederal: { type: Boolean, default: false },
+    federalRegistrationLink: { type: String },
     parentalAuthorizationFileUrl: {
       type: String,
     },
@@ -67,6 +68,7 @@ module.exports.validate = function (contest) {
     isPublished: Joi.boolean(),
     isValidatedByAdmin: Joi.boolean(),
     isFederal: Joi.boolean(),
+    federalRegistrationLink: Joi.string().uri().allow(null, ""),
     parentalAuthorizationUrl: Joi.string().uri().allow(null, ""),
     socials: Joi.object({
       instagram: Joi.string().allow(null, ""),

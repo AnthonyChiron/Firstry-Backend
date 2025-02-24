@@ -242,23 +242,6 @@ module.exports = class ContestsController extends CRUDController {
       errors: [],
     };
 
-    // Check if contest has a valid stripe account
-    // In case of no payment, we don't need to check
-    if (contest.enablePayment) {
-      const organizer = await Organizer.findById(contest.organizerId);
-      if (!organizer) return res.status(404).send("Organizer not found");
-
-      if (!organizer.stripeAccountId)
-        return res.status(400).send("Organizer has no stripe account");
-
-      if (!(await checkStripeAccountValidity(organizer.stripeAccountId))) {
-        result.isValid = false;
-        result.errors.push(
-          "Votre compte Stripe n'est pas valide : rendez-vous dans 'Mon compte' pour le mettre à jour"
-        );
-      }
-    }
-
     // Check if contest has at least one category
     const categories = await Category.find({ contestId: contest._id });
     if (categories.length == 0) {
@@ -278,6 +261,26 @@ module.exports = class ContestsController extends CRUDController {
     if (!contest.branding.poster) {
       result.isValid = false;
       result.errors.push("Vous devez ajouter un poster à votre contest.");
+    }
+
+    console.log(contest);
+    if (contest.isFederal) return res.send(result);
+
+    // Check if contest has a valid stripe account
+    // In case of no payment, we don't need to check
+    if (contest.enablePayment) {
+      const organizer = await Organizer.findById(contest.organizerId);
+      if (!organizer) return res.status(404).send("Organizer not found");
+
+      if (!organizer.stripeAccountId)
+        return res.status(400).send("Organizer has no stripe account");
+
+      if (!(await checkStripeAccountValidity(organizer.stripeAccountId))) {
+        result.isValid = false;
+        result.errors.push(
+          "Votre compte Stripe n'est pas valide : rendez-vous dans 'Mon compte' pour le mettre à jour"
+        );
+      }
     }
 
     res.send(result);
