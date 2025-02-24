@@ -27,4 +27,10 @@ router.post("/updatePoolResult/:stepId", isOrganizer, pools.updatePoolResult);
 router.post("/publishResult/:stepId", isOrganizer, pools.publishResult);
 router.post("/unpublishResult/:stepId", isOrganizer, pools.unpublishResult);
 
+router.delete(
+  "/deletePoolsByStepId/:stepId",
+  isOrganizer,
+  pools.deletePoolsByStepId
+);
+
 module.exports = router;

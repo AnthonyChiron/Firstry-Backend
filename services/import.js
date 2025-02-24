@@ -34,13 +34,22 @@ module.exports.verifyRiderHeaders = (buffer) => {
       "Filière",
       "Groupe d'épreuve",
       "Épreuve",
+      "Groupe",
       "Numéro de licence",
       "Nom",
       "Prenom",
       "Civilité",
+      "Numéro de dossard",
+      "Numéro de transpondeur",
       "Nationalité",
       "Date de naissance",
       "Sexe",
+      "Adresse",
+      "Code postal",
+      "Ville",
+      "Adresse mail",
+      "Téléphone",
+      "Portable",
       "N°Ligue - Nom Ligue",
       "N° Département - Nom Département",
       "N° Club",
@@ -56,6 +65,7 @@ module.exports.verifyRiderHeaders = (buffer) => {
       "Date d'inscription",
       "État",
       "Commentaire",
+      "Informations complementaires",
     ];
 
     // Comparaison des entêtes extraites avec celles attendues
@@ -116,13 +126,27 @@ async function createRegistration(rider, category) {
   }
 }
 
+function parseExcelDate(dateStr) {
+  const [day, month, year] = dateStr.split("-").map(Number);
+  // Attention : en JavaScript, le mois commence à 0 (0 pour janvier, 11 pour décembre)
+  return new Date(year, month - 1, day);
+}
+
 async function createRider(riderData) {
+  // Récupération et parsing de la date de naissance
+  const birthDate = parseExcelDate(riderData["Date de naissance"]);
+
+  // Vérifier que la date est valide
+  if (isNaN(birthDate.getTime())) {
+    throw new Error("Date de naissance invalide");
+  }
+
   try {
     const newRider = new Rider({
       firstName: riderData["Prenom"], // Adapter selon l'entête exacte
       lastName: riderData["Nom"], // Adapter selon l'entête exacte
       licenceNumber: riderData["Numéro de licence"], // Adapter selon l'entête exacte
-      birthDate: riderData["Date de naissance"], // Adapter selon l'entête exacte
+      birthDate: birthDate, // Adapter selon l'entête exacte
       sports: [sportsEnum.TROTTINETTE], // Adapter selon l'entête exacte
     });
     return await newRider.save();

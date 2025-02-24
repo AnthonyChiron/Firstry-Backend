@@ -15,10 +15,11 @@ module.exports = class ImportController {
       if (!verifyRiderHeaders(req.file.buffer)) {
         return res.status(400).send("Invalid file format");
       }
+
       console.log("Importing riders on contest...");
       await importRidersFromXlsx(req.file.buffer, contestId);
 
-      res.status(200).send("Riders imported successfully");
+      res.send("Riders imported successfully");
     } catch (error) {
       console.log(error);
       res.status(500).send("Error importing riders on contest");
