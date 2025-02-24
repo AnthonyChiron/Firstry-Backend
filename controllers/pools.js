@@ -63,7 +63,7 @@ module.exports = class PoolsController extends CRUDController {
             category: "$registrationDetails.category",
             contest: "$registrationDetails.category.contest",
             rank: 1,
-            score: 1,
+            score: -1,
           },
         },
       ]);
@@ -131,13 +131,26 @@ module.exports = class PoolsController extends CRUDController {
   createPools = async (req, res) => {
     const stepId = req.params.stepId;
 
-    await this.createPoolInDb(req.body.poolsEntries, req.params.stepId);
+    // Get step from stepId
+    const step = await Step.findById(stepId);
+    if (!step) return res.status(404).send("Step not found");
+
+    if (step.name === "FINALE")
+      await this.createPoolInDb(req.body.poolsEntries, req.params.stepId, true);
+    else
+      await this.createPoolInDb(
+        req.body.poolsEntries,
+        req.params.stepId,
+        false
+      );
 
     res.send(await this.getPoolInDb(stepId));
   };
 
   createPoolInDb = async (poolsEntries, stepId) => {
     let pools = [];
+
+    // Create pool for each entry order by score
     for (const poolEntry of poolsEntries) {
       let pool = new Pool({
         registration: poolEntry.registrationId,
@@ -146,7 +159,6 @@ module.exports = class PoolsController extends CRUDController {
         order: poolEntry.order,
         isMissing: poolEntry.isMissing ? poolEntry.isMissing : false,
       });
-      console.log(pool);
       pool = await pool.save();
       pools.push(pool);
     }
@@ -225,7 +237,6 @@ module.exports = class PoolsController extends CRUDController {
       score: -1,
     });
 
-    console.log(pools);
     // Mettre à jour les rangs
     for (let i = 0; i < pools.length; i++) {
       if (i < qualifiedNumber) pools[i].isQualified = true;
@@ -270,6 +281,14 @@ module.exports = class PoolsController extends CRUDController {
     step.isResultPublished = false;
     await step.save();
 
+    res.send(await this.getPoolInDb(stepId));
+  };
+
+  deletePoolsByStepId = async (req, res) => {
+    const stepId = req.params.stepId;
+
+    // Suppression des pools pour cette étape
+    await this.model.deleteMany({ step: stepId });
     res.send(await this.getPoolInDb(stepId));
   };
 };
