@@ -27,45 +27,58 @@ module.exports.verifyRiderHeaders = (buffer) => {
     }
 
     // Les entêtes attendues
+    // const expectedHeaders = [
+    //   "#",
+    //   "Manifestation",
+    //   "Type",
+    //   "Filière",
+    //   "Groupe d'épreuve",
+    //   "Épreuve",
+    //   "Groupe",
+    //   "Numéro de licence",
+    //   "Nom",
+    //   "Prenom",
+    //   "Civilité",
+    //   "Numéro de dossard",
+    //   "Numéro de transpondeur",
+    //   "Nationalité",
+    //   "Date de naissance",
+    //   "Sexe",
+    //   "Adresse",
+    //   "Code postal",
+    //   "Ville",
+    //   "Adresse mail",
+    //   "Téléphone",
+    //   "Portable",
+    //   "N°Ligue - Nom Ligue",
+    //   "N° Département - Nom Département",
+    //   "N° Club",
+    //   "Nom Club",
+    //   "Licence",
+    //   "Discipline",
+    //   "Sportif catégorie âge",
+    //   "Date de début",
+    //   "Date de fin",
+    //   "N° - Nom Structure organisatrice",
+    //   "Code postal manifestation",
+    //   "Commune manifestation",
+    //   "Date d'inscription",
+    //   "État",
+    //   "Commentaire",
+    //   "Informations complementaires",
+    // ];
+
     const expectedHeaders = [
       "#",
       "Manifestation",
       "Type",
-      "Filière",
-      "Groupe d'épreuve",
       "Épreuve",
-      "Groupe",
       "Numéro de licence",
       "Nom",
       "Prenom",
-      "Civilité",
-      "Numéro de dossard",
-      "Numéro de transpondeur",
       "Nationalité",
-      "Date de naissance",
-      "Sexe",
-      "Adresse",
-      "Code postal",
-      "Ville",
-      "Adresse mail",
-      "Téléphone",
-      "Portable",
-      "N°Ligue - Nom Ligue",
-      "N° Département - Nom Département",
-      "N° Club",
       "Nom Club",
       "Licence",
-      "Discipline",
-      "Sportif catégorie âge",
-      "Date de début",
-      "Date de fin",
-      "N° - Nom Structure organisatrice",
-      "Code postal manifestation",
-      "Commune manifestation",
-      "Date d'inscription",
-      "État",
-      "Commentaire",
-      "Informations complementaires",
     ];
 
     // Comparaison des entêtes extraites avec celles attendues
@@ -134,19 +147,18 @@ function parseExcelDate(dateStr) {
 
 async function createRider(riderData) {
   // Récupération et parsing de la date de naissance
-  const birthDate = parseExcelDate(riderData["Date de naissance"]);
+  // const birthDate = parseExcelDate(riderData["Date de naissance"]);
 
   // Vérifier que la date est valide
-  if (isNaN(birthDate.getTime())) {
-    throw new Error("Date de naissance invalide");
-  }
+  // if (isNaN(birthDate.getTime())) {
+  //   throw new Error("Date de naissance invalide");
+  // }
 
   try {
     const newRider = new Rider({
       firstName: riderData["Prenom"], // Adapter selon l'entête exacte
       lastName: riderData["Nom"], // Adapter selon l'entête exacte
       licenceNumber: riderData["Numéro de licence"], // Adapter selon l'entête exacte
-      birthDate: birthDate, // Adapter selon l'entête exacte
       sports: [sportsEnum.TROTTINETTE], // Adapter selon l'entête exacte
     });
     return await newRider.save();
