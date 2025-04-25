@@ -5,7 +5,7 @@ const { Rider } = require("../models/rider");
 const { registrationState } = require("../constants/registrationEnum");
 const { Category } = require("../models/category");
 const sportsEnum = require("../constants/sportsEnum");
-const { cp } = require("fs");
+const { Pool } = require("../models/pool");
 
 // Cette fonction va vérifier que les entêtes du fichier XLSX sont conformes
 module.exports.verifyRiderHeaders = (buffer) => {
@@ -153,6 +153,8 @@ async function createRider(riderData) {
   // if (isNaN(birthDate.getTime())) {
   //   throw new Error("Date de naissance invalide");
   // }
+
+  console.log("Rider data:", riderData);
 
   try {
     const newRider = new Rider({
@@ -311,6 +313,10 @@ module.exports.importRidersFromXlsx = async (buffer, contestId) => {
       await processRiderImport(riderData, categoryFromDb); // Ajout de category comme paramètre
     }
   }
+
+  await Pool.deleteMany({
+    registrationId: { $exists: true, $nin: await Registration.distinct("_id") },
+  });
 
   console.log("Importation terminée pour toutes les catégories valides.");
 };

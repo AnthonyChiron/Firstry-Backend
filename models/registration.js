@@ -8,7 +8,7 @@ module.exports.Registration = mongoose.model(
   mongoose.Schema({
     rider: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Rider",
+      ref: "Riders",
       required: true,
       validate: {
         isAsync: true,
