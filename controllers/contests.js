@@ -7,6 +7,8 @@ const { checkPreferences } = require("joi");
 const { uploadImg, uploadFile } = require("../services/storage");
 const { subDays } = require("date-fns");
 const { checkStripeAccountValidity } = require("../services/stripe");
+const { Registration } = require("../models/registration");
+const { User } = require("../models/user");
 
 module.exports = class ContestsController extends CRUDController {
   name = "contest";
@@ -304,5 +306,29 @@ module.exports = class ContestsController extends CRUDController {
     contest.isFederal = !contest.isFederal;
     contest = await contest.save();
     res.send(contest);
+  };
+
+  getEmailsByContestId = async (req, res) => {
+    console.log(req.params.id);
+    const categories = await Category.find({ contestId: req.params.id }).select(
+      "_id"
+    );
+
+    const registrations = await Registration.find({
+      category: { $in: categories.map((c) => c._id) },
+    }).populate({
+      path: "rider",
+      select: "_id",
+    });
+
+    const riderIds = registrations.map((reg) => reg.rider?._id).filter(Boolean);
+
+    const users = await User.find({ riderId: { $in: riderIds } }).select(
+      "email"
+    );
+
+    const emails = users.map((u) => u.email);
+
+    res.send(emails);
   };
 };

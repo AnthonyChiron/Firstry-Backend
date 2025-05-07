@@ -54,4 +54,6 @@ router.get("/getAdminStats", contests.getAdminStats);
 
 router.put("/toggleIsFederalById/:id", isAdmin, contests.toggleIsFederalById);
 
+router.get("/getEmailsByContestId/:id", contests.getEmailsByContestId);
+
 module.exports = router;
